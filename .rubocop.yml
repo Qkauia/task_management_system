@@ -1,0 +1,16 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-capybara
+  - rubocop-factory_bot
+
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  SuggestExtensions: false
+
+Rails:
+  Enabled: true
+
+RSpec:
+  Enabled: true
