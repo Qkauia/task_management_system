@@ -44,5 +44,5 @@ jobs:
 
     - name: Tag and push the Docker image
       run: |
-        docker tag ${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/my-repo:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/my-repo:latest
+        docker tag ${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/task_management_system:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/task_management_system:latest
