@@ -42,7 +42,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Tag and push the Docker image
+    - name: Push the Docker image
       run: |
-        docker tag ${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/my-image-name:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name:latest
