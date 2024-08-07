@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Set up timestamp
-      run: echo "IMAGE_TAG=my-image-name:$(date +%s)" >> $GITHUB_ENV
+      run: echo "IMAGE_TAG=sunezric/task_management_system:$(date +%s)" >> $GITHUB_ENV
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
@@ -44,5 +44,5 @@ jobs:
 
     - name: Tag and push the Docker image
       run: |
-        docker tag ${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/task_management_system:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/task_management_system:latest
+        docker tag ${{ env.IMAGE_TAG }} sunezric/task_management_system:latest
+        docker push sunezric/task_management_system:latest
