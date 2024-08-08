@@ -2,52 +2,38 @@ name: CI
 
 on:
   push:
-    branches: 
-      - '*'  # 監聽所有分支
+    branches:
+      - '*'
   pull_request:
-    branches: 
-      - '*'  # 監聽所有分支
+    branches:
+      - '*'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
-    services:
-      db:
-        image: postgres:13
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: task_management_system_ci
-        ports:
-          - 5432:5432
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.2.0' # 你正在使用的 Ruby 版本
+    - name: Set up Docker Compose
+      run: sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 
-    - name: Install dependencies
-      run: |
-        gem install bundler
-        bundle install
+    - name: Build and run services
+      run: docker-compose up -d --build
 
-    - name: Build Docker image
-      run: docker build -t my-image-name .
-
-    - name: Run Docker container
-      run: docker run -d --name my-container -e RAILS_ENV=test -e SECRET_KEY_BASE=test_secret_key_base --link db:db my-image-name tail -f /dev/null
-
-    - name: Run RuboCop
-      run: docker exec my-container bundle exec rubocop
+    - name: Wait for DB to be ready
+      run: docker-compose run app bash -c 'while ! pg_isready -h db -p 5432 -U postgres; do sleep 1; done'
 
     - name: Set up database
-      run: docker exec my-container bin/rails db:create db:schema:load
+      run: docker-compose run app bin/rails db:create db:schema:load
+
+    - name: Run RuboCop
+      run: docker-compose run app bundle exec rubocop
 
     - name: Run RSpec tests
-      run: docker exec my-container bundle exec rspec
+      run: docker-compose run app bundle exec rspec
+
+    - name: Shut down services
+      run: docker-compose down
