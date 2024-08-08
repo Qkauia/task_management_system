@@ -2,6 +2,9 @@
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require 'rails'
+ENV['SECRET_KEY_BASE'] ||= 'test_secret_key_base'
+
+require_relative '../config/environment'
 Rails.application.secrets.secret_key_base = 'test_secret_key_base' if Rails.env.test?
 
 require_relative '../config/environment'

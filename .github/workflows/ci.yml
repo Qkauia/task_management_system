@@ -1,49 +1,40 @@
-name: Docker Image CI
+name: CI
 
 on:
   push:
     branches: 
-      - '*'
+      - '*'  # 監聽所有分支
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - '*'  # 監聽所有分支
 
 jobs:
-
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - name: Set up timestamp
-      run: echo "IMAGE_TAG=sunezric/task_management_system:$(date +%s)" >> $GITHUB_ENV
-
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
-
-    - name: Run the Docker container
-      run: docker run -d --name my-container ${{ env.IMAGE_TAG }} tail -f /dev/null
-
-    - name: Check container status
-      run: docker ps -a
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.2.0' # 你正在使用的 Ruby 版本
 
     - name: Install dependencies
-      run: docker exec my-container bundle install
+      run: |
+        gem install bundler
+        bundle install
 
-    - name: Run RSpec tests
-      run: docker exec my-container bundle exec rspec
+    - name: Build Docker image
+      run: docker build -t my-image-name .
+
+    - name: Run Docker container
+      run: docker run -d --name my-container -e RAILS_ENV=test -e SECRET_KEY_BASE=test_secret_key_base my-image-name tail -f /dev/null
 
     - name: Run RuboCop
       run: docker exec my-container bundle exec rubocop
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Tag and push the Docker image
-      run: |
-        docker tag ${{ env.IMAGE_TAG }} sunezric/task_management_system:latest
-        docker push sunezric/task_management_system:latest
+    - name: Run RSpec tests
+      run: docker exec my-container bundle exec rspec
