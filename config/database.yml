@@ -12,6 +12,7 @@
 # Configure Using Gemfile
 # gem "pg"
 #
+
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -22,6 +23,7 @@ default: &default
 development:
   <<: *default
   database: task_management_system_development
+  
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -82,3 +84,10 @@ production:
   database: task_management_system_production
   username: <%= ENV["TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME"] %>
   password: <%= ENV["TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD"] %>
+
+ci:
+  <<: *default
+  database: task_management_system_ci
+  username: postgres
+  password: password
+  host: db
