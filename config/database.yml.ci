@@ -1,0 +1,8 @@
+ci:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: task_management_system_ci
+  username: postgres
+  password: password
+  host: db

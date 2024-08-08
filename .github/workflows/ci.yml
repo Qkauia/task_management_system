@@ -13,6 +13,16 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: task_management_system_ci
+        ports:
+          - 5432:5432
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -31,10 +41,13 @@ jobs:
       run: docker build -t my-image-name .
 
     - name: Run Docker container
-      run: docker run -d --name my-container -e RAILS_ENV=test -e SECRET_KEY_BASE=test_secret_key_base my-image-name tail -f /dev/null
+      run: docker run -d --name my-container -e RAILS_ENV=test -e SECRET_KEY_BASE=test_secret_key_base --link db:db my-image-name tail -f /dev/null
 
     - name: Run RuboCop
       run: docker exec my-container bundle exec rubocop
+
+    - name: Set up database
+      run: docker exec my-container bin/rails db:create db:schema:load
 
     - name: Run RSpec tests
       run: docker exec my-container bundle exec rspec
