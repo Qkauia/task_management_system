@@ -6,7 +6,8 @@ ENV['SECRET_KEY_BASE'] ||= 'test_secret_key_base'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-# Add additional requires below this line. Rails is not loaded until this point!
+
+Rails.application.credentials.secret_key_base = 'test_secret_key_base' if Rails.env.test?
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -15,8 +16,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # run twice. It is recommended that you do not name files matching this glob to
 # end with _spec.rb. You can configure this pattern with the --pattern
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-#
-# Rails.root.glob('spec/support/**/*.rb').sort.each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -54,16 +54,4 @@ RSpec.configure do |config|
 
   # Include FactoryBot methods
   config.include FactoryBot::Syntax::Methods
-
-  # Shoulda Matchers
-  Shoulda::Matchers.configure do |shoulda_config|
-    shoulda_config.integrate do |with|
-      with.test_framework :rspec
-      with.library :rails
-    end
-  end
-
-  # WebMock
-  require 'webmock/rspec'
-  WebMock.disable_net_connect!(allow_localhost: true)
 end
