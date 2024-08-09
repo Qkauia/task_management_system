@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  acts_as_paranoid
   belongs_to :user
 
   enum priority: { low: 1, medium: 2, high: 3 }

@@ -17,6 +17,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem 'devise'
 gem "bcrypt", "~> 3.1.7"
+gem 'paranoia'
 
 group :development, :test do
   gem 'rubocop', require: false
