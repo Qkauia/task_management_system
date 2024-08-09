@@ -1,31 +1,100 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  tasks:
+    create:
+      success: "Task was successfully created."
+    update:
+      success: "Task was successfully updated."
+    destroy:
+      success: "Task was successfully deleted."
+      confirm: "Are you sure?"
+    headers:
+      title: "Title"
+      priority: "Priority"
+      status: "Status"
+      start_time: "Start Time"
+      end_time: "End Time"
+      actions: "Actions"
+      my_tasks: "My Tasks"
+    filters:
+      status: "Filter by Status"
+      keyword: "Keyword Search"
+      filter: "Filter"
+    link:
+      new_task: "New Task"
+      show: "Show"
+      edit: "Edit"
+      delete: "Delete"
+      english: "English"
+      chinese: "Chinese"
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      default: "%Y-%m-%d"
+    day_names:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+    month_names:
+      - ~
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+  datetime:
+    distance_in_words:
+      half_a_minute: "half a minute"
+      less_than_x_seconds:
+        one:   "less than 1 second"
+        other: "less than %{count} seconds"
+      x_seconds:
+        one:   "1 second"
+        other: "%{count} seconds"
+      x_minutes:
+        one:   "1 minute"
+        other: "%{count} minutes"
+      about_x_hours:
+        one:   "about 1 hour"
+        other: "about %{count} hours"
+      x_days:
+        one:   "1 day"
+        other: "%{count} days"
+      about_x_months:
+        one:   "about 1 month"
+        other: "about %{count} months"
+      x_months:
+        one:   "1 month"
+        other: "%{count} months"
+      about_x_years:
+        one:   "about 1 year"
+        other: "about %{count} years"
+      over_x_years:
+        one:   "over 1 year"
+        other: "over %{count} years"
+      almost_x_years:
+        one:   "almost 1 year"
+        other: "almost %{count} years"
+  enums:
+    task:
+      priority:
+        low: "Low"
+        medium: "Medium"
+        high: "High"
+      status:
+        pending: "Pending"
+        in_progress: "In Progress"
+        completed: "Completed"

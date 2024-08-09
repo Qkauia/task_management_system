@@ -1,0 +1,100 @@
+zh-TW:
+  tasks:
+    create:
+      success: "任務已成功建立。"
+    update:
+      success: "任務已成功更新。"
+    destroy:
+      success: "任務已成功刪除。"
+      confirm: "你確定嗎?"
+    headers:
+      title: "標題"
+      priority: "優先順序"
+      status: "狀態"
+      start_time: "開始時間"
+      end_time: "結束時間"
+      actions: "操作"
+      my_tasks: "我的任務"
+    filters:
+      status: "按狀態篩選"
+      keyword: "關鍵字尋找"
+      filter: "篩選"
+    link:
+      new_task: "建立新任務"
+      show: "檢視"
+      edit: "編輯"
+      delete: "刪除"
+      english: "英文"
+      chinese: "繁體中文"
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      default: "%Y-%m-%d"
+    day_names:
+      - 星期日
+      - 星期一
+      - 星期二
+      - 星期三
+      - 星期四
+      - 星期五
+      - 星期六
+    month_names:
+      - ~
+      - 一月
+      - 二月
+      - 三月
+      - 四月
+      - 五月
+      - 六月
+      - 七月
+      - 八月
+      - 九月
+      - 十月
+      - 十一月
+      - 十二月
+  datetime:
+    distance_in_words:
+      half_a_minute: "半分鐘"
+      less_than_x_seconds:
+        one:   "少於 1 秒"
+        other: "少於 %{count} 秒"
+      x_seconds:
+        one:   "1 秒"
+        other: "%{count} 秒"
+      x_minutes:
+        one:   "1 分鐘"
+        other: "%{count} 分鐘"
+      about_x_hours:
+        one:   "大約 1 小時"
+        other: "大約 %{count} 小時"
+      x_days:
+        one:   "1 天"
+        other: "%{count} 天"
+      about_x_months:
+        one:   "大約 1 個月"
+        other: "大約 %{count} 個月"
+      x_months:
+        one:   "1 個月"
+        other: "%{count} 個月"
+      about_x_years:
+        one:   "大約 1 年"
+        other: "大約 %{count} 年"
+      over_x_years:
+        one:   "超過 1 年"
+        other: "超過 %{count} 年"
+      almost_x_years:
+        one:   "接近 1 年"
+        other: "接近 %{count} 年"
+  enums:
+    task:
+      priority:
+        low: "低"
+        medium: "中"
+        high: "高"
+      status:
+        pending: "待處理"
+        in_progress: "進行中"
+        completed: "已完成"
