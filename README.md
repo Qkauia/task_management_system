@@ -49,6 +49,7 @@
 | user_id    | bigint    | ID of the user who created the task, not null                       |
 | created_at | datetime  | Record creation timestamp, not null                                 |
 | updated_at | datetime  | Record last updated timestamp, not null                             |
+| deleted_at | datetime  | Record last deleted timestamp (used for soft delete functionality)  |
 
 ### tags
 | Column     | Data Type | Description                      |
