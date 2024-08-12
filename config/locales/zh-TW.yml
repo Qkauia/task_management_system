@@ -152,6 +152,3 @@ zh-TW:
       registration: '註冊'
       login: '登入'
       logout: '登出'  
-
-
-# t('users.headers.update_password')
