@@ -8,13 +8,16 @@ zh-TW:
       success: "任務已成功刪除。"
       confirm: "你確定嗎?"
     headers:
+      my_tasks: "我的任務"
+      task_details: "任務細節"
       title: "標題"
       priority: "優先順序"
       status: "狀態"
       start_time: "開始時間"
       end_time: "結束時間"
       actions: "操作"
-      my_tasks: "我的任務"
+      content: "內容"
+      tags: "標記"
     filters:
       status: "按狀態篩選"
       keyword: "關鍵字尋找"
@@ -24,6 +27,7 @@ zh-TW:
       show: "檢視"
       edit: "編輯"
       delete: "刪除"
+      back: "回上頁"
       english: "英文"
       chinese: "繁體中文"
   date:
@@ -98,3 +102,9 @@ zh-TW:
         pending: "待處理"
         in_progress: "進行中"
         completed: "已完成"
+  helpers:
+    submit:
+      create: "新增任務"
+      update: "更新任務"
+      submit: "保存"
+

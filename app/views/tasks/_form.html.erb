@@ -1,0 +1,40 @@
+<%= form_with model: @task, local: true do |form| %>
+  <div>
+    <%= form.label :title, I18n.t('tasks.headers.title') %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :content, I18n.t('tasks.headers.content') %>
+    <%= form.text_area :content %>
+  </div>
+
+  <div>
+    <%= form.label :start_time, I18n.t('tasks.headers.start_time') %>
+    <%= form.datetime_select :start_time %>
+  </div>
+
+  <div>
+    <%= form.label :end_time, I18n.t('tasks.headers.end_time') %>
+    <%= form.datetime_select :end_time %>
+  </div>
+
+  <div>
+    <%= form.label :priority, I18n.t('tasks.headers.priority') %>
+    <%= form.select :priority, Task.priorities.keys.map { |p| [I18n.t("enums.task.priority.#{p}"), p] } %>
+  </div>
+
+  <div>
+    <%= form.label :status, I18n.t('tasks.headers.status') %>
+    <%= form.select :status, Task.statuses.keys.map { |s| [I18n.t("enums.task.status.#{s}"), s] } %>
+  </div>
+
+  <div>
+    <%= form.label :tags, I18n.t('tasks.headers.tags') %>
+    <%= form.collection_select :tag_ids, Tag.all, :id, :name, {}, multiple: true %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

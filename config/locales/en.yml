@@ -8,13 +8,16 @@ en:
       success: "Task was successfully deleted."
       confirm: "Are you sure?"
     headers:
+      my_tasks: "My Tasks"
+      task_details: "Task Details"
       title: "Title"
       priority: "Priority"
       status: "Status"
       start_time: "Start Time"
       end_time: "End Time"
       actions: "Actions"
-      my_tasks: "My Tasks"
+      content: "Content"
+      tags: "Tags"
     filters:
       status: "Filter by Status"
       keyword: "Keyword Search"
@@ -24,6 +27,7 @@ en:
       show: "Show"
       edit: "Edit"
       delete: "Delete"
+      back: "Back"
       english: "English"
       chinese: "Chinese"
   date:
@@ -98,3 +102,8 @@ en:
         pending: "Pending"
         in_progress: "In Progress"
         completed: "Completed"
+  helpers:
+    submit:
+      create: "Create %{model}"
+      update: "Update %{model}"
+      submit: "Save %{model}"
