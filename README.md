@@ -27,13 +27,12 @@
 ## Table Schema
 
 ### users
+
 | Column                 | Data Type         | Description                                |
 |------------------------|-------------------|--------------------------------------------|
 | email                  | string            | User's email address, not null, unique     |
-| encrypted_password     | string            | User's encrypted password, not null        |
-| reset_password_token   | string            | Token for resetting password, unique       |
-| reset_password_sent_at | datetime          | Timestamp when reset password email sent   |
-| remember_created_at    | datetime          | Timestamp when remember me was set         |
+| password_hash          | string            | Hashed password for the user, not null     |
+| password_salt          | string            | Salt used for hashing the password, not null |
 | created_at             | datetime          | Record creation timestamp, not null        |
 | updated_at             | datetime          | Record last updated timestamp, not null    |
 
