@@ -9,7 +9,17 @@ zh-TW:
       confirm: "你確定嗎?"
     headers:
       my_tasks: "我的任務"
+      new_task : "新增任務"
       task_details: "任務細節"
+      title: "標題"
+      priority: "優先順序"
+      status: "狀態"
+      start_time: "開始時間"
+      end_time: "結束時間"
+      actions: "操作"
+      content: "內容"
+      tags: "標記"
+    form:
       title: "標題"
       priority: "優先順序"
       status: "狀態"
@@ -107,7 +117,41 @@ zh-TW:
         completed: "已完成"
   helpers:
     submit:
-      create: "新增任務"
-      update: "更新任務"
+      create: "新增"
+      update: "更新"
       submit: "保存"
+  sessions:
+    login:
+      success: "登入成功"
+    logout:
+      success: "已登出"
+    messages:
+      errors: "無效的電子郵件或密碼"
+  users:
+    registration:
+      success: "註冊成功，您已登入"
+    password:
+      update_success: "密碼已成功更新"
+    headers:
+      registration: '註冊'
+      update_password: '更改密碼'
+      login: "登入"
+    form:
+      password_confirmation: '密碼確認'
+      password: '輸入密碼'
+      email: '電子信箱'
+      current_password: "當前密碼"
+      new_password: "新密碼"
+    confirm:
+      logout: '確定要登出嗎'
+    errors:
+      update_failed: "密碼更新失敗。"
+      current_password_incorrect: "當前密碼不正確。"
+  navbar:
+      home: '首頁'
+      registration: '註冊'
+      login: '登入'
+      logout: '登出'  
 
+
+# t('users.headers.update_password')

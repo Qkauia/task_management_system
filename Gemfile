@@ -15,7 +15,6 @@ gem "jbuilder"
 gem "redis", ">= 4.0.1"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
-gem 'devise'
 gem "bcrypt", "~> 3.1.7"
 gem 'paranoia'
 
