@@ -10,6 +10,7 @@ en:
     headers:
       my_tasks: "My Tasks"
       task_details: "Task Details"
+      new_task : "New Task"
       title: "Title"
       priority: "Priority"
       status: "Status"
@@ -110,3 +111,35 @@ en:
       create: "Create %{model}"
       update: "Update %{model}"
       submit: "Save %{model}"
+  sessions:
+    login:
+      success: "Login successful"
+    logout:
+      success: "Logged out successfully"
+    messages:
+      errors: "Invalid email or password"
+  users:
+    registration:
+      success: "Registration successful, you are now logged in"
+    password:
+      update_success: "Password successfully updated"
+    headers:
+      registration: "Sign Up"
+      update_password: "Change Password"
+      login: "Login"
+    form:
+      password_confirmation: "Password Confirmation"
+      password: "Enter Password"
+      email: 'e-mail'
+      current_password: "Current Password"
+      new_password: "New Password"
+    confirm:
+      logout: 'Are you sure you want to log out?'
+    errors:
+      update_failed: "Password update failed."
+      current_password_incorrect: "The current password is incorrect."
+  navbar:
+      home: 'Home'
+      registration: 'Sign Up'
+      login: 'LogIn'
+      logout: 'LogOut'
