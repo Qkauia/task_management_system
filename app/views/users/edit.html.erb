@@ -1,0 +1,22 @@
+<h1><%= t('users.headers.update_password') %></h1>
+
+<%= form_with model: @user, url: user_path(@user), method: :patch, local: true do |form| %>
+  <div>
+    <%= form.label :current_password, t('users.form.current_password') %>
+    <%= form.password_field :current_password %>
+  </div>
+
+  <div>
+    <%= form.label :password, t('users.form.new_password') %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation, t('users.form.password_confirmation') %>
+    <%= form.password_field :password_confirmation %>
+  </div>
+  
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
