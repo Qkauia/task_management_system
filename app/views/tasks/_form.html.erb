@@ -1,36 +1,36 @@
 <%= form_with model: @task, local: true do |form| %>
   <div>
-    <%= form.label :title, I18n.t('tasks.headers.title') %>
+    <%= form.label :title, t('tasks.form.title') %>
     <%= form.text_field :title %>
   </div>
 
   <div>
-    <%= form.label :content, I18n.t('tasks.headers.content') %>
+    <%= form.label :content, t('tasks.form.content') %>
     <%= form.text_area :content %>
   </div>
 
   <div>
-    <%= form.label :start_time, I18n.t('tasks.headers.start_time') %>
+    <%= form.label :start_time, t('tasks.form.start_time') %>
     <%= form.datetime_select :start_time %>
   </div>
 
   <div>
-    <%= form.label :end_time, I18n.t('tasks.headers.end_time') %>
+    <%= form.label :end_time, t('tasks.form.end_time') %>
     <%= form.datetime_select :end_time %>
   </div>
 
   <div>
-    <%= form.label :priority, I18n.t('tasks.headers.priority') %>
-    <%= form.select :priority, Task.priorities.keys.map { |p| [I18n.t("enums.task.priority.#{p}"), p] } %>
+    <%= form.label :priority, t('tasks.form.priority') %>
+    <%= form.select :priority, Task.priorities.keys.map { |p| [t("enums.task.priority.#{p}"), p] } %>
   </div>
 
   <div>
-    <%= form.label :status, I18n.t('tasks.headers.status') %>
-    <%= form.select :status, Task.statuses.keys.map { |s| [I18n.t("enums.task.status.#{s}"), s] } %>
+    <%= form.label :status, t('tasks.form.status') %>
+    <%= form.select :status, Task.statuses.keys.map { |s| [t("enums.task.status.#{s}"), s] } %>
   </div>
 
   <div>
-    <%= form.label :tags, I18n.t('tasks.headers.tags') %>
+    <%= form.label :tags, t('tasks.form.tags') %>
     <%= form.collection_select :tag_ids, Tag.all, :id, :name, {}, multiple: true %>
   </div>
 

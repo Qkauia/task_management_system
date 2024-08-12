@@ -1,39 +1,39 @@
-<h1><%= I18n.t('tasks.headers.task_details') %></h1>
+<h1><%= t('tasks.headers.task_details') %></h1>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.title') %>:</strong>
+  <strong><%= t('tasks.headers.title') %>:</strong>
   <%= @task.title %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.content') %>:</strong>
+  <strong><%= t('tasks.headers.content') %>:</strong>
   <%= @task.content %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.status') %>:</strong>
+  <strong><%= t('tasks.headers.status') %>:</strong>
   <%= @task.start_time %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.end_time') %>:</strong>
+  <strong><%= t('tasks.headers.end_time') %>:</strong>
   <%= @task.end_time %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.priority') %>:</strong>
-  <%= I18n.t("enums.task.priority.#{@task.priority}") %>
+  <strong><%= t('tasks.headers.priority') %>:</strong>
+  <%= t("enums.task.priority.#{@task.priority}") %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.status') %>:</strong>
-  <%= I18n.t("enums.task.status.#{@task.status}") %>
+  <strong><%= t('tasks.headers.status') %>:</strong>
+  <%= t("enums.task.status.#{@task.status}") %>
 </p>
 
 <p>
-  <strong><%= I18n.t('tasks.headers.tags') %></strong>
+  <strong><%= t('tasks.headers.tags') %></strong>
   <%= @task.tags.map(&:name).join(", ") %>
 </p>
 
-<%= link_to I18n.t('tasks.link.edit'), edit_task_path(@task) %> |
-<%= link_to I18n.t('tasks.link.back'), tasks_path %>
+<%= link_to t('tasks.link.edit'), edit_task_path(@task) %> |
+<%= link_to t('tasks.link.back'), tasks_path %>
