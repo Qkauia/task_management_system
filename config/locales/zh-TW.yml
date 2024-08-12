@@ -30,6 +30,9 @@ zh-TW:
       back: "回上頁"
       english: "英文"
       chinese: "繁體中文"
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
   date:
     order:
       - :year

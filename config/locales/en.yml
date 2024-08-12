@@ -30,6 +30,9 @@ en:
       back: "Back"
       english: "English"
       chinese: "Chinese"
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
   date:
     order:
       - :year
