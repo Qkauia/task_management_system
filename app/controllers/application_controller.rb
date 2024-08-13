@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   helper_method :current_user
   before_action :set_locale
 
@@ -16,5 +17,13 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     redirect_to login_path unless current_user
+  end
+
+  private
+
+  def not_found
+    render file: Rails.public_path.join('404.html'),
+           status: :not_found,
+           layout: false
   end
 end
