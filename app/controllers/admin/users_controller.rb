@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_admin!
 
     def index
-      @users = User.all
+      @users = User.where.not(id: current_user.id)
     end
 
     def edit
@@ -12,17 +12,19 @@ module Admin
     end
 
     def update
-      @user = User.find(params[:id])
-      if @user.update(user_params)
+      if prevent_self_action
+        redirect_to admin_users_path, alert: t('.cannot_update_self')
+      elsif @user.update(user_params)
         redirect_to admin_users_path, notice: t('.success')
       else
         render :edit
       end
     end
-
+    
     def destroy
-      @user = User.find(params[:id])
-      if @user.admin? && User.where(role: :admin).count == 1
+      if prevent_self_action
+        redirect_to admin_users_path, alert: t('.cannot_delete_self')
+      elsif last_admin?
         redirect_to admin_users_path, alert: t('.last_admin')
       else
         @user.destroy
@@ -41,5 +43,11 @@ module Admin
 
       redirect_to root_path, alert: t('admin.users.unauthorized')
     end
+
+    def prevent_self_action
+      @user = User.find(params[:id])
+      @user == current_user
+    end
+    
   end
 end

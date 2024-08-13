@@ -169,8 +169,15 @@ en:
         email: "Email"
         role: "Role"
         save: "Save"
+      update:
+        success: "User was successfully updated"
+        cannot_update_self: "You cannot update yourself."
+      destroy:
+        success: "User was successfully deleted"
+        cannot_delete_self: "Cannot delete yourself."
+      cannot_delete_self: "Cannot delete yourself."
+      unauthorized: "You are not authorized to perform this action."
       form:
         email: "Email"
         role: "Role"
         submit: "Submit"
-
