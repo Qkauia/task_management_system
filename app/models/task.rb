@@ -8,6 +8,7 @@ class Task < ApplicationRecord
   enum status: { pending: 1, in_progress: 2, completed: 3 }
 
   validates :title, presence: true
+  validates :content, presence: true
   validates :priority, presence: true
   validates :status, presence: true
 
