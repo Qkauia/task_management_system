@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_admin!
 
     def index
-      @users = User.all
+      @users = User.where.not(id: current_user.id)
     end
 
     def edit
@@ -41,7 +41,7 @@ module Admin
     def authorize_admin!
       return if current_user.admin?
 
-      redirect_to root_path, alert: t('.unauthorized')
+      redirect_to root_path, alert: t('admin.users.unauthorized')
     end
 
     def prevent_self_action
@@ -52,6 +52,5 @@ module Admin
     def last_admin?
       @user.admin? && User.where(role: :admin).count == 1
     end
-
   end
 end
