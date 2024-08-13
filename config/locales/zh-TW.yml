@@ -178,7 +178,16 @@ zh-TW:
         email: "電子郵件"
         role: "角色"
         save: "保存"
+      update:
+        success: "使用者已成功更新"
+        cannot_update_self: "無法更新自己。"
+      destroy:
+        success: "使用者已成功刪除"
+        cannot_delete_self: "無法刪除自己。"
+      cannot_delete_self: "無法刪除自己。"
+      unauthorized: "您沒有權限執行此操作。"
       form:
         email: "電子郵件"
         role: "角色"
         submit: "提交"
+
