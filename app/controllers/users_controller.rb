@@ -21,10 +21,15 @@ class UsersController < ApplicationController
     @user = current_user
 
     if @user.authenticate(params[:user][:current_password])
-      if @user.update(user_params)
-        redirect_to root_path, notice: t('users.password.update_success')
+      if passwords_present?
+        if @user.update(user_params)
+          redirect_to root_path, notice: t('users.password.update_success')
+        else
+          flash.now[:alert] = t('users.password.update_failed')
+          render :edit
+        end
       else
-        flash.now[:alert] = t('users.password.update_failed')
+        flash.now[:alert] = t('users.password.fields_cannot_be_blank')
         render :edit
       end
     else
@@ -37,5 +42,9 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def passwords_present?
+    params[:user][:password].present? && params[:user][:password_confirmation].present?
   end
 end

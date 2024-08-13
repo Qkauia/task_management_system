@@ -1,5 +1,15 @@
 <h1><%= t('users.headers.registration') %></h1>
 
+<% if @user.errors.any? %>
+  <section class="error-messages">
+    <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </section>
+<% end %>
+
 <%= form_with model: @user, url: signup_path, local: true do |form| %>
   <div>
     <%= form.label :email, t('users.form.email') %>
