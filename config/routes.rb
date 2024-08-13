@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   scope "(:locale)", locale: /en|zh-TW/ do
     resources :tasks
     resources :users, only: [:new, :create, :edit, :update]
+    namespace :admin do
+      resources :users, only: [:index, :edit, :update, :destroy]
+    end
 
     root "tasks#index"
 
