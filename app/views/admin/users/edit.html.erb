@@ -1,0 +1,17 @@
+<h1><%= t('admin.users.edit.title', email: @user.email) %></h1>
+
+<%= form_with model: @user, url: admin_user_path(@user), local: true do |form| %>
+  <div>
+    <%= form.label :email, t('admin.users.edit.email') %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :role, t('admin.users.edit.role') %>
+    <%= form.select :role, User.roles.keys.map { |role| [t("enums.user.role.#{role}"), role] } %>
+  </div>
+
+  <div>
+    <%= form.submit t('admin.users.edit.save') %>
+  </div>
+<% end %>

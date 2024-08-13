@@ -115,6 +115,10 @@ zh-TW:
         pending: "待處理"
         in_progress: "進行中"
         completed: "已完成"
+    user:
+      role:
+        user: '一般使用者'
+        admin: '管理者'
   helpers:
     submit:
       create: "新增"
@@ -147,8 +151,33 @@ zh-TW:
     errors:
       update_failed: "密碼更新失敗。"
       current_password_incorrect: "當前密碼不正確。"
+    alerts:
+      insufficient_permissions: '權限不足，無法存取該頁面。'
+      last_admin: '無法刪除最後一位管理員。'
+      cannot_delete_last_admin: '無法刪除最後一位管理員。'
+      user_deleted: '使用者已刪除。'
   navbar:
       home: '首頁'
       registration: '註冊'
       login: '登入'
-      logout: '登出'  
+      logout: '登出'
+  admin:
+    users:
+      index:
+        title: "使用者管理"
+        headers:
+          email: "電子郵件"
+          role: "角色"
+          actions: "操作"
+        edit: "編輯"
+        delete: "刪除"
+        confirm_delete: "你確定要刪除此使用者嗎？"
+      edit:
+        title: "編輯使用者 %{email}"
+        email: "電子郵件"
+        role: "角色"
+        save: "保存"
+      form:
+        email: "電子郵件"
+        role: "角色"
+        submit: "提交"
