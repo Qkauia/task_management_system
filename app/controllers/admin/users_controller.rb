@@ -20,7 +20,7 @@ module Admin
         render :edit
       end
     end
-    
+
     def destroy
       if prevent_self_action
         redirect_to admin_users_path, alert: t('.cannot_delete_self')
