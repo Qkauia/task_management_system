@@ -26,15 +26,17 @@
 
 ## Table Schema
 
-### users
+### Users
 
-| Column                 | Data Type         | Description                                |
-|------------------------|-------------------|--------------------------------------------|
-| email                  | string            | User's email address, not null, unique     |
-| password_hash          | string            | Hashed password for the user, not null     |
-| password_salt          | string            | Salt used for hashing the password, not null |
-| created_at             | datetime          | Record creation timestamp, not null        |
-| updated_at             | datetime          | Record last updated timestamp, not null    |
+| Column        | Data Type  | Description                                  |
+|---------------|------------|----------------------------------------------|
+| email         | string     | User's email address; not null; unique       |
+| password_hash | string     | Hashed password for the user; not null       |
+| password_salt | string     | Salt used for hashing the password; not null |
+| role          | string     | User's role, enum with values: 'user', 'admin' |
+| deleted_at    | datetime   | Timestamp for when the record was soft-deleted |
+| created_at    | datetime   | Record creation timestamp; not null          |
+| updated_at    | datetime   | Record last updated timestamp; not null      |
 
 ### tasks
 | Column     | Data Type | Description                                                         |
