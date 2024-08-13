@@ -161,6 +161,7 @@ zh-TW:
       registration: '註冊'
       login: '登入'
       logout: '登出'
+      admin_interface: '管理者介面'
   admin:
     users:
       index:

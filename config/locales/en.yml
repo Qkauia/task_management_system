@@ -152,6 +152,7 @@ en:
       registration: 'Sign Up'
       login: 'LogIn'
       logout: 'LogOut'
+      admin_interface: 'Admin Interface'
   admin:
     users:
       index:

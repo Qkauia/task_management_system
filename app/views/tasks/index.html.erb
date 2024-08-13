@@ -1,6 +1,4 @@
 <h1><%= t('tasks.headers.my_tasks') %></h1>
-<%= link_to t('tasks.link.english'), url_for(locale: 'en') %>
-<%= link_to t('tasks.link.chinese'), url_for(locale: 'zh-TW') %>
 
 <%= form_with url: tasks_path, method: :get, local: true do |form| %>
   <%= form.label :status, t('tasks.filters.status') %>
