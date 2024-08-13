@@ -136,6 +136,8 @@ zh-TW:
       success: "註冊成功，您已登入"
     password:
       update_success: "密碼已成功更新"
+      current_password_incorrect: "當前密碼不正確"
+      fields_cannot_be_blank: "密碼和確認密碼不能為空"
     headers:
       registration: '註冊'
       update_password: '更改密碼'
@@ -190,4 +192,12 @@ zh-TW:
         email: "電子郵件"
         role: "角色"
         submit: "提交"
-
+  activerecord:
+    errors:
+      models:
+        task:
+          attributes:
+            title:
+              blank: "標題不能為空"
+            content:
+              blank: "內容不能為空"
