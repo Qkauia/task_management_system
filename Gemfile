@@ -35,9 +35,11 @@ group :development do
 end
 
 group :test do
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '6.1.1'
   gem 'shoulda-matchers'
   gem 'webmock'
+  gem 'capybara', '3.40.0'
+  gem 'selenium-webdriver', '4.10'
+  gem 'webdrivers', '5.3.0'
+  gem 'rails-controller-testing'
 end
