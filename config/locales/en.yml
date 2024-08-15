@@ -139,6 +139,8 @@ en:
       email: 'e-mail'
       current_password: "Current Password"
       new_password: "New Password"
+      cannot_be_blank: "can't be blank"
+      already_been_taken: "has already been taken"
     confirm:
       logout: 'Are you sure you want to log out?'
     errors:
