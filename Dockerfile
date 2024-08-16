@@ -56,9 +56,12 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
-# 設置運行時文件的權限，並以非 root 用戶運行以確保安全性
-RUN useradd rails --create-home --shell /bin/bash && \
+# 設置運行時文件的權限
+RUN mkdir -p db log storage tmp node_modules public/packs && \
     chown -R rails:rails db log storage tmp node_modules public/packs
+
+# 創建非 root 用戶並設置默認運行用戶
+RUN useradd -m -s /bin/bash rails
 USER rails
 
 # 入口點負責準備資料庫
