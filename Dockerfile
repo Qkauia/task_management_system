@@ -34,8 +34,8 @@ RUN bundle install && \
 # Install JavaScript dependencies using Yarn
 COPY package.json yarn.lock ./
 
-# 使用单独的 yarn install 命令，不带额外选项
-RUN yarn install
+# 使用网络并发选项解决网络问题
+RUN yarn install --network-concurrency 1 --network-timeout 600000
 
 # Copy application code
 COPY . .
