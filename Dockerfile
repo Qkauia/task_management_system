@@ -1,71 +1,33 @@
 # syntax = docker/dockerfile:1
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+# 基础构建阶段
 ARG RUBY_VERSION=3.2.0
 FROM ruby:$RUBY_VERSION-slim AS base
 
-# Rails app lives here
-WORKDIR /rails
+# Node.js 构建阶段
+FROM node:16-alpine AS nodebuild
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
 
-# Throw-away build stage to reduce size of final image
+# Rails 构建阶段
 FROM base AS build
 
-# Install packages needed to build gems and Yarn
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config curl && \
-    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn-archive-keyring.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn
+WORKDIR /rails
 
-# Install application gems
+# 安装系统依赖
+RUN apt-get update -qq && apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+
+# 复制 Node.js 构建结果
+COPY --from=nodebuild /app/node_modules ./node_modules
+
+# 安装 Ruby 依赖
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle install
 
-# Install JavaScript dependencies using Yarn
-COPY package.json yarn.lock ./
-
-# 使用网络并发选项解决网络问题
-RUN yarn install --network-concurrency 1 --network-timeout 600000
-
-# Copy application code
+# 复制应用代码
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
-
-# Precompile assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE=$SECRET_KEY_BASE ./bin/rails assets:precompile
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp node_modules public/packs
-USER rails
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+# 继续处理 Rails 和其他操作
+# ...
