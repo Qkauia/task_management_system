@@ -41,8 +41,8 @@ COPY . .
 # 預編譯 bootsnap 代碼以加快啟動速度
 RUN bundle exec bootsnap precompile app/ lib/
 
-# 在不需要 SECRET_KEY_BASE 的情況下預編譯生產資源
-RUN SECRET_KEY_BASE=$SECRET_KEY_BASE ./bin/rails assets:precompile
+# 使用臨時的 SECRET_KEY_BASE 預編譯生產資源
+RUN SECRET_KEY_BASE=dummy_secret_key_base ./bin/rails assets:precompile
 
 # 最終映像的部署階段
 FROM base
