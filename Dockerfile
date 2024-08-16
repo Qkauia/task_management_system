@@ -1,33 +1,71 @@
 # syntax = docker/dockerfile:1
 
-# 基础构建阶段
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.2.0
 FROM ruby:$RUBY_VERSION-slim AS base
 
-# Node.js 构建阶段
-FROM node:16-alpine AS nodebuild
-
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install
-
-# Rails 构建阶段
-FROM base AS build
-
+# Rails app lives here
 WORKDIR /rails
 
-# 安装系统依赖
-RUN apt-get update -qq && apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
 
-# 复制 Node.js 构建结果
-COPY --from=nodebuild /app/node_modules ./node_modules
+# Throw-away build stage to reduce size of final image
+FROM base AS build
 
-# 安装 Ruby 依赖
+# Install packages needed to build gems and Yarn
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config curl && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/yarn-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install -y yarn
+
+# Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
 
-# 复制应用代码
+# Install JavaScript dependencies using Yarn
+COPY package.json yarn.lock ./
+
+# 使用网络并发选项解决网络问题，保留锁文件
+RUN rm -rf node_modules && yarn install --network-concurrency 1 --network-timeout 600000
+
+# Copy application code
 COPY . .
 
-# 继续处理 Rails 和其他操作
-# ...
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile app/ lib/
+
+# Precompile assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE=$SECRET_KEY_BASE ./bin/rails assets:precompile
+
+# Final stage for app image
+FROM base
+
+# Install packages needed for deployment
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy built artifacts: gems, application
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /rails /rails
+
+# Run and own only the runtime files as a non-root user for security
+RUN useradd rails --create-home --shell /bin/bash && \
+    chown -R rails:rails db log storage tmp node_modules public/packs
+USER rails
+
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD ["./bin/rails", "server"]
