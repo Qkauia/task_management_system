@@ -1,3 +1,6 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "@hotwired/turbo-rails"
-import "controllers"
+import { Application } from "@hotwired/stimulus"
+import "./controllers"
+const application = Application.start()
+
+import "bootstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
