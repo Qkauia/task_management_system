@@ -1,0 +1,2 @@
+web: bin/rails server -p 3000
+js: yarn esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch

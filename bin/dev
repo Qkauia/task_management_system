@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Check if bin/yarn exists before trying to run it
+if [ ! -f "bin/yarn" ]; then
+  echo "bin/yarn not found. Please ensure it exists and is executable."
+  exit 1
+fi
+
+# Install dependencies if not already installed
+./bin/yarn install --check-files
+
+# Start Foreman to manage Procfile.dev
+if command -v foreman >/dev/null; then
+  exec foreman start -f Procfile.dev "$@"
+elif command -v overmind >/dev/null; then
+  exec overmind start -f Procfile.dev "$@"
+else
+  echo "Neither foreman nor overmind is installed. Please install one of them."
+  exit 1
+fi
