@@ -57,11 +57,15 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
 # 設置運行時文件的權限
-RUN mkdir -p db log storage tmp public/packs && \
-    chown -R rails:rails /rails
+RUN mkdir -p db log storage tmp public/packs
 
-# 創建非 root 用戶並設置默認運行用戶
+# 創建非 root 用戶
 RUN useradd -m -s /bin/bash rails
+
+# 更改應用目錄的所有權
+RUN chown -R rails:rails /rails/db /rails/log /rails/storage /rails/tmp /rails/public/packs
+
+# 設置默認運行用戶
 USER rails
 
 # 入口點負責準備資料庫
