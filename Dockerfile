@@ -33,7 +33,9 @@ RUN bundle install && \
 
 # Install JavaScript dependencies using Yarn
 COPY package.json yarn.lock ./
-RUN yarn install --check-files
+
+# 清理 Yarn 缓存并安装依赖，增加 --verbose 以获取详细调试信息
+RUN yarn cache clean && yarn install --check-files --verbose
 
 # Copy application code
 COPY . .
