@@ -34,8 +34,8 @@ RUN bundle install && \
 # Install JavaScript dependencies using Yarn
 COPY package.json yarn.lock ./
 
-# 清理 Yarn 缓存并安装依赖，增加 --verbose 以获取详细调试信息
-RUN yarn cache clean && yarn install --check-files --verbose
+# 增强调试输出，处理依赖问题
+RUN yarn cache clean && yarn install --check-files --verbose || cat /rails/yarn-error.log
 
 # Copy application code
 COPY . .
