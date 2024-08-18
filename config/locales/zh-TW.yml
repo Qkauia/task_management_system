@@ -10,6 +10,7 @@ zh-TW:
     headers:
       my_tasks: "我的任務"
       new_task : "新增任務"
+      edit_task: "編輯任務" 
       task_details: "任務細節"
       title: "標題"
       priority: "優先順序"
@@ -28,6 +29,7 @@ zh-TW:
       actions: "操作"
       content: "內容"
       tags: "標記"
+      new_tag: "新增標記"
     filters:
       status: "按狀態篩選"
       keyword: "關鍵字尋找"
