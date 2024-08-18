@@ -1,50 +1,66 @@
-<% if @task.errors.any? %>
-  <section class="error-messages">
-    <ul>
-    <% @task.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-    </ul>
-  </section>
-<% end %>
+<%= form_with model: @task, local: true, class: "needs-validation" do |form| %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :title, t('tasks.form.title'), class: "form-label" %>
+      <%= form.text_field :title, class: "form-control", required: true %>
+    </div>
 
-<%= form_with model: @task, local: true do |form| %>
-  <div>
-    <%= form.label :title, t('tasks.form.title') %>
-    <%= form.text_field :title %>
+    <div class="col-md-6 mb-3">
+      <%= form.label :priority, t('tasks.form.priority'), class: "form-label" %>
+      <%= form.select :priority, Task.priorities.keys.map { |p| [t("enums.task.priority.#{p}"), p] }, {}, class: "form-select" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :content, t('tasks.form.content') %>
-    <%= form.text_area :content %>
+  <!-- 日期和時間選擇器組合 -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :start_time, t('tasks.form.start_time'), class: "form-label" %>
+      <div class="input-group">
+        <%= form.date_select :start_time, { class: "form-control" }, class: "form-control" %>
+        <%= form.time_select :start_time, { class: "form-control" }, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <%= form.label :end_time, t('tasks.form.end_time'), class: "form-label" %>
+      <div class="input-group">
+        <%= form.date_select :end_time, { class: "form-control" }, class: "form-control" %>
+        <%= form.time_select :end_time, { class: "form-control" }, class: "form-control" %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :start_time, t('tasks.form.start_time') %>
-    <%= form.datetime_select :start_time %>
+  <div class="mb-3">
+    <%= form.label :content, t('tasks.form.content'), class: "form-label" %>
+    <%= form.text_area :content, class: "form-control", rows: 3, required: true %>
   </div>
 
-  <div>
-    <%= form.label :end_time, t('tasks.form.end_time') %>
-    <%= form.datetime_select :end_time %>
+  <!-- 標籤選擇按鈕 -->
+  <div class="mb-3">
+    <%= form.label :tags, t('tasks.form.tags'), class: "form-label" %>
+    <div class="btn-group-toggle" data-toggle="buttons">
+      <% Tag.all.each do |tag| %>
+        <label class="btn btn-outline-primary tag-button <%= 'active' if @task.tag_ids.include?(tag.id) %>">
+          <input type="checkbox" name="task[tag_ids][]" value="<%= tag.id %>" autocomplete="off" <%= 'checked' if @task.tag_ids.include?(tag.id) %> hidden>
+          <%= tag.name %>
+        </label>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :priority, t('tasks.form.priority') %>
-    <%= form.select :priority, Task.priorities.keys.map { |p| [t("enums.task.priority.#{p}"), p] } %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :new_tag, t('tasks.form.new_tag'), class: "form-label" %>
+      <%= form.text_field :new_tag, class: "form-control" %>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <%= form.label :status, t('tasks.form.status'), class: "form-label" %>
+      <%= form.select :status, Task.statuses.keys.map { |s| [t("enums.task.status.#{s}"), s] }, {}, class: "form-select" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :status, t('tasks.form.status') %>
-    <%= form.select :status, Task.statuses.keys.map { |s| [t("enums.task.status.#{s}"), s] } %>
-  </div>
-
-  <div>
-    <%= form.label :tags, t('tasks.form.tags') %>
-    <%= form.collection_select :tag_ids, Tag.all, :id, :name, {}, multiple: true %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="text-center">
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
