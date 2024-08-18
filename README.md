@@ -27,6 +27,11 @@
     rails db:migrate
     ```
 
+4. 啟動rails and yarn
+    ```bash
+    bin/dev
+    ```
+
 ## Table Schema
 
 ### Users
