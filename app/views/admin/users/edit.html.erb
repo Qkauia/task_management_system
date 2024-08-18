@@ -1,17 +1,23 @@
-<h1><%= t('admin.users.edit.title', email: @user.email) %></h1>
+<div class="container my-4">
+  <h1 class="text-center mb-4"><%= t('admin.users.edit.title', email: @user.email) %></h1>
 
-<%= form_with model: @user, url: admin_user_path(@user), local: true do |form| %>
-  <div>
-    <%= form.label :email, t('admin.users.edit.email') %>
-    <%= form.text_field :email %>
-  </div>
+  <div class="card shadow-sm p-4">
+    <div class="card-body">
+      <%= form_with model: @user, url: admin_user_path(@user), local: true, class: "needs-validation" do |form| %>
+        <div class="mb-3">
+          <%= form.label :email, t('admin.users.edit.email'), class: "form-label" %>
+          <%= form.text_field :email, class: "form-control", required: true %>
+        </div>
 
-  <div>
-    <%= form.label :role, t('admin.users.edit.role') %>
-    <%= form.select :role, User.roles.keys.map { |role| [t("enums.user.role.#{role}"), role] } %>
-  </div>
+        <div class="mb-3">
+          <%= form.label :role, t('admin.users.edit.role'), class: "form-label" %>
+          <%= form.select :role, User.roles.keys.map { |role| [t("enums.user.role.#{role}"), role] }, {}, class: "form-select" %>
+        </div>
 
-  <div>
-    <%= form.submit t('admin.users.edit.save') %>
+        <div class="d-grid">
+          <%= form.submit t('admin.users.edit.save'), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-<% end %>
+</div>

@@ -1,32 +1,38 @@
-<h1><%= t('users.headers.registration') %></h1>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+    <div class="card-body">
+      <h1 class="text-center mb-4"><%= t('users.headers.registration') %></h1>
 
-<% if @user.errors.any? %>
-  <section class="error-messages">
-    <ul>
-    <% @user.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-    </ul>
-  </section>
-<% end %>
+      <% if @user.errors.any? %>
+        <div class="alert alert-danger">
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-<%= form_with model: @user, url: signup_path, local: true do |form| %>
-  <div>
-    <%= form.label :email, t('users.form.email') %>
-    <%= form.email_field :email %>
-  </div>
+      <%= form_with model: @user, url: signup_path, local: true, class: "needs-validation" do |form| %>
+        <div class="mb-3">
+          <%= form.label :email, t('users.form.email'), class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", required: true %>
+        </div>
 
-  <div>
-    <%= form.label :password, t('users.form.password') %>
-    <%= form.password_field :password %>
-  </div>
+        <div class="mb-3">
+          <%= form.label :password, t('users.form.password'), class: "form-label" %>
+          <%= form.password_field :password, class: "form-control", required: true %>
+        </div>
 
-  <div>
-    <%= form.label :password_confirmation, t('users.form.password_confirmation') %>
-    <%= form.password_field :password_confirmation %>
+        <div class="mb-3">
+          <%= form.label :password_confirmation, t('users.form.password_confirmation'), class: "form-label" %>
+          <%= form.password_field :password_confirmation, class: "form-control", required: true %>
+        </div>
+
+        <div class="d-grid">
+          <%= form.submit t('users.headers.registration'), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-  
-  <div>
-    <%= form.submit t('users.headers.registration') %>
-  </div>
-<% end %>
+</div>
