@@ -1,8 +1,8 @@
 <% [:notice, :alert].each do |type| %>
   <% if flash[type] %>
-    <div class="flash <%= type %>">
+    <div class="alert <%= type == :notice ? 'alert-success' : 'alert-danger' %> alert-dismissible fade show" role="alert">
       <%= flash[type] %>
-      <button onclick="this.parentElement.style.display='none'" class="close-btn">X</button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% end %>
 <% end %>
