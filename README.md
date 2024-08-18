@@ -18,6 +18,9 @@
     ```bash
     bundle install
     ```
+    ```bash
+   yarn install
+    ```
 3. 設定資料庫
     ```bash
     rails db:create
