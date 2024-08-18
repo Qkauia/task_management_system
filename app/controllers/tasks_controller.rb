@@ -8,6 +8,10 @@ class TasksController < ApplicationController
                          .with_status(params[:status])
                          .search(params[:query])
                          .sorted
+
+    if params[:tag_id].present?
+      @tasks = @tasks.joins(:tags).where(tags: { id: params[:tag_id] })
+    end
   end
 
   def show; end
