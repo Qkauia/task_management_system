@@ -34,6 +34,7 @@ zh-TW:
       status: "按狀態篩選"
       keyword: "關鍵字尋找"
       filter: "篩選"
+      tag: "標記篩選"
     link:
       new_task: "建立新任務"
       show: "檢視"
