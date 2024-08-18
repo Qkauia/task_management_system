@@ -11,21 +11,18 @@
     </div>
   </div>
 
-  <!-- 日期和時間選擇器組合 -->
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= form.label :start_time, t('tasks.form.start_time'), class: "form-label" %>
       <div class="input-group">
-        <%= form.date_select :start_time, { class: "form-control" }, class: "form-control" %>
-        <%= form.time_select :start_time, { class: "form-control" }, class: "form-control" %>
+        <%= form.text_field :start_time, class: "form-control datetime-picker" %>
       </div>
     </div>
 
     <div class="col-md-6 mb-3">
       <%= form.label :end_time, t('tasks.form.end_time'), class: "form-label" %>
       <div class="input-group">
-        <%= form.date_select :end_time, { class: "form-control" }, class: "form-control" %>
-        <%= form.time_select :end_time, { class: "form-control" }, class: "form-control" %>
+        <%= form.text_field :end_time, class: "form-control datetime-picker" %>
       </div>
     </div>
   </div>
@@ -35,7 +32,6 @@
     <%= form.text_area :content, class: "form-control", rows: 3, required: true %>
   </div>
 
-  <!-- 標籤選擇按鈕 -->
   <div class="mb-3">
     <%= form.label :tags, t('tasks.form.tags'), class: "form-label" %>
     <div class="btn-group-toggle" data-toggle="buttons">
