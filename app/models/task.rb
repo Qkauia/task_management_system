@@ -14,9 +14,7 @@ class Task < ApplicationRecord
 
   scope :with_status, ->(status) { where(status: status) if status.present? }
   scope :search, lambda { |query|
-    if query.present?
-      joins(:tags).where("title ILIKE ? OR content ILIKE ? OR tags.name ILIKE ?", "%#{query}%", "%#{query}%", "%#{query}%").distinct
-    end
+    joins(:tags).where("title ILIKE ? OR content ILIKE ? OR tags.name ILIKE ?", "%#{query}%", "%#{query}%", "%#{query}%").distinct if query.present?
   }
   scope :sorted, -> { order(priority: :desc, start_time: :asc) }
 

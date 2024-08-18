@@ -24,11 +24,11 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= t('tasks.headers.title') %></th>
-      <th><%= t('tasks.headers.priority') %></th>
-      <th><%= t('tasks.headers.status') %></th>
-      <th><%= t('tasks.headers.start_time') %></th>
-      <th><%= t('tasks.headers.end_time') %></th>
+      <th><%=t('tasks.headers.title') %><%= sort_link('title', '  ▼') %></th>
+      <th><%= t('tasks.headers.priority') %><%= sort_link('priority', '  ▼') %></th>
+      <th><%= t('tasks.headers.status') %><%= sort_link('status', '  ▼') %></th>
+      <th><%= t('tasks.headers.start_time') %><%= sort_link('start_time', '  ▼') %></th>
+      <th><%= t('tasks.headers.end_time') %><%= sort_link('end_time', '  ▼') %></th>
       <th><%= t('tasks.headers.actions') %></th>
     </tr>
   </thead>
