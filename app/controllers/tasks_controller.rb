@@ -7,11 +7,12 @@ class TasksController < ApplicationController
                          .where(deleted_at: nil)
                          .with_status(params[:status])
                          .search(params[:query])
+                         .order(sort_column => sort_direction)
                          .sorted
 
-    if params[:tag_id].present?
-      @tasks = @tasks.joins(:tags).where(tags: { id: params[:tag_id] })
-    end
+    return if params[:tag_id].blank?
+
+    @tasks = @tasks.joins(:tags).where(tags: { id: params[:tag_id] })
   end
 
   def show; end
@@ -61,5 +62,13 @@ class TasksController < ApplicationController
 
     new_tag = Tag.find_or_create_by(name: params[:task][:new_tag])
     @task.tags << new_tag unless @task.tags.include?(new_tag)
+  end
+
+  def sort_column
+    %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : "priority"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end
