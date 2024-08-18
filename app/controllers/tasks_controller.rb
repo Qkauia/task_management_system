@@ -21,6 +21,7 @@ class TasksController < ApplicationController
   def create
     @task = current_user.tasks.new(task_params)
     if @task.save
+      create_new_tag_if_needed
       redirect_to tasks_path, notice: t('.success')
     else
       render :new, status: :unprocessable_entity
@@ -29,6 +30,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
+      create_new_tag_if_needed
       redirect_to tasks_path, notice: t('.success')
     else
       render :edit, status: :unprocessable_entity
@@ -48,5 +50,12 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :content, :start_time, :end_time, :priority, :status, tag_ids: [])
+  end
+
+  def create_new_tag_if_needed
+    return if params[:task][:new_tag].blank?
+
+    new_tag = Tag.find_or_create_by(name: params[:task][:new_tag])
+    @task.tags << new_tag unless @task.tags.include?(new_tag)
   end
 end
