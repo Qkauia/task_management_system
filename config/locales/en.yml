@@ -10,7 +10,8 @@ en:
     headers:
       my_tasks: "My Tasks"
       task_details: "Task Details"
-      new_task : "New Task"
+      new_task: "New Task"
+      edit_task: "Edit Task" 
       title: "Title"
       priority: "Priority"
       status: "Status"
