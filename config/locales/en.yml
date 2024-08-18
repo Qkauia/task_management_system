@@ -24,6 +24,7 @@ en:
       status: "Filter by Status"
       keyword: "Keyword Search"
       filter: "Filter"
+      tag: "Tag Filter"
     link:
       new_task: "New Task"
       show: "Show"
