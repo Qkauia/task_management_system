@@ -9,6 +9,8 @@ class TasksController < ApplicationController
                          .search(params[:query])
                          .order(sort_column => sort_direction)
                          .sorted
+                         .page(params[:page])
+                         .per(10)
 
     return if params[:tag_id].blank?
 

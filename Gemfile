@@ -18,6 +18,8 @@ gem "bootsnap", require: false
 gem "bcrypt", "~> 3.1.7"
 gem 'paranoia'
 gem 'sassc'
+gem 'kaminari'
+gem 'kaminari-bootstrap'
 
 group :development, :test do
   gem 'rubocop', require: false

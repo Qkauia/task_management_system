@@ -19,6 +19,10 @@
   <div class="col-auto align-self-end">
     <%= form.submit t('tasks.filters.filter'), class: "btn btn-primary" %>
   </div>
+  
+  <div class="col-auto align-self-end">
+    <%= link_to t('tasks.link.new_task'), new_task_path, class: "btn btn-success mt-3 text-decoration-none" %>
+  </div>
 <% end %>
 
 <table class="table table-striped">
@@ -50,4 +54,6 @@
   </tbody>
 </table>
 
-<%= link_to t('tasks.link.new_task'), new_task_path, class: "btn btn-success mt-3 text-decoration-none" %>
+<div class="d-flex justify-content-center">
+  <%= paginate @tasks %>
+</div>
