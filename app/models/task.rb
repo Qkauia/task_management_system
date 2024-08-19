@@ -11,6 +11,7 @@ class Task < ApplicationRecord
   validates :content, presence: true
   validates :priority, presence: true
   validates :status, presence: true
+  validate :start_time_cannot_be_greater_than_or_equal_to_end_time
 
   scope :with_status, ->(status) { where(status: status) if status.present? }
   scope :search, lambda { |query|
@@ -24,5 +25,13 @@ class Task < ApplicationRecord
 
   def human_status
     I18n.t("enums.task.status.#{status}")
+  end
+
+  private
+
+  def start_time_cannot_be_greater_than_or_equal_to_end_time
+    return unless start_time.present? && end_time.present? && start_time >= end_time
+
+    errors.add(:start_time, I18n.t('tasks.errors.start_time_greater_than_end_time'))
   end
 end
