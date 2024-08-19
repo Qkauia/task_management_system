@@ -1,4 +1,10 @@
 zh-TW:
+  errors:
+    template:
+      header:
+        one: "%{count} 個錯誤禁止被儲存"
+        other: "%{count} 個錯誤禁止被儲存"
+      body: "請檢查以下錯誤訊息："
   tasks:
     create:
       success: "任務已成功建立。"
@@ -24,7 +30,7 @@ zh-TW:
       title: "標題"
       priority: "優先順序"
       status: "狀態"
-      start_time: "開始時間"
+      start_time: "開始時間（留意開始時間必須大於結束時間）"
       end_time: "結束時間"
       actions: "操作"
       content: "內容"
@@ -43,6 +49,9 @@ zh-TW:
       back: "回上頁"
       english: "英文"
       chinese: "繁體中文"
+    errors:
+      start_time_greater_than_end_time: "開始時間大於結束時間"
+      prohibited: "禁止"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"

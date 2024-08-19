@@ -1,15 +1,11 @@
-import { Application } from "@hotwired/stimulus"
-import "@hotwired/turbo-rails"
-import "./controllers"
-const application = Application.start()
+import "@hotwired/turbo-rails";
+import "./controllers";
 
-import "bootstrap"
-import "bootstrap/dist/css/bootstrap.min.css"
-import "./controllers/tag_buttons_controller"
-
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { Mandarin } from "flatpickr/dist/l10n/zh"
+import { Mandarin } from "flatpickr/dist/l10n/zh";
 
 document.addEventListener("turbo:load", () => {
   flatpickr(".datetime-picker", {
