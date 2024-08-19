@@ -26,8 +26,11 @@
     rails db:create
     rails db:migrate
     ```
-
-4. 啟動rails and yarn
+4. 建立資料
+    ```bash
+    rails db:seed
+    ```
+5. 啟動rails and yarn
     ```bash
     bin/dev
     ```
