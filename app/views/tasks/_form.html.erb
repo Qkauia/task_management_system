@@ -1,47 +1,65 @@
-<%= form_with model: @task, local: true, class: "needs-validation" do |form| %>
+<%= form_with model: @task, local: true, class: "needs-validation", data: { controller: "task-time", turbo: false } do |form| %>
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= form.label :title, t('tasks.form.title'), class: "form-label" %>
-      <%= form.text_field :title, class: "form-control", required: true %>
+      <%= form.text_field :title, class: "form-control #{'is-invalid' if @task.errors[:title].any?}", required: true %>
+      <% if @task.errors[:title].any? %>
+        <div class="invalid-feedback">
+          <%= @task.errors[:title].first %>
+        </div>
+      <% end %>
     </div>
 
     <div class="col-md-6 mb-3">
       <%= form.label :priority, t('tasks.form.priority'), class: "form-label" %>
-      <%= form.select :priority, Task.priorities.keys.map { |p| [t("enums.task.priority.#{p}"), p] }, {}, class: "form-select" %>
+      <%= form.select :priority, Task.priorities.keys.map { |p| [t("enums.task.priority.#{p}"), p] }, {}, class: "form-select #{'is-invalid' if @task.errors[:priority].any?}" %>
+      <% if @task.errors[:priority].any? %>
+        <div class="invalid-feedback">
+          <%= @task.errors[:priority].first %>
+        </div>
+      <% end %>
     </div>
   </div>
 
-  <div class="row">
+  <!-- Start and End Time Inputs -->
+  <div class="row" data-controller="task-time">
     <div class="col-md-6 mb-3">
       <%= form.label :start_time, t('tasks.form.start_time'), class: "form-label" %>
-      <div class="input-group">
+      <div class="input-group" data-task-time-target="startTime">
         <%= form.text_field :start_time, class: "form-control datetime-picker" %>
+        <% if @task.errors[:start_time].any? %>
+          <div class="invalid-feedback" style="display: block;">
+            <%= @task.errors[:start_time].first %>
+          </div>
+        <% end %>
       </div>
     </div>
 
     <div class="col-md-6 mb-3">
       <%= form.label :end_time, t('tasks.form.end_time'), class: "form-label" %>
-      <div class="input-group">
-        <%= form.text_field :end_time, class: "form-control datetime-picker" %>
+      <div class="input-group" data-task-time-target="endTime">
+        <%= form.text_field :end_time, class: "form-control datetime-picker #{'is-invalid' if @task.errors[:end_time].any?}" %>
+        <% if @task.errors[:end_time].any? %>
+          <div class="invalid-feedback" style="display: block;">
+            <%= @task.errors[:end_time].first %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
 
   <div class="mb-3">
     <%= form.label :content, t('tasks.form.content'), class: "form-label" %>
-    <%= form.text_area :content, class: "form-control", rows: 3, required: true %>
+    <%= form.text_area :content, class: "form-control picker" %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :tags, t('tasks.form.tags'), class: "form-label" %>
-    <div class="btn-group-toggle" data-toggle="buttons">
-      <% Tag.all.each do |tag| %>
-        <label class="btn btn-outline-primary tag-button <%= 'active' if @task.tag_ids.include?(tag.id) %>">
-          <input type="checkbox" name="task[tag_ids][]" value="<%= tag.id %>" autocomplete="off" <%= 'checked' if @task.tag_ids.include?(tag.id) %> hidden>
-          <%= tag.name %>
-        </label>
-      <% end %>
-    </div>
+  <div class="mb-3" data-controller="tag-buttons">
+    <% Tag.all.each do |tag| %>
+      <label class="btn btn-outline-primary tag-button <%= 'active' if @task.tag_ids.include?(tag.id) %>" data-tag-buttons-target="button">
+        <input type="checkbox" name="task[tag_ids][]" value="<%= tag.id %>" autocomplete="off" <%= 'checked' if @task.tag_ids.include?(tag.id) %> hidden>
+        <%= tag.name %>
+      </label>
+    <% end %>
   </div>
 
   <div class="row">
@@ -56,6 +74,7 @@
     </div>
   </div>
 
+  <!-- Submit Button -->
   <div class="text-center">
     <%= form.submit class: "btn btn-primary" %>
   </div>
