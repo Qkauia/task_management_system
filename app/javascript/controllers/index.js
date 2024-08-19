@@ -1,10 +1,7 @@
-// Import and register all your controllers from the importmap under controllers/*
-import { application } from "./application" 
+import { application } from "./application"
 
-// Eager load all controllers defined in the import map under controllers/**/*_controller
-// import { eagerLoadControllersFrom } from "@hotwired/stimulus"
-// eagerLoadControllersFrom("controllers", application)
+import TagButtonsController from "./tag_buttons_controller";
+application.register("tag-buttons", TagButtonsController);
 
-// Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
-// import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"
-// lazyLoadControllersFrom("controllers", application)
+import TaskTimeController from "./task_time_controller";
+application.register("task-time", TaskTimeController);
