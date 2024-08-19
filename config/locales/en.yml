@@ -33,6 +33,8 @@ en:
       back: "Back"
       english: "English"
       chinese: "Chinese"
+    errors:
+      start_time_greater_than_end_time: "StartTime greater than EndTime"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
