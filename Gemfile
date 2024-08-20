@@ -20,7 +20,7 @@ gem 'paranoia'
 gem 'sassc'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
-gem 'carrierwave'
+gem 'carrierwave', '~> 3.0'
 gem 'mini_magick'
 
 
