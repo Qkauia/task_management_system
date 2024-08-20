@@ -178,10 +178,19 @@ zh-TW:
       login: '登入'
       logout: '登出'
       admin_interface: '管理者介面'
+      notification: '通知'
+      notification_links:
+        mark_as_read: '標示已讀'
+        view_tasks: '檢視任務'
+        view_all_notifications: '檢視所有通知'
+      notification_messages:
+        no_notification: '沒有新的通知'
   admin:
     users:
       index:
         title: "使用者管理"
+        search_button: "尋找"
+        search_placeholder: "請輸入使用者E-mail關鍵字"
         headers:
           email: "電子郵件"
           role: "角色"
@@ -215,3 +224,10 @@ zh-TW:
               blank: "標題不能為空"
             content:
               blank: "內容不能為空"
+  notification:
+    marked_as_read: "通知已標記為已讀"
+    all_notifications: "所有通知"
+    task_is_due_soon: "即將到期。"
+    task_end_time_has_passed: "超過了結束時間。"
+    no_unread_notifications: "沒有未讀通知"
+
