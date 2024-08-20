@@ -3,18 +3,18 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
 
   def index
-    @tasks = current_user.tasks.includes(:tags)
-                         .where(deleted_at: nil)
-                         .with_status(params[:status])
-                         .search(params[:query])
-                         .order(sort_column => sort_direction)
+    @tasks = current_user.tasks
+                         .with_associations
+                         .filtered_by_status(params[:status])
+                         .filtered_by_query(params[:query])
+                         .ordered_by(sort_column, sort_direction)
                          .sorted
                          .page(params[:page])
                          .per(10)
 
     return if params[:tag_id].blank?
 
-    @tasks = @tasks.joins(:tags).where(tags: { id: params[:tag_id] })
+    @tasks = @tasks.left_outer_joins(:tags).where(tags: { id: params[:tag_id] })
   end
 
   def show; end
