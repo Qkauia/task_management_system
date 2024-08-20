@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
       redirect_to root_path, notice: t('sessions.login.success')
+      check_task_notifications(current_user)
     else
       flash.now[:alert] = t('sessions.messages.errors')
       render :new
