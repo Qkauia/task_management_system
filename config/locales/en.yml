@@ -161,10 +161,19 @@ en:
       login: 'LogIn'
       logout: 'LogOut'
       admin_interface: 'Admin Interface'
+      notification: 'Notification'
+      notification_links:
+        mark_as_read: 'Mark as Read'
+        view_tasks: 'View Task'
+        view_all_notifications: 'View all Notifications'
+      notification_messages:
+        no_notification: 'No new Notifications'
   admin:
     users:
       index:
         title: "User Management"
+        search_button: "Search Button"
+        search_placeholder: "Please enter User Email Keyword"
         headers:
           email: "Email"
           role: "Role"
@@ -198,3 +207,10 @@ en:
               blank: "can't be blank"
             content:
               blank: "can't be blank"
+  notification:
+    marked_as_read: "Notification marked as Read"
+    all_notifications: "Notifications"
+    task_is_due_soon: "is due soon."
+    task_end_time_has_passed: "EndTime has passed."
+    no_unread_notifications: "No unread Notifications"
+
