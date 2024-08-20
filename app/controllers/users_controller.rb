@@ -38,10 +38,28 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit_profile
+    @user = current_user
+  end
+
+  def update_profile
+    @user = current_user
+    if @user.update(profile_params)
+      redirect_to root_path, notice: t('users.avatar.updated_successfully')
+    else
+      flash.now[:alert] = t('users.avatar.update_failed')
+      render :edit_profile
+    end
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation, :avatar)
+  end
+
+  def profile_params
+    params.require(:user).permit(:avatar)
   end
 
   def passwords_present?
