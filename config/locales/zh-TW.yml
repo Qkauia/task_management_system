@@ -132,6 +132,9 @@ zh-TW:
         user: '一般使用者'
         admin: '管理者'
   helpers:
+    label:
+      user:
+        avatar: "選擇大頭照"
     submit:
       create: "新增"
       update: "更新"
@@ -162,6 +165,11 @@ zh-TW:
       new_password: "新密碼"
       cannot_be_blank: "不能為空"
       already_been_taken: "已經被使用"
+      upload_avatar: "上傳頭像"
+    avatar:
+      updated_successfully: "頭像更新成功"
+      update_failed: "頭像更新失敗"
+      update: '更新頭像'
     confirm:
       logout: '確定要登出嗎'
     errors:
@@ -177,6 +185,7 @@ zh-TW:
       registration: '註冊'
       login: '登入'
       logout: '登出'
+      update_avatar: '更新頭像'
       admin_interface: '管理者介面'
       notification: '通知'
       notification_links:

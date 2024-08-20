@@ -115,6 +115,9 @@ en:
         user: 'User'
         admin: 'Admin'
   helpers:
+    label:
+      user:
+        avatar: "Select Avatar"
     submit:
       create: "Create %{model}"
       update: "Update %{model}"
@@ -145,6 +148,11 @@ en:
       new_password: "New Password"
       cannot_be_blank: "can't be blank"
       already_been_taken: "has already been taken"
+      upload_avatar: "Upload Avatar"
+    avatar:
+      updated_successfully: "Avatar Updated Successfully"
+      update_failed: "Avatar Update Failed"
+      update: "Update Avatar"
     confirm:
       logout: 'Are you sure you want to log out?'
     errors:
@@ -160,6 +168,7 @@ en:
       registration: 'Sign Up'
       login: 'LogIn'
       logout: 'LogOut'
+      update_avatar: 'Update Avatar'
       admin_interface: 'Admin Interface'
       notification: 'Notification'
       notification_links:
