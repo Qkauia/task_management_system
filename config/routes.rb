@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :edit, :update, :destroy]
     end
 
+    get '/profile/edit', to: 'users#edit_profile', as: :edit_profile
+    patch '/profile', to: 'users#update_profile', as: :update_profile
+
     resources :notifications, only: [:index] do
       member do
         patch :mark_as_read

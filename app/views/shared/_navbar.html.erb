@@ -51,12 +51,27 @@
               <% end %>
             </ul>
           </li>
-          <!-- User Links -->
-          <li class="nav-item">
-            <%= link_to t('navbar.logout'), logout_path, class: "nav-link", data: { turbo_method: "delete", turbo_confirm: t('users.confirm.logout') } %>
-          </li>
-          <li class="nav-item">
-            <%= link_to t('users.headers.update_password'), edit_user_path(current_user), class: "nav-link" %>
+          <!-- User Links with Avatar -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <% if current_user.avatar.present? %>
+                <%= image_tag current_user.avatar.url(:thumb), class: "rounded-circle me-2", width: 30, height: 30 %>
+              <% else %>
+                <%= image_tag "default_avatar.jpg", class: "rounded-circle me-2", width: 45, height: 45 %>
+              <% end %>
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <%= link_to t('users.headers.update_password'), edit_user_path(current_user), class: "dropdown-item" %>
+              </li>
+              <li>
+                <%= link_to t('navbar.logout'), logout_path, class: "dropdown-item", data: { turbo_method: "delete", turbo_confirm: t('users.confirm.logout') } %>
+              </li>
+              <li class="nav-item">
+                <%= link_to t('navbar.update_avatar'), edit_profile_path, class: "dropdown-item" %>
+              </li>
+            </ul>
           </li>
         <% else %>
           <li class="nav-item">
