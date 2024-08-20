@@ -29,8 +29,13 @@
           <%= form.password_field :password_confirmation, class: "form-control", required: true %>
         </div>
 
+        <div class="mb-3">
+          <%= form.label :avatar, t('users.form.upload_avatar'), class: "mb-2" %>
+          <%= form.file_field :avatar, class: "form-control" %>
+        </div>
+
         <div class="d-grid">
-          <%= form.submit t('users.headers.registration'), class: "btn btn-primary" %>
+          <%= form.submit t('users.headers.registration'), class: "mt-2 btn btn-primary" %>
         </div>
       <% end %>
     </div>
