@@ -21,7 +21,6 @@
     </div>
   </div>
 
-  <!-- Start and End Time Inputs -->
   <div class="row" data-controller="task-time">
     <div class="col-md-6 mb-3">
       <%= form.label :start_time, t('tasks.form.start_time'), class: "form-label" %>
@@ -53,9 +52,9 @@
     <%= form.text_area :content, class: "form-control picker" %>
   </div>
 
-  <div class="mb-3" data-controller="tag-buttons">
+  <div class="mb-5" data-controller="tag-buttons">
     <% Tag.all.each do |tag| %>
-      <label class="btn btn-outline-primary tag-button <%= 'active' if @task.tag_ids.include?(tag.id) %>" data-tag-buttons-target="button">
+      <label class="btn btn-outline-primary tag-button mb-2 <%= 'active' if @task.tag_ids.include?(tag.id) %>" data-tag-buttons-target="button">
         <input type="checkbox" name="task[tag_ids][]" value="<%= tag.id %>" autocomplete="off" <%= 'checked' if @task.tag_ids.include?(tag.id) %> hidden>
         <%= tag.name %>
       </label>
@@ -74,7 +73,6 @@
     </div>
   </div>
 
-  <!-- Submit Button -->
   <div class="text-center">
     <%= form.submit class: "btn btn-primary" %>
   </div>

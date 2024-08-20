@@ -14,6 +14,12 @@ class User < ApplicationRecord
 
   enum role: { user: 'user', admin: 'admin' }
 
+  scope :excluding_current_user, ->(current_user) { where.not(id: current_user.id) }
+  scope :filtered_by_query, lambda { |query|
+    cleaned_query = query.to_s.strip
+    where("email ILIKE ?", "%#{cleaned_query}%").distinct if cleaned_query.present?
+  }
+
   def authenticate(password)
     password_hash == encrypt(password)
   end
