@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_admin!
 
     def index
-      @users = User.where.not(id: current_user.id)
+      @users = User.where.not(id: current_user.id).page(params[:page]).per(10)
     end
 
     def edit
