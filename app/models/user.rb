@@ -5,6 +5,7 @@ class User < ApplicationRecord
   before_save :set_default_role
 
   has_many :tasks, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, length: { minimum: 6 }, confirmation: true, if: -> { password.present? }
