@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   acts_as_paranoid
+  mount_uploader :avatar, AvatarUploader
 
   before_save :encrypt_password, if: -> { password.present? }
   before_save :set_default_role

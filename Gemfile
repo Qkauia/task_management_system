@@ -20,6 +20,9 @@ gem 'paranoia'
 gem 'sassc'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
+gem 'carrierwave'
+gem 'mini_magick'
+
 
 group :development, :test do
   gem 'rubocop', require: false
