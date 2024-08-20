@@ -13,7 +13,7 @@
 
   <div class="col-auto">
     <%= form.label :tag, t('tasks.filters.tag'), class: "form-label" %>
-    <%= form.collection_select :tag_id, Tag.all, :id, :name, { include_blank: true, selected: params[:tag_id] }, { class: "form-select" } %>
+    <%= form.collection_select :tag_id, Tag.order(:name), :id, :name, { include_blank: true, selected: params[:tag_id] }, { class: "form-select" } %>
   </div>
 
   <div class="col-auto align-self-end">

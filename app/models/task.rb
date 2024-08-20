@@ -13,11 +13,14 @@ class Task < ApplicationRecord
   validates :status, presence: true
   validate :start_time_cannot_be_greater_than_or_equal_to_end_time
 
-  scope :with_status, ->(status) { where(status: status) if status.present? }
-  scope :search, lambda { |query|
-    joins(:tags).where("title ILIKE ? OR content ILIKE ? OR tags.name ILIKE ?", "%#{query}%", "%#{query}%", "%#{query}%").distinct if query.present?
+  scope :with_associations, -> { includes(:tags).where(deleted_at: nil) }
+  scope :filtered_by_status, ->(status) { where(status: status) if status.present? }
+  scope :filtered_by_query, lambda { |query|
+    cleaned_query = query.to_s.strip
+    joins(:tags).where("title ILIKE ? OR content ILIKE ? OR tags.name ILIKE ?", "%#{cleaned_query}%", "%#{cleaned_query}%", "%#{cleaned_query}%").distinct if cleaned_query.present?
   }
   scope :sorted, -> { order(priority: :desc, start_time: :asc) }
+  scope :ordered_by, ->(column, direction) { order(column => direction) }
 
   def human_priority
     I18n.t("enums.task.priority.#{priority}")
