@@ -1,0 +1,25 @@
+<h1 class="mb-4"><%= t('notification.all_notifications') %></h1>
+
+<% if @notifications.any? %>
+  <% @notifications.each do |notification| %>
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+      <div>
+        <p class="mb-0">
+          <%= notification.message %>
+        </p>
+      </div>
+      <div>
+        <%= link_to t('navbar.notification_links.mark_as_read'), mark_as_read_notification_path(notification), data: { turbo_method: :patch }, class: "btn btn-sm btn-outline-primary me-2" %>
+        <%= link_to t('navbar.notification_links.view_tasks'), task_path(notification.task), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="alert alert-info text-center">
+    <%= t('notification.no_unread_notifications') %>
+  </div>
+<% end %>
+
+<div class="d-flex justify-content-center mt-4">
+  <%= paginate @notifications %>
+</div>

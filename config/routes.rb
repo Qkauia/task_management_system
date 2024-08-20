@@ -6,6 +6,12 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :edit, :update, :destroy]
     end
 
+    resources :notifications, only: [:index] do
+      member do
+        patch :mark_as_read
+      end
+    end
+
     root "tasks#index"
 
     get 'signup', to: 'users#new'
