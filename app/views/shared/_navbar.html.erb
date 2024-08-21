@@ -57,7 +57,7 @@
               <% if current_user.avatar.present? %>
                 <%= image_tag current_user.avatar.url(:thumb), class: "rounded-circle me-2", width: 30, height: 30 %>
               <% else %>
-                <%= image_tag "default_avatar.jpg", class: "rounded-circle me-2", width: 45, height: 45 %>
+                <%= image_tag "default_avatar.jpg", class: "rounded-circle me-2", width: 30, height: 30 %>
               <% end %>
               <%= current_user.email %>
             </a>
