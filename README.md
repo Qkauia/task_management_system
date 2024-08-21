@@ -35,65 +35,97 @@
     bin/dev
     ```
 
-## Table Schema
+## Database Structure
 
-### Users
+### Extensions
+This project uses the following PostgreSQL extension:
+- `plpgsql`: Procedural language support for PostgreSQL.
 
-| Column        | Data Type  | Description                                  |
-|---------------|------------|----------------------------------------------|
-| email         | string     | User's email address; not null; unique       |
-| password_hash | string     | Hashed password for the user; not null       |
-| password_salt | string     | Salt used for hashing the password; not null |
-| role          | string     | User's role, enum with values: 'user', 'admin' |
-| deleted_at    | datetime   | Timestamp for when the record was soft-deleted |
-| created_at    | datetime   | Record creation timestamp; not null          |
-| updated_at    | datetime   | Record last updated timestamp; not null      |
+### Tables
 
-### tasks
-| Column     | Data Type | Description                                                         |
-|------------|-----------|---------------------------------------------------------------------|
-| title      | string    | Title of the task                                                   |
-| content    | text      | Content or description of the task                                  |
-| start_time | datetime  | Start time of the task                                              |
-| end_time   | datetime  | End time of the task                                                |
-| priority   | integer   | Priority of the task (1: low, 2: medium, 3: high)                   |
-| status     | integer   | Status of the task (1: pending, 2: in progress, 3: completed)       |
-| user_id    | bigint    | ID of the user who created the task, not null                       |
-| created_at | datetime  | Record creation timestamp, not null                                 |
-| updated_at | datetime  | Record last updated timestamp, not null                             |
-| deleted_at | datetime  | Record last deleted timestamp (used for soft delete functionality)  |
+#### `notifications`
+| Column     | Type                | Description                  |
+|------------|--------------------|------------------------------|
+| `user_id`  | `bigint` (foreign key) | References the `users` table. |
+| `task_id`  | `bigint` (foreign key) | References the `tasks` table. |
+| `message`  | `string`            | Notification message.        |
+| `read_at`  | `datetime`          | Timestamp when notification was read. |
+| `created_at` | `datetime`        | Timestamp when the record was created. |
+| `updated_at` | `datetime`        | Timestamp when the record was last updated. |
 
-### tags
-| Column     | Data Type | Description                      |
-|------------|-----------|----------------------------------|
-| name       | string    | Name of the tag                  |
-| created_at | datetime  | Record creation timestamp, not null |
-| updated_at | datetime  | Record last updated timestamp, not null |
+**Indexes:**
+- `index_notifications_on_task_id`
+- `index_notifications_on_user_id`
 
-### task_tags
-| Column     | Data Type | Description                      |
-|------------|-----------|----------------------------------|
-| task_id    | bigint    | ID of the associated task, not null |
-| tag_id     | bigint    | ID of the associated tag, not null |
-| created_at | datetime  | Record creation timestamp, not null |
-| updated_at | datetime  | Record last updated timestamp, not null |
+#### `tags`
+| Column     | Type        | Description                  |
+|------------|-------------|------------------------------|
+| `name`     | `string`    | Name of the tag.             |
+| `created_at` | `datetime` | Timestamp when the record was created. |
+| `updated_at` | `datetime` | Timestamp when the record was last updated. |
 
-### Indexes
-- **users**
-  - `index_users_on_email` (unique)
-  - `index_users_on_reset_password_token` (unique)
+#### `task_tags`
+| Column     | Type                | Description                  |
+|------------|--------------------|------------------------------|
+| `task_id`  | `bigint` (foreign key) | References the `tasks` table. |
+| `tag_id`   | `bigint` (foreign key) | References the `tags` table. |
+| `created_at` | `datetime`        | Timestamp when the record was created. |
+| `updated_at` | `datetime`        | Timestamp when the record was last updated. |
 
-- **tasks**
-  - `index_tasks_on_user_id`
+**Indexes:**
+- `index_task_tags_on_tag_id`
+- `index_task_tags_on_task_id`
 
-- **task_tags**
-  - `index_task_tags_on_tag_id`
-  - `index_task_tags_on_task_id`
+#### `task_users`
+| Column     | Type                | Description                  |
+|------------|--------------------|------------------------------|
+| `user_id`  | `bigint` (foreign key) | References the `users` table. |
+| `task_id`  | `bigint` (foreign key) | References the `tasks` table. |
+| `created_at` | `datetime`        | Timestamp when the record was created. |
+| `updated_at` | `datetime`        | Timestamp when the record was last updated. |
+
+**Indexes:**
+- `index_task_users_on_task_id`
+- `index_task_users_on_user_id`
+
+#### `tasks`
+| Column     | Type                | Description                  |
+|------------|--------------------|------------------------------|
+| `title`    | `string`           | Task title.                  |
+| `content`  | `text`             | Task content.                |
+| `start_time` | `datetime`       | Start time for the task.     |
+| `end_time`   | `datetime`       | End time for the task.       |
+| `priority`  | `integer` (default: 1, not null) | Task priority (1: low, 2: medium, 3: high). |
+| `status`    | `integer` (default: 1, not null) | Task status (1: pending, 2: in progress, 3: completed). |
+| `user_id`   | `bigint` (foreign key) | References the `users` table. |
+| `created_at` | `datetime`        | Timestamp when the record was created. |
+| `updated_at` | `datetime`        | Timestamp when the record was last updated. |
+| `deleted_at` | `datetime`        | Soft delete timestamp.       |
+
+**Indexes:**
+- `index_tasks_on_deleted_at`
+- `index_tasks_on_user_id`
+
+#### `users`
+| Column     | Type                | Description                  |
+|------------|--------------------|------------------------------|
+| `email`    | `string` (default: "", not null) | User email address (must be unique). |
+| `created_at` | `datetime`        | Timestamp when the record was created. |
+| `updated_at` | `datetime`        | Timestamp when the record was last updated. |
+| `password_hash` | `string` (not null) | Hashed password.            |
+| `password_salt` | `string` (not null) | Password salt.              |
+| `role`     | `string`           | User role (e.g., admin, regular user). |
+| `deleted_at` | `datetime`        | Soft delete timestamp.       |
+| `avatar`   | `string`           | Path to user avatar.         |
+
+**Indexes:**
+- `index_users_on_deleted_at`
+- `index_users_on_email` (unique)
 
 ### Foreign Keys
-- **task_tags**
-  - `tag_id` references `tags`
-  - `task_id` references `tasks`
+- `notifications`: `task_id`, `user_id`
+- `task_tags`: `task_id`, `tag_id`
+- `task_users`: `task_id`, `user_id`
+- `tasks`: `user_id`
 
-- **tasks**
-  - `user_id` references `users`
+---
