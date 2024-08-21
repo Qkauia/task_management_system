@@ -7,6 +7,8 @@ class User < ApplicationRecord
 
   has_many :tasks, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :task_users, dependent: :destroy
+  has_many :shared_tasks, through: :task_users, source: :task
 
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, length: { minimum: 6 }, confirmation: true, if: -> { password.present? }
