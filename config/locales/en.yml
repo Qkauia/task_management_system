@@ -20,6 +20,10 @@ en:
       actions: "Actions"
       content: "Content"
       tags: "Tags"
+      shared_count: "Shared Count"
+      founder: "Founder"
+      related_parties: "Related Parties"
+      no_associated_users: "There are no related users at the moment"
     filters:
       status: "Filter by Status"
       keyword: "Keyword Search"
@@ -149,6 +153,11 @@ en:
       cannot_be_blank: "can't be blank"
       already_been_taken: "has already been taken"
       upload_avatar: "Upload Avatar"
+      select_mark: "Select Mark:"
+      choose_share_with_other_users: "Choose to Share with other Users:"
+      selected: "Selected "
+      peoples: " Peoples"
+      clear_all_selections: "Clear all Selections"
     avatar:
       updated_successfully: "Avatar Updated Successfully"
       update_failed: "Avatar Update Failed"

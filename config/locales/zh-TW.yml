@@ -26,6 +26,10 @@ zh-TW:
       actions: "操作"
       content: "內容"
       tags: "標記"
+      shared_count: "共享人數"
+      founder: "建立者"
+      related_parties: "關連者"
+      no_associated_users: "目前沒有關連使用者"
     form:
       title: "標題"
       priority: "優先順序"
@@ -166,6 +170,11 @@ zh-TW:
       cannot_be_blank: "不能為空"
       already_been_taken: "已經被使用"
       upload_avatar: "上傳頭像"
+      select_mark: "選取標記:"
+      choose_share_with_other_users: "選取分享其他使用者:"
+      selected: "已選取 "
+      peoples: " 人"
+      clear_all_selections: "清除所有選取"
     avatar:
       updated_successfully: "頭像更新成功"
       update_failed: "頭像更新失敗"
