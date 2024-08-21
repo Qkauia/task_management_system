@@ -11,7 +11,8 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "esbuild": "^0.23.0",
-    "flatpickr": "^4.6.13"
+    "flatpickr": "^4.6.13",
+    "select2": "^4.1.0-rc.0"
   },
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
