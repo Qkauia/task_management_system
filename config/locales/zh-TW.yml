@@ -27,9 +27,12 @@ zh-TW:
       content: "內容"
       tags: "標記"
       shared_count: "共享人數"
+      group_tasks: "群組任務"
+      show_calendar: "觀看日曆"
       founder: "建立者"
       related_parties: "關連者"
       no_associated_users: "目前沒有關連使用者"
+      no_group: "沒有群組"
     form:
       title: "標題"
       priority: "優先順序"
@@ -53,6 +56,8 @@ zh-TW:
       back: "回上頁"
       english: "英文"
       chinese: "繁體中文"
+      personal_tasks: "個人(分享)任務"
+      group_tasks: "群組任務"
     errors:
       start_time_greater_than_end_time: "開始時間大於結束時間"
       prohibited: "禁止"
@@ -289,3 +294,14 @@ zh-TW:
   alert:
       creation_failed: "新增失敗"
       not_found: "找不到頁面"
+  zh-TW:
+  calendar:
+    title: 任務日曆
+    close_button: 關閉
+    buttons:
+      prev: 上一個
+      next: 下一個
+      today: 今天
+      month: 月
+      week: 週
+      day: 日
