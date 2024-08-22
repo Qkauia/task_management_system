@@ -1,4 +1,5 @@
 @import "bootstrap";
 @import "flatpickr/dist/flatpickr.min.css";
 @import "kaminari-bootstrap";
-
+@import "@fullcalendar/core/main.css";
+@import "@fullcalendar/daygrid/main.css";
