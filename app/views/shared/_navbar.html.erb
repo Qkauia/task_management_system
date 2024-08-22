@@ -6,9 +6,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <%= link_to t('navbar.admin_interface'), admin_users_path, class: "nav-link" %>
-        </li>
+        <% if current_user&.role == "admin" %>
+          <li class="nav-item">
+            <%= link_to t('navbar.admin_interface'), admin_users_path, class: "nav-link" %>
+          </li>
+        <% end %>
         <li class="nav-item">
           <%= link_to t('tasks.link.english'), url_for(locale: 'en'), class: "nav-link" %>
         </li>
@@ -19,6 +21,9 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <%= link_to t('tasks.link.new_task'), new_task_path, class: "btn btn-success mx-2 text-decoration-none" %>
+        </li>
+        <li class="nav-item mx-1">
+          <%= link_to t('groups.links.create_group'), new_group_path, class: "btn btn-success text-decoration-none" %>
         </li>
         <% if current_user %>
           <!-- Notification Dropdown -->
@@ -36,7 +41,11 @@
                     <%= notification.message %>
                     <div class="mt-2">
                       <%= link_to t('navbar.notification_links.mark_as_read'), mark_as_read_notification_path(notification), data: { turbo_method: :patch }, class: "btn btn-sm btn-outline-primary" %>
-                      <%= link_to t('navbar.notification_links.view_tasks'), task_path(notification.task), class: "btn btn-sm btn-outline-secondary ms-2" %>
+                      <% if notification.task.present? %>
+                        <%= link_to t('navbar.notification_links.view_tasks'), task_path(notification.task), class: "btn btn-sm btn-outline-secondary ms-2" %>
+                      <% else %>
+                        <span class="text-muted"><%= t('navbar.notification_links.task_not_found') %></span>
+                      <% end %>
                     </div>
                   </li>
                   <li><hr class="dropdown-divider"></li>
@@ -66,19 +75,22 @@
                 <%= link_to t('users.headers.update_password'), edit_user_path(current_user), class: "dropdown-item" %>
               </li>
               <li>
-                <%= link_to t('navbar.logout'), logout_path, class: "dropdown-item", data: { turbo_method: "delete", turbo_confirm: t('users.confirm.logout') } %>
-              </li>
-              <li class="nav-item">
                 <%= link_to t('navbar.update_avatar'), edit_profile_path, class: "dropdown-item" %>
+              </li>
+              <li>
+                <%= link_to t('navbar.my_tasks'), tasks_path, class: "dropdown-item" %>
+              </li>
+              <li>
+                <%= link_to t('navbar.my_groups'), groups_path, class: "dropdown-item" %>
+              </li>
+              <li>
+                <%= link_to t('navbar.logout'), logout_path, class: "dropdown-item", data: { turbo_method: "delete", turbo_confirm: t('users.confirm.logout') } %>
               </li>
             </ul>
           </li>
         <% else %>
           <li class="nav-item">
             <%= link_to t('navbar.login'), login_path, class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to t('navbar.registration'), signup_path, class: "nav-link" %>
           </li>
         <% end %>
       </ul>
