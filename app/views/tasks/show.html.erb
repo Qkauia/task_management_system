@@ -8,11 +8,6 @@
     </div>
 
     <div class="mb-3">
-      <strong><%= t('tasks.headers.content') %>:</strong>
-      <span class="ms-2"><%= @task.content %></span>
-    </div>
-
-    <div class="mb-3">
       <strong><%= t('tasks.headers.start_time') %>:</strong>
       <span class="ms-2"><%= @task.start_time %></span>
     </div>
@@ -28,20 +23,30 @@
     </div>
 
     <div class="mb-3">
-      <strong><%= t('tasks.headers.related_parties') %>:</strong>
-      <% associated_users = @task.shared_users.where.not(id: current_user.id) %>
-      <% if current_user.email != @task.author.email %>
-        <span class="badge bg-primary ms-2"><%= @task.author.email %></span>
+      <strong>Related Groups:</strong>
+      <% if @task.groups.any? %>
+        <% @task.groups.each do |group| %>
+          <div class="mt-2">
+            <span class="badge bg-info"><%= group.name %>(群組)</span>
+            <% group.users.where.not(id: current_user.id).each do |user| %>
+              <span class="badge bg-primary ms-2"><%= user.email %></span>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <span class="ms-2 text-muted">No related groups</span>
       <% end %>
+    </div>
 
+    <div class="mb-3">
+      <strong>Related Users:</strong>
+      <% associated_users = @task.shared_users.where.not(id: current_user.id) %>
       <% if associated_users.any? %>
         <% associated_users.each do |user| %>
           <span class="badge bg-primary ms-2"><%= user.email %></span>
         <% end %>
       <% else %>
-        <% if current_user.email == @task.author.email %>
-          <span class="ms-2 text-muted"><%= t('tasks.headers.no_associated_users') %></span>
-        <% end %>
+        <span class="ms-2 text-muted">No related users</span>
       <% end %>
     </div>
 
@@ -62,6 +67,11 @@
     <div class="mb-3">
       <strong><%= t('tasks.headers.tags') %>:</strong>
       <span class="badge bg-warning ms-2"><%= @task.tags.map(&:name).join(", ") %></span>
+    </div>
+
+    <div class="mb-3">
+      <strong><%= t('tasks.headers.content') %>:</strong>
+      <span class="ms-2"><%= @task.content %></span>
     </div>
   </div>
 </div>

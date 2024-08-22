@@ -28,15 +28,14 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%=t('tasks.headers.title') %><%= sort_link('title', '  ▼') %></th>
+      <th><%= t('tasks.headers.title') %><%= sort_link('title', '  ▼') %></th>
       <th><%= t('tasks.headers.priority') %><%= sort_link('priority', '  ▼') %></th>
       <th><%= t('tasks.headers.status') %><%= sort_link('status', '  ▼') %></th>
       <th><%= t('tasks.headers.start_time') %><%= sort_link('start_time', '  ▼') %></th>
       <th><%= t('tasks.headers.end_time') %><%= sort_link('end_time', '  ▼') %></th>
+      <th><%= t('tasks.headers.group') %></th>
+      <th><%= t('tasks.headers.shared_count') %><%= sort_link('shared_count', '  ▼') %></th>
       <th><%= t('tasks.headers.actions') %></th>
-      <th>
-        <%= t('tasks.headers.shared_count') %><%= sort_link('shared_count', '  ▼') %>
-      </th>
     </tr>
   </thead>
   <tbody>
@@ -48,17 +47,27 @@
         <td><%= task.start_time %></td>
         <td><%= task.end_time %></td>
         <td>
+          <% if task.groups.any? %>
+            <%= task.groups.map(&:name).join(', ') %>
+          <% else %>
+            <em>無</em>
+          <% end %>
+        </td>
+        <td>
+          <% shared_count = task.shared_count %>
+          <% case shared_count %>
+          <% when 1..5 %>
+            <%= '☺' * shared_count %>
+          <% when 6..Float::INFINITY %>
+            <%= '☺☺☺☺☺..more' %>
+          <% else %>
+            <%= '&nbsp;'.html_safe %>
+          <% end %>
+        </td>
+        <td>
           <%= link_to t('tasks.link.show'), task, class: "btn btn-info btn-sm text-decoration-none" %>
           <%= link_to t('tasks.link.edit'), edit_task_path(task), class: "btn btn-warning btn-sm text-decoration-none" %>
           <%= link_to t('tasks.link.delete'), task, data: { turbo_method: "delete", turbo_confirm: t('tasks.destroy.confirm') }, class: "btn btn-danger btn-sm text-decoration-none" %>
-        </td>
-        <td>
-          <% shared_count = task.shared_users.where.not(id: task.user_id).count %>
-          <% if shared_count > 0 %>
-            <%= '☺' * shared_count %>
-          <% else %>
-            &nbsp;
-          <% end %>
         </td>
       </tr>
     <% end %>
