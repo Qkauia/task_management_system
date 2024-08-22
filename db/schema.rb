@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_21_022712) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_22_033120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "group_tasks", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.bigint "task_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_tasks_on_group_id"
+    t.index ["task_id"], name: "index_group_tasks_on_task_id"
+  end
+
+  create_table "group_users", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_users_on_group_id"
+    t.index ["user_id"], name: "index_group_users_on_user_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
 
   create_table "notifications", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -77,6 +103,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_21_022712) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "group_tasks", "groups"
+  add_foreign_key "group_tasks", "tasks"
+  add_foreign_key "group_users", "groups"
+  add_foreign_key "group_users", "users"
   add_foreign_key "notifications", "tasks"
   add_foreign_key "notifications", "users"
   add_foreign_key "task_tags", "tags"
