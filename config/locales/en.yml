@@ -21,9 +21,12 @@ en:
       content: "Content"
       tags: "Tags"
       shared_count: "Shared Count"
+      group_tasks: "Group Tasks"
+      show_calendar: "Show Calendar"
       founder: "Founder"
       related_parties: "Related Parties"
       no_associated_users: "There are no related users at the moment"
+      no_group: "No Group"
     filters:
       status: "Filter by Status"
       keyword: "Keyword Search"
@@ -37,6 +40,8 @@ en:
       back: "Back"
       english: "English"
       chinese: "Chinese"
+      personal_tasks: "Personal(Shared) Tasks"
+      group_tasks: "Group Tasks"
     errors:
       start_time_greater_than_end_time: "StartTime greater than EndTime"
     form:
@@ -272,3 +277,10 @@ en:
   alert:
       creation_failed: "Creation Failed"
       not_found: "Not Found"
+  calendar:
+    today: "Today"
+    month: "Month"
+    week: "Week"
+    day: "Day"
+    custom_button: "Custom Button"
+    alert_message: "You clicked the custom button!"
