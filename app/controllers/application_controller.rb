@@ -37,6 +37,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def sort_column
+    if params[:sort] == "shared_count"
+      "shared_count"
+    else
+      %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : "priority"
+    end
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
+
   private
 
   def not_found
