@@ -15,6 +15,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :groups, except: [:show] do
+      delete 'remove_user', on: :member
+    end
+
     root "tasks#index"
 
     get 'signup', to: 'users#new'
