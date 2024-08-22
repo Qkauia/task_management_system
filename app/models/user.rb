@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :task_users, dependent: :destroy
   has_many :shared_tasks, through: :task_users, source: :task
+  has_many :group_users, dependent: :destroy
+  has_many :groups, through: :group_users
+  has_many :owned_tasks, class_name: 'Task', dependent: :destroy
 
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, length: { minimum: 6 }, confirmation: true, if: -> { password.present? }
@@ -25,6 +28,10 @@ class User < ApplicationRecord
 
   def authenticate(password)
     password_hash == encrypt(password)
+  end
+
+  def accessible_tasks
+    owned_tasks.or(shared_tasks)
   end
 
   private
