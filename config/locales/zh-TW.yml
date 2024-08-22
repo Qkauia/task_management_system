@@ -56,6 +56,11 @@ zh-TW:
     errors:
       start_time_greater_than_end_time: "開始時間大於結束時間"
       prohibited: "禁止"
+    form:
+      choose_share_with_groups: "選擇與群組共享:"
+      selected: "已選取 "
+      groups: " 個群組"
+      clear_all_selections: "清除所有選取"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
@@ -196,6 +201,8 @@ zh-TW:
       logout: '登出'
       update_avatar: '更新頭像'
       admin_interface: '管理者介面'
+      my_tasks: '我的任務'
+      my_groups: '我的群組'
       notification: '通知'
       notification_links:
         mark_as_read: '標示已讀'
@@ -248,4 +255,37 @@ zh-TW:
     task_is_due_soon: "即將到期。"
     task_end_time_has_passed: "超過了結束時間。"
     no_unread_notifications: "沒有未讀通知"
-
+  groups:
+    create:
+      success: "群組已成功建立。"
+    update:
+      success: "群組已成功更新。"
+    destroy:
+      success: "群組已成功刪除。"
+    index:
+      group_list: "群組列表"
+    links:
+      create_group: "新增群組"
+    form:
+      name: "群組名稱"
+    headers:
+      new: "新增群組"
+      index: "我的群組"
+    show:
+      group_leader: "群主建立者:"
+      members: "群組成員:"
+    link:
+      delete: "刪除群組"
+      edit: "編輯群組"
+    remind:
+      select_group: "請選擇右側群組進行操作"
+    remove_user:
+      success: "%{email} 已移出群組。"
+      failure: "無法移除使用者。"
+      cannot_remove_leader: "無法移除群組建立者。"
+    confirm:
+      delete: "確定要刪除這個群組？"
+      remove_user: "確定要移除這位使用者？"
+  alert:
+      creation_failed: "新增失敗"
+      not_found: "找不到頁面"
