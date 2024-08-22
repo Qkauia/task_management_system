@@ -21,11 +21,18 @@ class ApplicationController < ActionController::Base
   end
 
   def check_task_notifications(user)
-    user.tasks.each do |task|
-      if task.end_time <= Time.current && user.notifications.where(task: task).blank?
-        user.notifications.create(task: task, message: "〖 #{task.title} 〗" + t('notification.task_end_time_has_passed').to_s)
-      elsif (task.end_time - 1.day) <= Time.current && user.notifications.where(task: task).blank?
-        user.notifications.create(task: task, message: "〖 #{task.title} 〗" + t('notification.task_is_due_soon').to_s)
+    owned_and_shared_tasks = Task.owned_and_shared_by(user)
+    group_tasks = Task.for_user_groups(user)
+
+    related_tasks = (owned_and_shared_tasks + group_tasks).uniq
+
+    related_tasks.each do |task|
+      next if task.end_time.blank?
+
+      if task.end_time <= Time.current && user.notifications.where(task: task, message: t('notification.task_end_time_has_passed', task_title: task.title)).blank?
+        user.notifications.create(task: task, message: t('notification.task_end_time_has_passed', task_title: task.title))
+      elsif (task.end_time - 2.days) <= Time.current && user.notifications.where(task: task, message: t('notification.task_is_due_soon', task_title: task.title)).blank?
+        user.notifications.create(task: task, message: t('notification.task_is_due_soon', task_title: task.title))
       end
     end
   end
