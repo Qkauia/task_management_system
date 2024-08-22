@@ -1,5 +1,24 @@
-@import "bootstrap";
-@import "flatpickr/dist/flatpickr.min.css";
-@import "kaminari-bootstrap";
-@import "@fullcalendar/core/main.css";
-@import "@fullcalendar/daygrid/main.css";
+
+.table td, .table th {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table {
+  word-wrap: break-word;
+}
+
+.task-title {
+  font-size: 0.9rem;
+}
+
+.task-event {
+  margin: 2px 0 !important;
+  border-radius: 2px !important;
+}
