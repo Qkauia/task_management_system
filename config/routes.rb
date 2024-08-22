@@ -4,20 +4,25 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :users, only: [:index, :edit, :update, :destroy]
     end
-    resources :tasks
+    resources :tasks, except: [:index] do
+      collection do
+        get :personal
+      end
+    end
+    resources :group_tasks, only: [:index]
 
     resources :notifications, only: [:index] do
       member do
         patch :mark_as_read
       end
     end
-    
+
     resources :groups, except: [:show] do
       delete 'remove_user', on: :member
     end
-    
-    root "tasks#index"
-    
+
+    root "tasks#personal"
+
     get 'signup', to: 'users#new'
     post 'signup', to: 'users#create'
     get 'login', to: 'sessions#new'
