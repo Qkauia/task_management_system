@@ -10,6 +10,8 @@ en:
     headers:
       my_tasks: "My Tasks"
       task_details: "Task Details"
+      all_tasks: "All Tasks"
+      important_tasks: "Important Tasks"
       new_task: "New Task"
       edit_task: "Edit Task" 
       title: "Title"

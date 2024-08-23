@@ -18,6 +18,8 @@ zh-TW:
       new_task : "新增任務"
       edit_task: "編輯任務" 
       task_details: "任務細節"
+      all_tasks: "所有任務"
+      important_tasks: "重要任務"
       title: "標題"
       priority: "優先順序"
       status: "狀態"
