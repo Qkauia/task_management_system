@@ -36,3 +36,6 @@
 
 /public/uploads/tmp/*
 /public/uploads/user/avatar/*
+
+/node_modules
+/app/assets/builds/*

@@ -1,91 +1,10 @@
-<script type="text/javascript">
-  var locale = "<%= I18n.locale %>";
-</script>
-
 <h1 class="mb-4"><%= t('tasks.headers.personal_tasks') %></h1>
 
-<%= form_with url: personal_tasks_path, method: :get, local: true, class: "row g-3 mb-4" do |form| %>
-  <div class="col-auto">
-    <%= form.label :status, t('tasks.filters.status'), class: "form-label" %>
-    <%= form.select :status, Task.statuses.keys.map { |status| [t("enums.task.status.#{status}"), status] }, { include_blank: true, selected: params[:status] }, class: "form-select" %>
-  </div>
+<%= render 'shared/filter_task_form', url: personal_tasks_path %>
 
-  <div class="col-auto">
-    <%= form.label :query, t('tasks.filters.keyword'), class: "form-label" %>
-    <%= form.text_field :query, value: params[:query], class: "form-control" %>
-  </div>
-
-  <div class="col-auto">
-    <%= form.label :tag, t('tasks.filters.tag'), class: "form-label" %>
-    <%= form.collection_select :tag_id, Tag.order(:name), :id, :name, { include_blank: true, selected: params[:tag_id] }, { class: "form-select" } %>
-  </div>
-
-  <div class="col-auto align-self-end">
-    <%= form.submit t('tasks.filters.filter'), class: "btn btn-primary" %>
-  </div>
-  
-  <div class="col-auto align-self-end">
-    <%= link_to t('tasks.link.new_task'), new_task_path, class: "btn btn-success mt-3 text-decoration-none" %>
-  </div>
-
-  <div class="col-auto align-self-end">
-    <%= link_to t('tasks.link.group_tasks'), group_tasks_path, class: "btn btn-success mt-3 text-decoration-none" %>
-  </div>
-  
-<% end %>
-<div class="col-auto align-self-end">
+<div class="col-auto mb-3 d-flex align-items-start gap-3">
   <button id="showCalendarButton" class="btn btn-primary"><%= t('tasks.headers.show_calendar') %></button>
+  <%= link_to t('tasks.link.group_tasks'), group_tasks_path, class: "btn btn-success text-decoration-none" %>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= t('tasks.headers.title') %><%= sort_link('title', '  ▼') %></th>
-      <th><%= t('tasks.headers.priority') %><%= sort_link('priority', '  ▼') %></th>
-      <th><%= t('tasks.headers.status') %><%= sort_link('status', '  ▼') %></th>
-      <th><%= t('tasks.headers.start_time') %><%= sort_link('start_time', '  ▼') %></th>
-      <th><%= t('tasks.headers.end_time') %><%= sort_link('end_time', '  ▼') %></th>
-      <th><%= t('tasks.headers.group') %></th>
-      <th><%= t('tasks.headers.shared_count') %><%= sort_link('shared_count', '  ▼') %></th>
-      <th><%= t('tasks.headers.actions') %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tasks.each do |task| %>
-      <tr>
-        <td><%= link_to task.title, task_path(task.id), class: "text-decoration-none task-title", title: task.title %></td>
-        <td><%= t("enums.task.priority.#{task.priority}") %></td>
-        <td><%= t("enums.task.status.#{task.status}") %></td>
-        <td><%= task.start_time %></td>
-        <td><%= task.end_time %></td>
-        <td>
-          <% if task.groups.any? %>
-            <%= task.groups.map(&:name).join(', ') %>
-          <% else %>
-            <p><%= t('tasks.headers.no_group') %></p>
-          <% end %>
-        </td>
-        <td>
-          <% shared_count = task.shared_count %>
-          <% case shared_count %>
-          <% when 1..5 %>
-            <%= '☺' * shared_count %>
-          <% when 6..Float::INFINITY %>
-            <%= '☺☺☺☺☺..more' %>
-          <% else %>
-            <%= '&nbsp;'.html_safe %>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to t('tasks.link.show'), task, class: "btn btn-info btn-sm text-decoration-none" %>
-          <%= link_to t('tasks.link.edit'), edit_task_path(task), class: "btn btn-warning btn-sm text-decoration-none" %>
-          <%= link_to t('tasks.link.delete'), task, data: { turbo_method: "delete", turbo_confirm: t('tasks.destroy.confirm') }, class: "btn btn-danger btn-sm text-decoration-none" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<div class="d-flex justify-content-center">
-  <%= paginate @tasks %>
-</div>
+<%= render 'shared/task_item' %>
