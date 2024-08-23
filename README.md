@@ -84,18 +84,20 @@ This project uses the following PostgreSQL extension:
 - `belongs_to :task`
 
 #### `tasks`
-| Column     | Type                | Description                  |
-|------------|--------------------|------------------------------|
-| `title`    | `string`           | Task title.                  |
-| `content`  | `text`             | Task content.                |
-| `start_time` | `datetime`       | Start time for the task.     |
-| `end_time` | `datetime`         | End time for the task.       |
-| `priority` | `integer` (default: 1, not null) | Task priority (1: low, 2: medium, 3: high). |
-| `status`   | `integer` (default: 1, not null) | Task status (1: pending, 2: in progress, 3: completed). |
-| `user_id`  | `bigint` (foreign key) | References the `users` table. |
-| `deleted_at` | `datetime`       | Soft delete timestamp.       |
-| `created_at` | `datetime`       | Timestamp when the record was created. |
-| `updated_at` | `datetime`       | Timestamp when the record was last updated. |
+| Column       | Type                     | Description                                                      |
+|--------------|--------------------------|------------------------------------------------------------------|
+| `title`      | `string`                 | Task title.                                                      |
+| `content`    | `text`                   | Task content.                                                    |
+| `start_time` | `datetime`               | Start time for the task.                                         |
+| `end_time`   | `datetime`               | End time for the task.                                           |
+| `priority`   | `integer` (default: 1, not null) | Task priority (1: low, 2: medium, 3: high).                     |
+| `status`     | `integer` (default: 1, not null) | Task status (1: pending, 2: in progress, 3: completed).         |
+| `position`   | `integer`                | Task's position for sorting or ordering purposes.                 |
+| `important`  | `boolean`                | Indicates if the task is marked as important (true: important, false: not important). |
+| `user_id`    | `bigint` (foreign key)   | References the `users` table.                                     |
+| `deleted_at` | `datetime`               | Soft delete timestamp.                                            |
+| `created_at` | `datetime`               | Timestamp when the record was created.                            |
+| `updated_at` | `datetime`               | Timestamp when the record was last updated.                       |
 
 **Indexes:**
 - `index_tasks_on_deleted_at`
