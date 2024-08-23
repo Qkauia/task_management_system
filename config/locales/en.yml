@@ -53,6 +53,7 @@ en:
       groups: "Groups"
       selected: "Selected"
       clear_all_selections: "Clear all Selections"
+      show_label_usage: "Show Label Usage"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"

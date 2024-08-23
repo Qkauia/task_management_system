@@ -15,8 +15,8 @@ zh-TW:
       confirm: "你確定嗎?"
     headers:
       my_tasks: "我的任務"
-      new_task : "新增任務"
-      edit_task: "編輯任務" 
+      new_task: "新增任務"
+      edit_task: "編輯任務"
       task_details: "任務細節"
       all_tasks: "所有任務"
       important_tasks: "重要任務"
@@ -47,9 +47,14 @@ zh-TW:
       content: "內容"
       tags: "標記"
       new_tag: "新增標記"
+      show_label_usage: "顯示標籤使用圖表"
+      choose_share_with_groups: "選擇與群組共享:"
+      selected: "已選取 "
+      groups: " 個群組"
+      clear_all_selections: "清除所有選取"
     filters:
       status: "按狀態篩選"
-      keyword: "關鍵字尋找"
+      keyword: "關鍵字搜尋"
       filter: "篩選"
       tag: "標記篩選"
     link:
@@ -65,11 +70,6 @@ zh-TW:
     errors:
       start_time_greater_than_end_time: "開始時間大於結束時間"
       prohibited: "禁止"
-    form:
-      choose_share_with_groups: "選擇與群組共享:"
-      selected: "已選取 "
-      groups: " 個群組"
-      clear_all_selections: "清除所有選取"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
@@ -106,34 +106,34 @@ zh-TW:
     distance_in_words:
       half_a_minute: "半分鐘"
       less_than_x_seconds:
-        one:   "少於 1 秒"
+        one: "少於 1 秒"
         other: "少於 %{count} 秒"
       x_seconds:
-        one:   "1 秒"
+        one: "1 秒"
         other: "%{count} 秒"
       x_minutes:
-        one:   "1 分鐘"
+        one: "1 分鐘"
         other: "%{count} 分鐘"
       about_x_hours:
-        one:   "大約 1 小時"
+        one: "大約 1 小時"
         other: "大約 %{count} 小時"
       x_days:
-        one:   "1 天"
+        one: "1 天"
         other: "%{count} 天"
       about_x_months:
-        one:   "大約 1 個月"
+        one: "大約 1 個月"
         other: "大約 %{count} 個月"
       x_months:
-        one:   "1 個月"
+        one: "1 個月"
         other: "%{count} 個月"
       about_x_years:
-        one:   "大約 1 年"
+        one: "大約 1 年"
         other: "大約 %{count} 年"
       over_x_years:
-        one:   "超過 1 年"
+        one: "超過 1 年"
         other: "超過 %{count} 年"
       almost_x_years:
-        one:   "接近 1 年"
+        one: "接近 1 年"
         other: "接近 %{count} 年"
   enums:
     task:
@@ -281,7 +281,7 @@ zh-TW:
       new: "新增群組"
       index: "我的群組"
     show:
-      group_leader: "群主建立者:"
+      group_leader: "群組建立者:"
       members: "群組成員:"
     link:
       delete: "刪除群組"
@@ -298,7 +298,6 @@ zh-TW:
   alert:
       creation_failed: "新增失敗"
       not_found: "找不到頁面"
-  zh-TW:
   calendar:
     title: 任務日曆
     close_button: 關閉
