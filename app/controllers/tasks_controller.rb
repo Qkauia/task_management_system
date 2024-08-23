@@ -114,7 +114,10 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :content, :start_time, :end_time, :priority, :status, :position, :important, tag_ids: [], shared_user_ids: [], group_ids: []).tap do |whitelisted|
+    params.require(:task).permit(
+      :title, :content, :start_time, :end_time, :priority, :status, :position, :important,
+      { tag_ids: [], shared_user_ids: [], group_ids: [] }, :file
+    ).tap do |whitelisted|
       whitelisted[:group_ids] ||= []
     end
   end
