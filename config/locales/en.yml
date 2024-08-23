@@ -46,6 +46,8 @@ en:
       chinese: "Chinese"
       personal_tasks: "Personal(Shared) Tasks"
       group_tasks: "Group Tasks"
+      download_file: "Download File"
+      view_file: "View File"
     errors:
       start_time_greater_than_end_time: "StartTime greater than EndTime"
     form:
@@ -54,6 +56,7 @@ en:
       selected: "Selected"
       clear_all_selections: "Clear all Selections"
       show_label_usage: "Show Label Usage"
+      upload_file: "Upload File"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
