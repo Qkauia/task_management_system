@@ -44,7 +44,7 @@ class TasksController < ApplicationController
     @task = current_user.tasks.new(task_params)
     if @task.save
       create_new_tag_if_needed
-      @task.file.attach(params[:task][:file]) if params[:task][:file].present?
+      attach_file_to_task
       redirect_to personal_tasks_path, notice: t('.success')
     else
       render :new, alert: t('alert.creation_failed')
@@ -55,6 +55,7 @@ class TasksController < ApplicationController
     if @task.user == current_user || @task.task_users.find_by(user: current_user)&.can_edit || current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
       if @task.update(task_params)
         create_new_tag_if_needed
+        attach_file_to_task
         redirect_to personal_tasks_path, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
@@ -138,5 +139,9 @@ class TasksController < ApplicationController
 
   def set_groups_by_letter
     @groups_by_letter = current_user.groups.order(:name).group_by { |group| group.name[0].upcase }
+  end
+
+  def attach_file_to_task
+    @task.file.attach(params[:task][:file]) if params[:task][:file].present?
   end
 end

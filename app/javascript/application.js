@@ -18,3 +18,4 @@ import './show_calendar';
 import './sortable_tasks';
 import './tags_reports';
 import './task_sortablejs_operation_tips';
+import './view_file';
