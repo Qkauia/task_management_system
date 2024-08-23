@@ -65,7 +65,10 @@
   </div>
 
   <div class="mb-2" data-controller="tag-buttons">
-    <p><%= t('users.form.select_mark') %></p>
+    <div class="mb-2">
+      <%= t('users.form.select_mark') %>
+      <button id="show-chart-button" class="btn btn-primary mx-3 mb-2" type="button"><%= t('tasks.form.show_label_usage') %></button>
+    </div>
     <% Tag.all.each do |tag| %>
       <label class="btn btn-outline-primary tag-button mb-2 <%= 'active' if @task.tag_ids.include?(tag.id) %>" data-tag-buttons-target="button">
         <input type="checkbox" name="task[tag_ids][]" value="<%= tag.id %>" autocomplete="off" <%= 'checked' if @task.tag_ids.include?(tag.id) %> hidden>
