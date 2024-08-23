@@ -47,6 +47,11 @@
     </div>
   </div>
 
+  <div class="col-md-6 mb-3">
+    <%= form.label :file, t('tasks.form.upload_file'), class: "form-label" %>
+    <%= form.file_field :file, class: "form-control" %>
+  </div>
+
   <div class="mb-3">
     <%= form.label :content, t('tasks.form.content'), class: "form-label" %>
     <%= form.text_area :content, class: "form-control picker" %>

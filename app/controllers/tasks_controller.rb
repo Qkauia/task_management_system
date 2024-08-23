@@ -44,6 +44,7 @@ class TasksController < ApplicationController
     @task = current_user.tasks.new(task_params)
     if @task.save
       create_new_tag_if_needed
+      @task.file.attach(params[:task][:file]) if params[:task][:file].present?
       redirect_to personal_tasks_path, notice: t('.success')
     else
       render :new, alert: t('alert.creation_failed')
