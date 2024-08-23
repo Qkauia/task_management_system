@@ -1,5 +1,7 @@
 class Task < ApplicationRecord
   acts_as_paranoid
+  has_one_attached :file
+
   belongs_to :user
   belongs_to :author, class_name: 'User', foreign_key: 'user_id', inverse_of: :tasks
   belongs_to :group, optional: true
