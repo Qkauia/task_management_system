@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     resources :tasks, except: [:index] do
       collection do
         get :personal
+        post :sort
+      end
+      member do
+        patch :update_importance
       end
     end
     resources :group_tasks, only: [:index]
