@@ -49,6 +49,26 @@ class ApplicationController < ActionController::Base
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
+  def calendar_serialize_task(task)
+    {
+      id: task.id,
+      title: task.title,
+      start: task.start_time,
+      end: task.end_time,
+      url: task_path(task),
+      color: task_color(task)
+    }
+  end
+
+  def task_color(task)
+    case task.status
+    when 'pending' then '#808080'
+    when 'in_progress' then '#728C72'
+    when 'completed' then '#A2634C'
+    else '#000000'
+    end
+  end
+
   private
 
   def not_found
