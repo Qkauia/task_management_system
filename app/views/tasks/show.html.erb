@@ -1,67 +1,71 @@
-<h1 class="mb-4"><%= t('tasks.headers.task_details') %></h1>
-
-<div class="card mb-4">
+<h1 class="mb-4 text-center"><%= t('tasks.headers.task_details') %></h1>
+<div class="card shadow-sm mb-4">
   <div class="card-body">
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.title') %>:</strong>
-      <span class="ms-2"><%= @task.title %></span>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.title') %>:</strong>
+        <span class="ms-2 text-muted"><%= @task.title %></span>
+      </div>
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.priority') %>:</strong>
+        <span class="ms-2 badge bg-<%= @task.priority == 'high' ? 'danger' : @task.priority == 'medium' ? 'warning' : 'secondary' %>">
+          <%= t("enums.task.priority.#{@task.priority}") %>
+        </span>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.start_time') %>:</strong>
-      <span class="ms-2"><%= @task.start_time %></span>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.start_time') %>:</strong>
+        <span class="ms-2 text-muted"><%= @task.start_time %></span>
+      </div>
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.end_time') %>:</strong>
+        <span class="ms-2 text-muted"><%= @task.end_time %></span>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.end_time') %>:</strong>
-      <span class="ms-2"><%= @task.end_time %></span>
-    </div>
-
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.founder') %>:</strong>
-      <span class="badge bg-success ms-2"><%= @task.author.email %></span>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.founder') %>:</strong>
+        <span class="badge bg-success ms-2"><%= @task.author.email %></span>
+      </div>
+      <div class="col-md-6">
+        <strong><%= t('tasks.headers.status') %>:</strong>
+        <span class="ms-2 badge bg-<%= @task.status == 'completed' ? 'success' : @task.status == 'in_progress' ? 'primary' : 'secondary' %>">
+          <%= t("enums.task.status.#{@task.status}") %>
+        </span>
+      </div>
     </div>
 
     <div class="mb-3">
       <strong>Related Groups:</strong>
       <% if @task.groups.any? %>
-        <% @task.groups.each do |group| %>
-          <div class="mt-2">
-            <span class="badge bg-info"><%= group.name %>(群組)</span>
+        <div class="mt-2">
+          <% @task.groups.each do |group| %>
+            <span class="badge bg-info me-2"><%= group.name %>(群組)</span>
             <% group.users.where.not(id: current_user.id).each do |user| %>
-              <span class="badge bg-primary ms-2"><%= user.email %></span>
+              <span class="badge bg-primary ms-1"><%= user.email %></span>
             <% end %>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       <% else %>
         <span class="ms-2 text-muted">No related groups</span>
       <% end %>
     </div>
-
+    
     <div class="mb-3">
       <strong>Related Users:</strong>
       <% associated_users = @task.shared_users.where.not(id: current_user.id) %>
       <% if associated_users.any? %>
-        <% associated_users.each do |user| %>
-          <span class="badge bg-primary ms-2"><%= user.email %></span>
-        <% end %>
+        <div class="mt-2">
+          <% associated_users.each do |user| %>
+            <span class="badge bg-primary me-2"><%= user.email %></span>
+          <% end %>
+        </div>
       <% else %>
         <span class="ms-2 text-muted">No related users</span>
       <% end %>
-    </div>
-
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.priority') %>:</strong>
-      <span class="ms-2 badge bg-<%= @task.priority == 'high' ? 'danger' : @task.priority == 'medium' ? 'warning' : 'secondary' %>">
-        <%= t("enums.task.priority.#{@task.priority}") %>
-      </span>
-    </div>
-
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.status') %>:</strong>
-      <span class="ms-2 badge bg-<%= @task.status == 'completed' ? 'success' : @task.status == 'in_progress' ? 'primary' : 'secondary' %>">
-        <%= t("enums.task.status.#{@task.status}") %>
-      </span>
     </div>
 
     <div class="mb-3">
@@ -71,12 +75,20 @@
 
     <div class="mb-3">
       <strong><%= t('tasks.headers.content') %>:</strong>
-      <span class="ms-2"><%= @task.content %></span>
+      <div class="mt-2 p-2 bg-light rounded border"><%= @task.content %></div>
     </div>
   </div>
 </div>
 
-<div class="d-flex gap-2">
+<div class="">
   <%= link_to t('tasks.link.edit'), edit_task_path(@task), class: "btn btn-primary" %>
   <%= link_to t('tasks.link.back'), personal_tasks_path, class: "btn btn-secondary" %>
+  <% if @task.file.attached? %>
+    <button id="view-file-button" class="btn btn-info"
+            data-file-type="<%= @task.file.content_type %>"
+            data-file-url="<%= rails_blob_path(@task.file, disposition: "inline") %>">
+      <%= t('tasks.link.view_file') %>
+    </button>
+    <%= link_to t('tasks.link.download_file'), rails_blob_path(@task.file, disposition: "attachment"), class: "btn btn-success" %>
+  <% end %>
 </div>
