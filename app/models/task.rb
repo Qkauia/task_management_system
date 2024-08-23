@@ -33,6 +33,9 @@ class Task < ApplicationRecord
   scope :ordered_by, ->(column, direction) { order(column => direction) }
   scope :filter_by_tag, ->(tag_id) { joins(:tags).where(tags: { id: tag_id }) if tag_id.present? }
 
+  default_scope { order(position: :asc) }
+  scope :important, -> { where(important: true) }
+
   scope :owned_and_shared_by, lambda { |user|
     Task.left_outer_joins(:task_users)
         .where("tasks.user_id = ? OR task_users.user_id = ?", user.id, user.id)
