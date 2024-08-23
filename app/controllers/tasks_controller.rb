@@ -11,26 +11,19 @@ class TasksController < ApplicationController
                  .filtered_by_query(params[:query])
                  .filter_by_tag(params[:tag_id])
                  .order("#{sort_column} #{sort_direction}")
-                 .sorted.page(params[:page]).per(10)
+                 .sorted.page(params[:page]).per(5)
+    @important_tasks = Task.owned_and_shared_by(current_user)
+                           .important
+                           .with_shared_count
+                           .filtered_by_status(params[:status])
+                           .filtered_by_query(params[:query])
+                           .filter_by_tag(params[:tag_id])
+                           .order("#{sort_column} #{sort_direction}")
 
     respond_to do |format|
       format.html
       format.json do
-        render json: @tasks.map { |task|
-          {
-            id: task.id,
-            title: task.title,
-            start: task.start_time,
-            end: task.end_time,
-            url: task_path(task),
-            color: case task.status
-                   when 'pending' then '#808080'
-                   when 'in_progress' then '#728C72'
-                   when 'completed' then '#A2634C'
-                   else '#000000'
-                   end
-          }
-        }
+        render json: @tasks.map { |task| calendar_serialize_task(task) }
       end
     end
   end
@@ -75,6 +68,37 @@ class TasksController < ApplicationController
     redirect_to personal_tasks_path, notice: t('.success')
   end
 
+  def sort
+    params[:order].each do |task_order|
+      task = current_user.tasks.find_by(id: task_order[:id])
+      task&.update(position: task_order[:position])
+    end
+
+    head :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: '任务未找到' }, status: :not_found
+  end
+
+  def update_importance
+    if params[:id].nil?
+      render json: { error: '任務 ID 無效' }, status: :unprocessable_entity
+      return
+    end
+
+    task = Task.find_by(id: params[:id])
+
+    if task.nil?
+      render json: { error: '未找到任務' }, status: :not_found
+      return
+    end
+
+    if task.update(important: params[:important])
+      head :ok
+    else
+      render json: { error: '更新失敗' }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_task
@@ -90,7 +114,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :content, :start_time, :end_time, :priority, :status, tag_ids: [], shared_user_ids: [], group_ids: []).tap do |whitelisted|
+    params.require(:task).permit(:title, :content, :start_time, :end_time, :priority, :status, :position, :important, tag_ids: [], shared_user_ids: [], group_ids: []).tap do |whitelisted|
       whitelisted[:group_ids] ||= []
     end
   end
