@@ -25,6 +25,12 @@ Rails.application.routes.draw do
       delete 'remove_user', on: :member
     end
 
+    resources :reports, only: [] do
+      collection do
+        get :tag_usage
+      end
+    end
+
     root "tasks#personal"
 
     get 'signup', to: 'users#new'
