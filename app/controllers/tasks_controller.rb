@@ -12,13 +12,8 @@ class TasksController < ApplicationController
                  .filter_by_tag(params[:tag_id])
                  .order("#{sort_column} #{sort_direction}")
                  .sorted.page(params[:page]).per(5)
-    @important_tasks = Task.owned_and_shared_by(current_user)
-                           .important
-                           .with_shared_count
-                           .filtered_by_status(params[:status])
-                           .filtered_by_query(params[:query])
-                           .filter_by_tag(params[:tag_id])
-                           .order("#{sort_column} #{sort_direction}")
+
+    @important_tasks = Task.owned_and_shared_by(current_user).important
 
     respond_to do |format|
       format.html
@@ -29,9 +24,9 @@ class TasksController < ApplicationController
   end
 
   def show
-    return if @task_accessible
+    return if task_accessible?
 
-    redirect_to personal_tasks, alert: t('alert.not_found')
+    redirect_to personal_tasks_path, alert: t('alert.not_found')
   end
 
   def new
@@ -43,8 +38,7 @@ class TasksController < ApplicationController
   def create
     @task = current_user.tasks.new(task_params)
     if @task.save
-      create_new_tag_if_needed
-      attach_file_to_task
+      handle_after_save_actions
       redirect_to personal_tasks_path, notice: t('.success')
     else
       render :new, alert: t('alert.creation_failed')
@@ -52,10 +46,9 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.user == current_user || @task.task_users.find_by(user: current_user)&.can_edit || current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
+    if task_accessible_for_update?
       if @task.update(task_params)
-        create_new_tag_if_needed
-        attach_file_to_task
+        handle_after_save_actions
         redirect_to personal_tasks_path, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
@@ -78,15 +71,10 @@ class TasksController < ApplicationController
 
     head :ok
   rescue ActiveRecord::RecordNotFound
-    render json: { error: '任务未找到' }, status: :not_found
+    render json: { error: '任務未找到' }, status: :not_found
   end
 
   def update_importance
-    if params[:id].nil?
-      render json: { error: '任務 ID 無效' }, status: :unprocessable_entity
-      return
-    end
-
     task = Task.find_by(id: params[:id])
 
     if task.nil?
@@ -105,14 +93,23 @@ class TasksController < ApplicationController
 
   def set_task
     @task = Task.find_by(id: params[:id])
-
     if @task.nil?
       redirect_to personal_tasks_path, alert: t('alert.not_found')
     else
-      @task_accessible = current_user.id == @task.user_id ||
-                         @task.shared_users.include?(current_user) ||
-                         @task.groups.any? { |group| group.users.include?(current_user) }
+      @task_accessible = task_accessible?
     end
+  end
+
+  def task_accessible?
+    current_user.id == @task.user_id ||
+      @task.shared_users.include?(current_user) ||
+      @task.groups.any? { |group| group.users.include?(current_user) }
+  end
+
+  def task_accessible_for_update?
+    @task.user == current_user ||
+      @task.task_users.find_by(user: current_user)&.can_edit ||
+      current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
   end
 
   def task_params
@@ -122,6 +119,11 @@ class TasksController < ApplicationController
     ).tap do |whitelisted|
       whitelisted[:group_ids] ||= []
     end
+  end
+
+  def handle_after_save_actions
+    create_new_tag_if_needed
+    attach_file_to_task
   end
 
   def create_new_tag_if_needed
