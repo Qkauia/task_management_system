@@ -21,8 +21,14 @@ class GroupsController < ApplicationController
   def create
     @group = current_user.groups.new(group_params)
     @group.user = current_user
+
+    if insufficient_members?(group_params[:user_ids])
+      flash.now[:alert] = t('alert.member_count_insufficient')
+      render :new and return
+    end
+
     if @group.save
-      @group.users << current_user unless @group.users.include?(current_user)
+      add_current_user_to_group
       redirect_to groups_path, notice: t('.success')
     else
       render :new, alert: t('alert.creation_failed')
@@ -76,5 +82,15 @@ class GroupsController < ApplicationController
     @users_by_letter = User.where.not(id: current_user.id)
                            .order(:email)
                            .group_by { |user| user.email[0].upcase }
+  end
+
+  def insufficient_members?(user_ids)
+    selected_user_ids = (user_ids || []).compact_blank
+    total_members = selected_user_ids.size + 1
+    total_members < 2
+  end
+
+  def add_current_user_to_group
+    @group.users << current_user unless @group.users.include?(current_user)
   end
 end
