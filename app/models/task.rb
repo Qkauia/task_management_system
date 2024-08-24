@@ -26,8 +26,9 @@ class Task < ApplicationRecord
   scope :filtered_by_query, lambda { |query|
     cleaned_query = query.to_s.strip
     if cleaned_query.present?
-      where("title ILIKE ? OR content ILIKE ? OR tags.name ILIKE ?", "%#{cleaned_query}%", "%#{cleaned_query}%", "%#{cleaned_query}%")
-        .joins(:tags)
+      joins("LEFT OUTER JOIN task_tags ON task_tags.task_id = tasks.id")
+        .joins("LEFT OUTER JOIN tags ON tags.id = task_tags.tag_id")
+        .where("tasks.title ILIKE ? ", "%#{cleaned_query}%")
         .distinct
     end
   }
