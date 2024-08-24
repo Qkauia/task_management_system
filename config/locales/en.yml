@@ -11,7 +11,7 @@ en:
       my_tasks: "My Tasks"
       task_details: "Task Details"
       all_tasks: "All Tasks"
-      important_tasks: "Important Tasks"
+      important_tasks: "✩ Important Tasks ✩"
       new_task: "New Task"
       edit_task: "Edit Task" 
       title: "Title"
@@ -31,6 +31,7 @@ en:
       related_parties: "Related Parties"
       no_associated_users: "There are no related users at the moment"
       no_group: "No Group"
+      no_task: "No Task"
     filters:
       status: "Filter by Status"
       keyword: "Keyword Search"
@@ -57,6 +58,11 @@ en:
       clear_all_selections: "Clear all Selections"
       show_label_usage: "Show Label Usage"
       upload_file: "Upload File"
+      placeholder:
+        title: "Please Input Title"
+        content: "Please Input Something"
+        tag: "Input to Create Tag"
+        query_title: "Query Title"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
@@ -176,6 +182,13 @@ en:
       selected: "Selected "
       peoples: " Peoples"
       clear_all_selections: "Clear all Selections"
+      not_member: "※ Not a member? Please register"
+    placeholder:
+      email: "Please Input your Email"
+      password: "Please Input Password"
+      password_confirmation: "Input password Confirm"
+      current_password: "Input Current Password"
+      new_password: "Input New Password"
     avatar:
       updated_successfully: "Avatar Updated Successfully"
       update_failed: "Avatar Update Failed"
@@ -282,9 +295,12 @@ en:
     confirm:
       delete: "Are you sure you want to Delete this Group?"
       remove_user: "Are you sure you want to Remove this User?"
+    placeholder:
+      input_group_name: "Please Input Group Name"
   alert:
       creation_failed: "Creation Failed"
-      not_found: "Not Found"
+      not_found: "Not Found, Task may have been Removed"
+      member_count_insufficient: "More than 1 member must be selected"
   calendar:
     today: "Today"
     month: "Month"
@@ -292,3 +308,11 @@ en:
     day: "Day"
     custom_button: "Custom Button"
     alert_message: "You clicked the custom button!"
+  footer:
+    about: "About Me"
+    about_me: "This is a simple task management system that helps you manage tasks effectively."
+    quick_link: "Quick Link"
+    contact_me: "Contact Me"
+    privacy_policy: "Privacy Policy"
+    socia_media: "Socia Media"
+

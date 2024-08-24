@@ -19,7 +19,7 @@ zh-TW:
       edit_task: "編輯任務"
       task_details: "任務細節"
       all_tasks: "所有任務"
-      important_tasks: "重要任務"
+      important_tasks: "✩ 重要任務 ✩"
       title: "標題"
       priority: "優先順序"
       status: "狀態"
@@ -37,6 +37,7 @@ zh-TW:
       related_parties: "關連者"
       no_associated_users: "目前沒有關連使用者"
       no_group: "沒有群組"
+      no_task: "沒有任務"
     form:
       title: "標題"
       priority: "優先順序"
@@ -53,6 +54,11 @@ zh-TW:
       groups: " 個群組"
       clear_all_selections: "清除所有選取"
       upload_file: "上傳檔案"
+      placeholder:
+        title: "請輸入標題"
+        content: "請輸入些內容"
+        tag: "輸入建立標記"
+        query_title: "尋找標題"
     filters:
       status: "按狀態篩選"
       keyword: "關鍵字搜尋"
@@ -188,10 +194,17 @@ zh-TW:
       already_been_taken: "已經被使用"
       upload_avatar: "上傳頭像"
       select_mark: "選取標記:"
-      choose_share_with_other_users: "選取分享其他使用者:"
+      choose_share_with_other_users: "增加成員:"
       selected: "已選取 "
       peoples: " 人"
       clear_all_selections: "清除所有選取"
+      not_member: "※ 不是會員？請註冊"
+    placeholder:
+      email: "請輸入你的信箱"
+      password: "請輸入密碼"
+      password_confirmation: "輸入密碼確認"
+      current_password: "輸入目前密碼"
+      new_password: "輸入新密碼"
     avatar:
       updated_successfully: "頭像更新成功"
       update_failed: "頭像更新失敗"
@@ -298,9 +311,12 @@ zh-TW:
     confirm:
       delete: "確定要刪除這個群組？"
       remove_user: "確定要移除這位使用者？"
+    placeholder:
+      input_group_name: "請輸入群組名稱"
   alert:
       creation_failed: "新增失敗"
-      not_found: "找不到頁面"
+      not_found: "找不到頁面，任務可能已經被移除。"
+      member_count_insufficient: "必須選取1個以上成員"
   calendar:
     title: 任務日曆
     close_button: 關閉
@@ -311,3 +327,10 @@ zh-TW:
       month: 月
       week: 週
       day: 日
+  footer:
+    about: "關於我"
+    about_me: "這是一個簡單的任務管理系統，幫助你有效地管理任務。"
+    quick_link: "快速連結"
+    contact_me: "聯絡我"
+    privacy_policy: "隱私政策"
+    socia_media: "社交媒體"
