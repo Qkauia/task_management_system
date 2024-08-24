@@ -62,4 +62,5 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+
+CMD ["bash", "-c", "yarn esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch & bundle exec rails s -b '0.0.0.0'"]
