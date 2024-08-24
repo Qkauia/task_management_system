@@ -16,17 +16,17 @@
       <%= form_with model: @user, url: signup_path, local: true, class: "needs-validation" do |form| %>
         <div class="mb-3">
           <%= form.label :email, t('users.form.email'), class: "form-label" %>
-          <%= form.email_field :email, class: "form-control", required: true %>
+          <%= form.email_field :email, class: "form-control", required: true, placeholder: t('users.placeholder.email') %>
         </div>
 
         <div class="mb-3">
           <%= form.label :password, t('users.form.password'), class: "form-label" %>
-          <%= form.password_field :password, class: "form-control", required: true %>
+          <%= form.password_field :password, class: "form-control", required: true, placeholder: t('users.placeholder.password') %>
         </div>
 
         <div class="mb-3">
           <%= form.label :password_confirmation, t('users.form.password_confirmation'), class: "form-label" %>
-          <%= form.password_field :password_confirmation, class: "form-control", required: true %>
+          <%= form.password_field :password_confirmation, class: "form-control", required: true, placeholder: t('users.placeholder.password_confirmation') %>
         </div>
 
         <div class="mb-3">
