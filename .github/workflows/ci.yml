@@ -18,7 +18,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
+
+    - name: Set up Docker Compose
+      uses: docker/compose-action@v3
+
+    - name: Ensure bundle and node_modules directories exist
+      run: |
+        mkdir -p vendor/bundle
+        mkdir -p node_modules
 
     - name: Cache bundle dependencies
       uses: actions/cache@v3
@@ -36,6 +44,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
+    - name: Install Yarn
+      run: |
+        curl -o- -L https://yarnpkg.com/install.sh | bash
+        yarn install --frozen-lockfile
+
     - name: Build and run services
       run: docker-compose up -d --build
 
@@ -44,10 +57,6 @@ jobs:
 
     - name: Set up database
       run: docker-compose run app bin/rails db:setup
-      env:
-        TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME: ${{ secrets.TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME }}
-        TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD: ${{ secrets.TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD }}
-        SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
 
     - name: Run RuboCop
       run: docker-compose run app bundle exec rubocop
