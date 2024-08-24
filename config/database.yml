@@ -84,6 +84,8 @@ production:
   database: task_management_system_production
   username: <%= ENV["TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME"] %>
   password: <%= ENV["TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD"] %>
+  host: db
+  port: 5432
 
 ci:
   <<: *default
