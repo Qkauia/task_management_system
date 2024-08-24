@@ -12,9 +12,10 @@
 
   <body>
     <%= render 'shared/navbar' %>
-    <%= render "shared/flash" if flash.any? %>
-    <div class="container mt-4">
+    <%= render "shared/flash" %>
+    <div class="container my-5">
       <%= yield %>
     </div>
+    <%= render "shared/footer" %>
   </body>
 </html>

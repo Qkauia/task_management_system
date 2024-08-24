@@ -1,0 +1,3 @@
+<% if model.errors.any? %>
+  <div id="flash-errors" data-errors="<%= model.errors.full_messages.to_json %>"></div>
+<% end %>

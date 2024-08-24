@@ -3,17 +3,6 @@
     <div class="card-body">
       <h1 class="text-center mb-4"><%= t('users.headers.update_password') %></h1>
 
-      <% if @user.errors.any? %>
-        <div class="alert alert-danger" id="error_explanation">
-          <h2 class="h5"><%= pluralize(@user.errors.count, "error") %> <%= t('users.errors.prohibited') %>:</h2>
-          <ul>
-            <% @user.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
       <%= form_with model: @user, url: user_path(@user), method: :patch, local: true, data: { turbo: false }, class: "needs-validation" do |form| %>
         <div class="mb-3">
           <%= form.label :current_password, t('users.form.current_password'), class: "form-label" %>
