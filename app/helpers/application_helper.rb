@@ -7,4 +7,8 @@ module ApplicationHelper
       content_tag(:span, title) + tag.i(class: "icon-class")
     end
   end
+
+  def format_datetime(date_time)
+    date_time&.strftime('%Y/%m/%d %H:%M')
+  end
 end
