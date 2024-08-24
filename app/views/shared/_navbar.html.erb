@@ -44,7 +44,7 @@
                       <% if notification.task.present? %>
                         <%= link_to t('navbar.notification_links.view_tasks'), task_path(notification.task), class: "btn btn-sm btn-outline-secondary ms-2" %>
                       <% else %>
-                        <span class="text-muted"><%= t('navbar.notification_links.task_not_found') %></span>
+                        <span class="text-muted"><%= t('navbar.notification_messages.task_removed') %></span>
                       <% end %>
                     </div>
                   </li>
