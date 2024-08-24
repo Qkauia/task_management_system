@@ -2,7 +2,11 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= form.label :title, t('tasks.form.title'), class: "form-label" %>
-      <%= form.text_field :title, class: "form-control #{'is-invalid' if @task.errors[:title].any?}", required: true %>
+      <%= form.text_field :title,
+                          class: "form-control #{'is-invalid' if @task.errors[:title].any?}",
+                          placeholder: t('tasks.form.placeholder.title'),
+                          required: true %>
+                          
       <% if @task.errors[:title].any? %>
         <div class="invalid-feedback">
           <%= @task.errors[:title].first %>
@@ -54,13 +58,15 @@
 
   <div class="mb-3">
     <%= form.label :content, t('tasks.form.content'), class: "form-label" %>
-    <%= form.text_area :content, class: "form-control picker" %>
+    <%= form.text_area :content, placeholder: t('tasks.form.placeholder.content'),
+                                 class: "form-control picker" %>
   </div>
 
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= form.label :new_tag, t('tasks.form.new_tag'), class: "form-label" %>
-      <%= form.text_field :new_tag, class: "form-control" %>
+      <%= form.text_field :new_tag, placeholder: t('tasks.form.placeholder.tag'),
+                                    class: "form-control" %>
     </div>
 
     <div class="col-md-6 mb-3">
@@ -121,6 +127,7 @@
   </span>
   <button class="btn btn-danger btn-sm ms-1" data-action="click->user-buttons#clearAll"><%= t('users.form.clear_all_selections') %></button>
   <div class="mt-3">
+  <% if @users_by_letter.present? %>
     <% @users_by_letter.each do |letter, users| %>
       <button class="btn btn-secondary dropdown-toggle mb-2 align-items-center" type="button" id="dropdown<%= letter %>" data-bs-toggle="dropdown" aria-expanded="false" data-user-buttons-target="letter" data-letter="<%= letter %>" style="width: 95px;">
         <%= letter %>
@@ -137,6 +144,7 @@
         <% end %>
       </ul>
     <% end %>
+  <% end %>
   </div>
 </div>
 
