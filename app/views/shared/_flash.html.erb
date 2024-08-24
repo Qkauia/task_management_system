@@ -1,8 +1,6 @@
-<% [:notice, :alert].each do |type| %>
-  <% if flash[type] %>
-    <div class="alert <%= type == :notice ? 'alert-success' : 'alert-danger' %> alert-dismissible fade show" role="alert">
-      <%= flash[type] %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% end %>
+<% if flash[:notice] || flash[:alert] %>
+  <div id="flash-message"
+       data-type="<%= flash[:notice] ? 'success' : 'error' %>"
+       data-message="<%= j(flash[:notice] || flash[:alert]) %>">
+  </div>
 <% end %>
