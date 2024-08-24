@@ -19,3 +19,5 @@ import './sortable_tasks';
 import './tags_reports';
 import './task_sortablejs_operation_tips';
 import './view_file';
+import './flash_message';
+import './error_any';
