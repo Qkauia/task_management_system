@@ -57,7 +57,7 @@ jobs:
       run: docker-compose up -d --build
 
     - name: Wait for DB to be ready
-      run: docker-compose run app bash -c 'while ! pg_isready -h db -p 5432 -U postgres; do sleep 1; done'
+      run: docker-compose run app ./wait-for-it.sh db:5432 --timeout=60 --strict -- echo "Database is up"
 
     - name: Set up database
       run: docker-compose run app bin/rails db:setup
