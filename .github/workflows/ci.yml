@@ -53,8 +53,8 @@ jobs:
     - name: Precompile assets
       run: docker-compose run --rm app bash -c "SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile"
 
-    - name: Run database setup
-      run: docker-compose run --rm app bash -c "RAILS_ENV=production bundle exec rails db:setup"
+    - name: Set up database for CI environment
+      run: docker-compose run --rm app bash -c "RAILS_ENV=ci bundle exec rails db:setup"
 
     - name: Run RuboCop for code linting
       run: docker-compose run --rm app bundle exec rubocop
