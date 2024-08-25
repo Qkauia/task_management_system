@@ -27,11 +27,6 @@ jobs:
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
 
-    - name: Ensure bundle and node_modules directories exist
-      run: |
-        mkdir -p vendor/bundle
-        mkdir -p node_modules
-
     - name: Cache bundle dependencies
       uses: actions/cache@v3
       with:
@@ -48,25 +43,24 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
-    - name: Install Yarn
+    - name: Install dependencies
       run: |
-        curl -o- -L https://yarnpkg.com/install.sh | bash
         yarn install --frozen-lockfile
 
-    - name: Build and run services
-      run: docker-compose up -d --build
+    - name: Build Docker images
+      run: docker-compose build
 
-    - name: Wait for DB to be ready
-      run: docker-compose run app ./wait-for-it.sh db:5432 --timeout=60 --strict -- echo "Database is up"
+    - name: Precompile assets
+      run: docker-compose run --rm app bash -c "SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile"
 
-    - name: Set up database
-      run: docker-compose run app bin/rails db:setup
+    - name: Run database setup
+      run: docker-compose run --rm app bash -c "RAILS_ENV=production bundle exec rails db:setup"
 
-    - name: Run RuboCop
-      run: docker-compose run app bundle exec rubocop
+    - name: Run RuboCop for code linting
+      run: docker-compose run --rm app bundle exec rubocop
 
-    - name: Run RSpec tests
-      run: docker-compose run app bundle exec rspec
+    - name: Run tests
+      run: docker-compose run --rm app bundle exec rspec
 
     - name: Shut down services
-      run: docker-compose down
+      run: docker-compose down --volumes --remove-orphans

@@ -24,5 +24,6 @@
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
     "build:watch": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch"
-  }
+  },
+  "sideEffects": false
 }

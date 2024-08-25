@@ -15,10 +15,23 @@ ENV RAILS_ENV="production" \
 RUN gem update --system --no-document && \
     gem install bundler -v '2.4.22'
 
+# 添加 ping 工具的安裝
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y iputils-ping
+
 FROM base AS build
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential curl git libpq-dev libvips node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    git \
+    libpq-dev \
+    libvips \
+    node-gyp \
+    pkg-config \
+    python-is-python3 \
+    postgresql-client-13
 
 ARG NODE_VERSION=18.17.1
 ARG YARN_VERSION=1.22.19
@@ -43,7 +56,8 @@ RUN yarn run build
 # 預編譯 Rails 資產
 RUN SECRET_KEY_BASE=dummy_secret_key_base ./bin/rails assets:precompile
 
-FROM base
+# 使用 build 階段作為最終階段
+FROM build
 
 RUN useradd -m -s /bin/bash rails
 
@@ -51,13 +65,13 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y libpq-dev curl libvips && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
 RUN mkdir -p /rails/db /rails/log /rails/storage /rails/tmp && \
     chown -R rails:rails /rails
 
 USER rails:rails
+
+COPY wait-for-it.sh /rails/wait-for-it.sh
+COPY --chmod=+x wait-for-it.sh /rails/wait-for-it.sh
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
