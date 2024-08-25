@@ -71,7 +71,7 @@ RUN mkdir -p /rails/db /rails/log /rails/storage /rails/tmp && \
 USER rails:rails
 
 COPY wait-for-it.sh /rails/wait-for-it.sh
-COPY --chmod=+x wait-for-it.sh /rails/wait-for-it.sh
+RUN chmod +x /rails/wait-for-it.sh
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
