@@ -1,13 +1,13 @@
-version: '3.8'
+
 services:
-  db:
+  mydb:
     image: postgres:13
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD}
       POSTGRES_DB: task_management_system_production
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   app:
     build: .
@@ -16,8 +16,12 @@ services:
       - TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME=${TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME}
       - TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD=${TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD}
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_BUCKET=${AWS_BUCKET}
     depends_on:
-      - db
+      - mydb
     ports:
       - "3000:3000"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+    command: bash -c "./wait-for-it.sh mydb:5432 -- bundle exec rails s -b '0.0.0.0'"

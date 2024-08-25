@@ -23,7 +23,8 @@ gem 'kaminari-bootstrap'
 gem 'carrierwave', '~> 3.0'
 gem 'mini_magick'
 gem 'aws-sdk-s3'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
+gem 'faker'
 
 group :development, :test do
   gem 'rubocop', require: false
@@ -31,7 +32,6 @@ group :development, :test do
   gem 'rubocop-rspec', require: false
   gem 'rubocop-capybara', require: false
   gem 'rubocop-factory_bot', require: false
-  gem 'faker'
   gem 'factory_bot_rails'
 end
 
