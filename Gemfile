@@ -27,6 +27,7 @@ gem 'dotenv-rails'
 gem 'faker'
 gem 'rubocop', require: false
 
+
 group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
