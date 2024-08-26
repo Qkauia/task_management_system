@@ -25,9 +25,9 @@ gem 'mini_magick'
 gem 'aws-sdk-s3'
 gem 'dotenv-rails'
 gem 'faker'
+gem 'rubocop', require: false
 
 group :development, :test do
-  gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-capybara', require: false
