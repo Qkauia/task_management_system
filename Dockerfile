@@ -1,81 +1,74 @@
 # syntax = docker/dockerfile:1
 
+# 確保 RUBY_VERSION 與 .ruby-version 和 Gemfile 中的版本一致
 ARG RUBY_VERSION=3.2.0
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
+FROM ruby:$RUBY_VERSION-slim AS base
 
+# Rails 應用所在的目錄
 WORKDIR /rails
 
+# 設置生產環境
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development:test" \
-    RAILS_SERVE_STATIC_FILES="true" \
-    RAILS_LOG_TO_STDOUT="true"
+    BUNDLE_WITHOUT="development"
 
-RUN gem update --system --no-document && \
-    gem install bundler -v '2.4.22'
-
-# 添加 ping 工具的安裝
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y iputils-ping
-
+# 臨時構建階段以減少最終映像大小
 FROM base AS build
 
+# 安裝構建 gems 和 Yarn 所需的依賴包
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-    build-essential \
-    curl \
-    git \
-    libpq-dev \
-    libvips \
-    node-gyp \
-    pkg-config \
-    python-is-python3 \
-    postgresql-client-13
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn@1.22.19
 
-ARG NODE_VERSION=18.17.1
-ARG YARN_VERSION=1.22.19
-ENV PATH=/usr/local/node/bin:$PATH
-
-RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
-    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
-    npm install -g yarn@$YARN_VERSION && \
-    rm -rf /tmp/node-build-master
-
+# 安裝應用程式的 gems
 COPY Gemfile Gemfile.lock ./
-ARG INSTALL_ENV=production
-RUN bundle install --jobs=4 --retry=5 --verbose --with="$INSTALL_ENV" || { echo "Bundle install failed"; exit 1; }
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
 
+# 安裝 JavaScript 依賴
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
 
+# 保留鎖定檔案，並使用網路並發選項解決 yarn 安裝問題
+RUN rm -rf node_modules && yarn install --network-concurrency 1 --network-timeout 600000
+
+# 複製應用程式代碼
 COPY . .
 
-# 編譯前端資產
-RUN yarn run build
+# 預編譯 bootsnap 代碼以加快啟動速度
+RUN bundle exec bootsnap precompile app/ lib/
 
-# 預編譯 Rails 資產
+# 使用臨時的 SECRET_KEY_BASE 預編譯生產資源
 RUN SECRET_KEY_BASE=dummy_secret_key_base ./bin/rails assets:precompile
 
-# 使用 build 階段作為最終階段
-FROM build
+# 最終映像的部署階段
+FROM base
 
+# 安裝部署所需的軟體包
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# 複製已構建的工件：gems 和應用程式代碼
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /rails /rails
+
+# 設置運行時文件的權限
+RUN mkdir -p /rails/public/assets /rails/db /rails/log /rails/storage /rails/tmp /rails/public/packs && \
+    chown -R 1000:1000 /rails
+
+# 創建非 root 用戶
 RUN useradd -m -s /bin/bash rails
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y libpq-dev curl libvips && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+# 設置默認運行用戶
+USER rails
 
-RUN mkdir -p /rails/db /rails/log /rails/storage /rails/tmp && \
-    chown -R rails:rails /rails
-
-USER rails:rails
-
-COPY wait-for-it.sh /rails/wait-for-it.sh
-RUN chmod +x /rails/wait-for-it.sh
-
+# 入口點負責準備資料庫
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
+# 默認啟動伺服器，這可以在運行時覆蓋
 EXPOSE 3000
-
-CMD ["bash", "-c", "yarn esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch & bundle exec rails s -b '0.0.0.0'"]
+CMD ["./bin/rails", "server"]
