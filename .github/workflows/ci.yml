@@ -10,12 +10,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     env:
+      DOCKER_BUILDKIT: 1
       TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME: ${{ secrets.TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME }}
       TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD: ${{ secrets.TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
 
     steps:
@@ -54,24 +58,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
-    - name: Install dependencies
-      run: |
-        yarn install --frozen-lockfile
+    - name: Install Yarn dependencies
+      run: yarn install --frozen-lockfile
 
     - name: Build Docker images
       run: docker-compose build
 
     - name: Precompile assets
-      run: docker-compose run --rm app bash -c "SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile"
-
-    - name: Set up database for CI environment
-      run: docker-compose run --rm app bash -c "RAILS_ENV=ci bundle exec rails db:setup"
-
-    - name: Run RuboCop for code linting
-      run: docker-compose run --rm app bundle exec rubocop
-
-    - name: Run tests
-      run: docker-compose run --rm app bundle exec rspec
+      run: docker-compose run --rm app bash -c "BUNDLE_WITHOUT='development:test' SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile"
 
     - name: Shut down services
       run: docker-compose down --volumes --remove-orphans

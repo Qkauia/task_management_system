@@ -17,4 +17,3 @@ production:
   host: mydb
   port: 5432
   log_level: debug
-
