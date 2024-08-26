@@ -43,7 +43,8 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --jobs=4 --retry=5 --verbose || { echo "Bundle install failed"; exit 1; }
+ARG INSTALL_ENV=production
+RUN bundle install --jobs=4 --retry=5 --verbose --with="$INSTALL_ENV" || { echo "Bundle install failed"; exit 1; }
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
