@@ -22,10 +22,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2.0
 
     - name: Cache bundle dependencies
       uses: actions/cache@v3
@@ -34,6 +34,17 @@ jobs:
         key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-bundler-
+
+    - name: Install bundle dependencies
+      run: bundle install --jobs=4 --retry=5
+
+    - name: Run RuboCop for code linting
+      run: bundle exec rubocop
+
+    - name: Set up Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
 
     - name: Cache Yarn dependencies
       uses: actions/cache@v3
