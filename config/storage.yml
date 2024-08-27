@@ -14,6 +14,7 @@ amazon:
   region: <%= ENV['AWS_REGION'] %>
   bucket: <%= ENV['AWS_BUCKET'] %>
 
+
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS
@@ -32,3 +33,11 @@ amazon:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+tigris:
+  service: S3
+  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+  bucket: <%= ENV["BUCKET_NAME"] %>
+  region: <%= ENV['AWS_REGION'] %>
+  endpoint: <%= ENV["AWS_ENDPOINT_URL_S3"] %>

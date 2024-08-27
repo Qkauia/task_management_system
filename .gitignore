@@ -38,4 +38,9 @@
 /public/uploads/user/avatar/*
 
 /node_modules
+vendor/bundle/
 /app/assets/builds/*
+.yarn/releases/
+.vscode/settings.json
+
+
