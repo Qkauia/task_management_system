@@ -1,3 +1,4 @@
+
 services:
   mydb:
     image: postgres:13
@@ -23,4 +24,5 @@ services:
       - mydb
     ports:
       - "3000:3000"
-    command: bash -c "chown -R rails:rails /rails/public/assets && ./wait-for-it.sh mydb:5432 -- bundle exec rails s -b '0.0.0.0'"
+    command: bash -c "./wait-for-it.sh mydb:5432 -- bundle exec rails db:migrate && RAILS_ENV=production bundle exec rails assets:precompile && bundle exec rails s -b '0.0.0.0'"
+    

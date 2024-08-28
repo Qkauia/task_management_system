@@ -13,26 +13,27 @@ gem "turbo-rails"
 gem "stimulus-rails"
 gem "jbuilder"
 gem "redis", ">= 4.0.1"
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 gem "bootsnap", require: false
 gem "bcrypt", "~> 3.1.7"
-gem 'paranoia'
-gem 'sassc'
-gem 'kaminari'
-gem 'kaminari-bootstrap'
-gem 'carrierwave', '~> 3.0'
-gem 'mini_magick'
-gem 'aws-sdk-s3'
-gem 'dotenv-rails'
-gem 'faker'
-gem 'rubocop', require: false
+gem "paranoia"
+gem "kaminari"
+gem "kaminari-bootstrap"
+gem "carrierwave", "~> 3.0"
+gem "mini_magick"
+gem "aws-sdk-s3"
+gem "dotenv-rails"
+gem "faker"
+gem "rubocop", require: false
+gem "jsbundling-rails", "~> 1.3"
+gem "dockerfile-rails", ">= 1.6", group: :development
 
 group :development, :test do
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'rubocop-capybara', require: false
-  gem 'rubocop-factory_bot', require: false
-  gem 'factory_bot_rails'
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-capybara", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -42,11 +43,11 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails', '6.1.1'
-  gem 'shoulda-matchers'
-  gem 'webmock'
-  gem 'capybara', '3.40.0'
-  gem 'selenium-webdriver', '4.10'
-  gem 'webdrivers', '5.3.0'
-  gem 'rails-controller-testing'
+  gem "rspec-rails", "6.1.1"
+  gem "shoulda-matchers"
+  gem "webmock"
+  gem "capybara", "3.40.0"
+  gem "selenium-webdriver", "4.10"
+  gem "webdrivers", "5.3.0"
+  gem "rails-controller-testing"
 end

@@ -1,13 +1,23 @@
 const esbuild = require('esbuild');
+const path = require('path');
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isWatchMode = process.argv.includes('--watch');
 
-esbuild.build({
-  entryPoints: ['app/javascript/application.js'],
+const config = {
+  entryPoints: ['app/javascript/application.js'], // 入口文件
   bundle: true,
-  minify: true,
   sourcemap: true,
-  outdir: 'app/assets/builds',
-  loader: { '.js': 'jsx', '.css': 'file' },
-  treeShaking: false,
-}).catch(() => process.exit(1));
+  format: 'esm',
+  outdir: path.join('app', 'assets', 'builds'),
+  publicPath: 'public/assets',
+  loader: { '.js': 'jsx', '.css': 'css', '.scss': 'css' }, // 處理文件類型
+  minify: process.env.NODE_ENV === 'production',
+};
+
+if (isWatchMode) {
+  esbuild.context(config).then(ctx => {
+    ctx.watch();
+  }).catch(() => process.exit(1));
+} else {
+  esbuild.build(config).catch(() => process.exit(1));
+}
