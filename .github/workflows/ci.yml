@@ -65,7 +65,7 @@ jobs:
       run: docker-compose build
 
     - name: Precompile assets
-      run: docker-compose run --rm app bash -c "BUNDLE_WITHOUT='development:test' SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile"
+      run: docker-compose run --rm app bash -c "BUNDLE_WITHOUT='development:test' SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile --trace"
 
     - name: Shut down services
       run: docker-compose down --volumes --remove-orphans

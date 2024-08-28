@@ -1,74 +1,85 @@
 # syntax = docker/dockerfile:1
 
-# 確保 RUBY_VERSION 與 .ruby-version 和 Gemfile 中的版本一致
 ARG RUBY_VERSION=3.2.0
-FROM ruby:$RUBY_VERSION-slim AS base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim
 
-# Rails 應用所在的目錄
 WORKDIR /rails
 
-# 設置生產環境
+# 設置環境變數
 ENV RAILS_ENV="production" \
+    NODE_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_LOG_TO_STDOUT="true"
 
-# 臨時構建階段以減少最終映像大小
-FROM base AS build
+# 更新 gem 和安装 bundler
+RUN gem update --system --no-document && \
+    gem install bundler -v '2.4.22'
 
-# 安裝構建 gems 和 Yarn 所需的依賴包
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g yarn@1.22.19
+# 安裝系統依賴
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    libpq-dev \
+    libssl-dev \
+    zlib1g-dev \
+    libyaml-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libcurl4-openssl-dev \
+    software-properties-common \
+    libffi-dev \
+    curl \
+    unzip
 
-# 安裝應用程式的 gems
+RUN apt-get update && apt-get install -y imagemagick
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js 和 Yarn
+ARG NODE_VERSION=18.17.1
+ARG YARN_VERSION=1.22.19
+ENV PATH=/usr/local/node/bin:$PATH
+
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+    npm install -g yarn@$YARN_VERSION && \
+    rm -rf /tmp/node-build-master
+
+# 安裝 Gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN bundle config set deployment true && \
+    bundle lock --add-platform x86_64-linux && \
+    bundle install --jobs=4 --retry=5 --verbose
 
-# 安裝 JavaScript 依賴
+# 安裝 Node.js 和 Yarn 依賴
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# 保留鎖定檔案，並使用網路並發選項解決 yarn 安裝問題
-RUN rm -rf node_modules && yarn install --network-concurrency 1 --network-timeout 600000
-
-# 複製應用程式代碼
+# 複製專案代碼
 COPY . .
 
-# 預編譯 bootsnap 代碼以加快啟動速度
-RUN bundle exec bootsnap precompile app/ lib/
+# 預編譯資產，使用 dummy SECRET_KEY_BASE
+RUN SECRET_KEY_BASE=dummy_secret_key_base RAILS_ENV=production bundle exec rails assets:precompile
 
-# 使用臨時的 SECRET_KEY_BASE 預編譯生產資源
-RUN SECRET_KEY_BASE=dummy_secret_key_base ./bin/rails assets:precompile
-
-# 最終映像的部署階段
-FROM base
-
-# 安裝部署所需的軟體包
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# 複製已構建的工件：gems 和應用程式代碼
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
-# 設置運行時文件的權限
-RUN mkdir -p /rails/public/assets /rails/db /rails/log /rails/storage /rails/tmp /rails/public/packs && \
-    chown -R 1000:1000 /rails
-
-# 創建非 root 用戶
+# 使用非 root 使用者運行應用程式
 RUN useradd -m -s /bin/bash rails
 
-# 設置默認運行用戶
-USER rails
+# 設置正確的權限
+RUN mkdir -p /rails/db /rails/log /rails/storage /rails/tmp && \
+    chown -R rails:rails /rails
 
-# 入口點負責準備資料庫
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+USER rails:rails
 
-# 默認啟動伺服器，這可以在運行時覆蓋
+# wait-for-it.sh
+COPY wait-for-it.sh /rails/wait-for-it.sh
+COPY --chmod=+x wait-for-it.sh /rails/wait-for-it.sh
+
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+
+# 使用 entrypoint 啟動應用程式
+ENTRYPOINT ["./bin/docker-entrypoint"]
+
+# 最終運行命令
+CMD ["bash", "-c", "bundle exec rails s -b '0.0.0.0'"]

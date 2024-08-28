@@ -44,3 +44,6 @@ vendor/bundle/
 .vscode/settings.json
 
 
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

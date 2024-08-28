@@ -1,23 +1,19 @@
-require("@hotwired/turbo-rails");
-require("./controllers");
-const $ = require('jquery');
-window.$ = $;
-window.jQuery = $;
-require('../assets/stylesheets/application.css');
+import "@hotwired/turbo-rails";
+import "./controllers";
 
+import '../assets/stylesheets/application.css';
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "flatpickr/dist/flatpickr.min.css";
+import 'select2';
+import 'select2/dist/css/select2.css';
+import "chart.js/auto";
 
-require("bootstrap");
-require("bootstrap/dist/css/bootstrap.min.css");
-require("flatpickr/dist/flatpickr.min.css");
-require('select2');
-require('select2/dist/css/select2.css');
-require("chart.js/auto");
-
-require('./select2_flatpickr');
-require('./show_calendar');
-require('./sortable_tasks');
-require('./tags_reports');
-require('./task_sortablejs_operation_tips');
-require('./view_file');
-require('./flash_message');
-require('./error_any');
+import './select2_flatpickr';
+import './show_calendar';
+import './sortable_tasks';
+import './tags_reports';
+import './task_sortablejs_operation_tips';
+import './view_file';
+import './flash_message';
+import './error_any';
