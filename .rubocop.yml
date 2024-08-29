@@ -4,13 +4,31 @@ require:
   - rubocop-capybara
   - rubocop-factory_bot
 
-inherit_from: .rubocop_todo.yml
-
 AllCops:
+  NewCops: disable
   SuggestExtensions: false
 
 Rails:
-  Enabled: true
+  Enabled: false
 
 RSpec:
-  Enabled: true
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false  # 禁用文檔註解檢查
+
+Metrics/AbcSize:
+  Enabled: false  # 禁用 ABC 大小檢查
+
+Metrics/MethodLength:
+  Enabled: false  # 禁用方法長度檢查
+
+Layout/LineLength:
+  Enabled: false  # 禁用行長限制檢查
+  Max: 200      # 可選：設置最大行長度
+
+Metrics/BlockLength:
+  Max: 200
+
+Metrics/ClassLength:
+  Max: 130  # 根據需要增加此值

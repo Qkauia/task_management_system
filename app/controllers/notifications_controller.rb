@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller manages the users within the admin namespace.
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_notification, only: [:mark_as_read]

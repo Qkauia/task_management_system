@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller manages the users within the admin namespace.
 class ReportsController < ApplicationController
   def tag_usage
     @tag_usage = Tag.joins(:task_tags)

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe TaskTag, type: :model do
   let(:task) { create(:task) }
   let(:tag) { create(:tag) }
-  let(:task_tag) { create(:task_tag, task: task, tag: tag) }
+  let(:task_tag) { create(:task_tag, task:, tag:) }
 
   it 'has a valid factory' do
     expect(task_tag).to be_valid

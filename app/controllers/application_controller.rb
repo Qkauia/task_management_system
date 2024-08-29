@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# The main application controller that other controllers inherit from.
 class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   helper_method :current_user
@@ -29,24 +32,32 @@ class ApplicationController < ActionController::Base
     related_tasks.each do |task|
       next if task.end_time.blank?
 
-      if task.end_time <= Time.current && user.notifications.where(task: task, message: t('notification.task_end_time_has_passed', task_title: task.title)).blank?
-        user.notifications.create(task: task, message: t('notification.task_end_time_has_passed', task_title: task.title))
-      elsif (task.end_time - 2.days) <= Time.current && user.notifications.where(task: task, message: t('notification.task_is_due_soon', task_title: task.title)).blank?
-        user.notifications.create(task: task, message: t('notification.task_is_due_soon', task_title: task.title))
+      if task.end_time <= Time.current && user.notifications.where(task:,
+                                                                   message: t(
+                                                                     'notification.task_end_time_has_passed', task_title: task.title
+                                                                   )).blank?
+        user.notifications.create(task:,
+                                  message: t('notification.task_end_time_has_passed',
+                                             task_title: task.title))
+      elsif (task.end_time - 2.days) <= Time.current && user.notifications.where(task:,
+                                                                                 message: t(
+                                                                                   'notification.task_is_due_soon', task_title: task.title
+                                                                                 )).blank?
+        user.notifications.create(task:, message: t('notification.task_is_due_soon', task_title: task.title))
       end
     end
   end
 
   def sort_column
-    if params[:sort] == "shared_count"
-      "shared_count"
+    if params[:sort] == 'shared_count'
+      'shared_count'
     else
-      %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : "priority"
+      %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : 'priority'
     end
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
   def calendar_serialize_task(task)

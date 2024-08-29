@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller manages the users within the admin namespace.
 class UsersController < ApplicationController
   def new
     @user = User.new
@@ -48,6 +51,7 @@ class UsersController < ApplicationController
       redirect_to root_path, notice: t('users.avatar.updated_successfully')
     else
       flash.now[:alert] = t('users.avatar.update_failed')
+      Rails.logger.debug @user.errors.full_messages
       render :edit_profile
     end
   end

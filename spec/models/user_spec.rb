@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -9,7 +11,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'validates uniqueness of email' do
-      existing_user = FactoryBot.create(:user, email: "test@example.com")
+      existing_user = FactoryBot.create(:user, email: 'test@example.com')
       new_user = FactoryBot.build(:user, email: existing_user.email)
       expect(new_user).not_to be_valid
       expect(new_user.errors[:email]).to include(I18n.t('users.form.already_been_taken'))
@@ -18,10 +20,10 @@ RSpec.describe User, type: :model do
 
   describe 'callbacks' do
     it 'encrypts the password before saving' do
-      user = FactoryBot.build(:user, password: "newpassword")
+      user = FactoryBot.build(:user, password: 'newpassword')
       user.save
       expect(user.password_hash).not_to be_nil
-      expect(user.password_hash).not_to eq("newpassword")
+      expect(user.password_hash).not_to eq('newpassword')
     end
 
     it 'sets the default role to user if not specified' do
@@ -39,13 +41,13 @@ RSpec.describe User, type: :model do
 
   describe '#authenticate' do
     it 'returns true if the password is correct' do
-      user = FactoryBot.create(:user, password: "password")
-      expect(user.authenticate("password")).to be true
+      user = FactoryBot.create(:user, password: 'password')
+      expect(user.authenticate('password')).to be true
     end
 
     it 'returns false if the password is incorrect' do
-      user = FactoryBot.create(:user, password: "password")
-      expect(user.authenticate("wrongpassword")).to be false
+      user = FactoryBot.create(:user, password: 'password')
+      expect(user.authenticate('wrongpassword')).to be false
     end
   end
 
@@ -53,13 +55,13 @@ RSpec.describe User, type: :model do
     it 'marks the user as deleted without actually removing the record' do
       user = FactoryBot.create(:user)
       user.destroy
-      expect(User.only_deleted.find_by(id: user.id)).not_to be_nil
+      expect(described_class.only_deleted.find_by(id: user.id)).not_to be_nil
     end
 
     it 'does not include deleted users in default queries' do
       user = FactoryBot.create(:user)
       user.destroy
-      expect(User.find_by(id: user.id)).to be_nil
+      expect(described_class.find_by(id: user.id)).to be_nil
     end
   end
 end

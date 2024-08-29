@@ -1,9 +1,20 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :controller do
-  let(:admin) { create(:user, email: "admin_#{SecureRandom.uuid}@example.com", role: 'admin', password: 'password', password_confirmation: 'password') }
-  let(:user) { create(:user, email: "user_#{SecureRandom.uuid}@example.com", role: 'user', password: 'password', password_confirmation: 'password') }
-  let(:other_admin) { create(:user, email: "admin2_#{SecureRandom.uuid}@example.com", role: 'admin', password: 'password', password_confirmation: 'password') }
+  let(:admin) do
+    create(:user, email: "admin_#{SecureRandom.uuid}@example.com", role: 'admin', password: 'password',
+                  password_confirmation: 'password')
+  end
+  let(:user) do
+    create(:user, email: "user_#{SecureRandom.uuid}@example.com", role: 'user', password: 'password',
+                  password_confirmation: 'password')
+  end
+  let(:other_admin) do
+    create(:user, email: "admin2_#{SecureRandom.uuid}@example.com", role: 'admin', password: 'password',
+                  password_confirmation: 'password')
+  end
 
   before do
     session[:user_id] = admin.id
@@ -12,7 +23,7 @@ RSpec.describe Admin::UsersController, type: :controller do
   describe '#index' do
     it 'assigns all users except the current admin to @users' do
       get :index
-      expect(assigns(:users)).to match_array([user, other_admin])
+      expect(assigns(:users)).to contain_exactly(user, other_admin)
     end
 
     it 'renders the index template' do
@@ -75,21 +86,21 @@ RSpec.describe Admin::UsersController, type: :controller do
     context 'when destroying another user' do
       it 'deletes the user and redirects to the users index' do
         delete :destroy, params: { id: user.id }
-        expect(User.exists?(user.id)).to be_falsey
+        expect(User).not_to exist(user.id)
         expect(response).to redirect_to(admin_users_path)
         expect(flash[:notice]).to eq(I18n.t('admin.users.destroy.success'))
       end
     end
-  
+
     context 'when attempting to destroy self' do
       it 'does not delete and redirects with an alert' do
         delete :destroy, params: { id: admin.id }
-        expect(User.exists?(admin.id)).to be_truthy
+        expect(User).to exist(admin.id)
         expect(response).to redirect_to(admin_users_path)
         expect(flash[:alert]).to eq(I18n.t('admin.users.cannot_delete_self'))
       end
     end
-  
+
     context 'when attempting to destroy the last admin' do
       before do
         allow(User).to receive(:where).and_call_original
@@ -97,16 +108,15 @@ RSpec.describe Admin::UsersController, type: :controller do
           original_method.call(*args).where(deleted_at: nil)
         end
       end
-  
+
       it 'does not delete and redirects with an alert' do
         delete :destroy, params: { id: admin.id }
-        expect(User.exists?(admin.id)).to be_truthy
+        expect(User).to exist(admin.id)
         expect(response).to redirect_to(admin_users_path)
         expect(flash[:alert]).to eq(I18n.t('admin.users.destroy.cannot_delete_self'))
       end
     end
   end
-  
 
   describe 'authorization' do
     context 'when non-admin user tries to access' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Task < ApplicationRecord
   acts_as_paranoid
   has_one_attached :file
@@ -22,13 +24,13 @@ class Task < ApplicationRecord
   validate :start_time_cannot_be_greater_than_or_equal_to_end_time
 
   # Scope in Task model
-  scope :filtered_by_status, ->(status) { where(status: status) if status.present? }
+  scope :filtered_by_status, ->(status) { where(status:) if status.present? }
   scope :filtered_by_query, lambda { |query|
     cleaned_query = query.to_s.strip
     if cleaned_query.present?
-      joins("LEFT OUTER JOIN task_tags ON task_tags.task_id = tasks.id")
-        .joins("LEFT OUTER JOIN tags ON tags.id = task_tags.tag_id")
-        .where("tasks.title ILIKE ? ", "%#{cleaned_query}%")
+      joins('LEFT OUTER JOIN task_tags ON task_tags.task_id = tasks.id')
+        .joins('LEFT OUTER JOIN tags ON tags.id = task_tags.tag_id')
+        .where('tasks.title ILIKE ? ', "%#{cleaned_query}%")
         .distinct
     end
   }
@@ -41,7 +43,7 @@ class Task < ApplicationRecord
 
   scope :owned_and_shared_by, lambda { |user|
     Task.left_outer_joins(:task_users)
-        .where("tasks.user_id = ? OR task_users.user_id = ?", user.id, user.id)
+        .where('tasks.user_id = ? OR task_users.user_id = ?', user.id, user.id)
         .distinct
   }
 
