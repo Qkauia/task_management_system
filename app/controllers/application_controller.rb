@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
   def set_notifications
     return unless current_user
 
-    @notifications = current_user.notifications.unread.includes(:task).limit(6)
+    @notifications = current_user.notifications.unread.includes(:task)
     @unread_count = @notifications.size
   end
 end

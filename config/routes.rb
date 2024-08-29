@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :users, only: %i[index edit update destroy]
     end
-    resources :tasks, except: [:index] do
+    resources :tasks, except: %i[index] do
       collection do
         get :personal
         post :sort
@@ -15,15 +15,15 @@ Rails.application.routes.draw do
         patch :update_importance
       end
     end
-    resources :group_tasks, only: [:index]
+    resources :group_tasks, only: %i[index]
 
-    resources :notifications, only: [:index] do
+    resources :notifications, only: %i[index] do
       member do
         patch :mark_as_read
       end
     end
 
-    resources :groups, except: [:show] do
+    resources :groups, except: %i[show] do
       delete 'remove_user', on: :member
     end
 

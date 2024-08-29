@@ -17,6 +17,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    current_user.notifications.destroy_all if current_user
     session[:user_id] = nil
     redirect_to root_path, notice: t('sessions.logout.success')
   end
