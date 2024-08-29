@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller manages the users within the admin namespace.
 class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: %i[edit update destroy]
@@ -5,11 +8,11 @@ class GroupsController < ApplicationController
 
   def index
     @groups = current_user.groups.uniq
-
+    to_creat_group
     return if params[:id].blank?
 
     @selected_group = current_user.groups.find_by(id: params[:id])
-    @tasks = @selected_group&.tasks
+    @tasks = @selected_group.tasks
   end
 
   def new
@@ -92,5 +95,12 @@ class GroupsController < ApplicationController
 
   def add_current_user_to_group
     @group.users << current_user unless @group.users.include?(current_user)
+  end
+
+  def to_creat_group
+    return unless @groups.empty?
+
+    redirect_to new_group_path, alert: t('groups.alert.no_groups_found')
+    nil
   end
 end
