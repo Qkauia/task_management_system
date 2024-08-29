@@ -29,5 +29,5 @@
     "p:start": "build:production",
     "build:watch": "node esbuild.config.js --watch"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.4.1"
 }
