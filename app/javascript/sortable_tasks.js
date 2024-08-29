@@ -23,7 +23,9 @@ document.addEventListener('turbo:load', () => {
           },
           body: JSON.stringify({ order: order })
         }).then(response => {
-          if (!response.ok) {
+          if (response.ok) {
+            location.reload(); // 排序成功後重新加載頁面
+          } else {
             alert('排序更新失敗');
           }
         }).catch(error => {
@@ -52,8 +54,8 @@ document.addEventListener('turbo:load', () => {
 
   function updateTaskImportance(taskId, isImportant) {
     if (!taskId) {
-      console.error('任务 ID 无效:', taskId);
-      alert('任务 ID 无效，无法更新任务状态。');
+      console.error('任務 ID 無效:', taskId);
+      alert('任務 ID 無效，無法更新任務狀態。');
       return;
     }
 
@@ -65,13 +67,15 @@ document.addEventListener('turbo:load', () => {
       },
       body: JSON.stringify({ important: isImportant })
     }).then(response => {
-      if (!response.ok) {
-        alert('更新任务状态失败');
-        console.error('更新失败:', response);
+      if (response.ok) {
+        location.reload(); // 更新成功後重新加載頁面
+      } else {
+        alert('更新任務狀態失敗');
+        console.error('更新失敗:', response);
       }
     }).catch(error => {
-      console.error('更新任务状态时出错:', error);
-      alert('发生错误，无法更新任务状态。');
+      console.error('更新任務狀態時出錯:', error);
+      alert('發生錯誤，無法更新任務狀態。');
     });
   }
 });
