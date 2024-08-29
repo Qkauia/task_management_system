@@ -1,6 +1,5 @@
-
+/* 基本表格樣式 */
 .table td, .table th {
-  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11,9 +10,10 @@
 }
 
 .table {
-  word-wrap: break-word;
+  word-wrap: break-word; /* 這裡的 word-wrap 在 nowrap 的情況下不起作用 */
 }
 
+/* 文字樣式 */
 .task-title {
   font-size: 0.9rem;
 }
@@ -23,7 +23,16 @@
   border-radius: 2px !important;
 }
 
+.navbar {
+  position: fixed !important;
+  top: 0;
+  width: 100%;
+  z-index: 1030 !important;
+}
+
+/* 佈局和頁腳樣式 */
 html, body {
+  padding-top: 15px; 
   height: 100%;
   margin: 0;
 }
@@ -38,7 +47,8 @@ main {
   flex-grow: 1;
 }
 
-footer {
+.footer {
+  flex: 0 1 auto;
   background-color: #343a40;
   color: #ffffff;
   padding: 1rem;
@@ -47,3 +57,127 @@ footer {
   position: relative;
   bottom: 0;
 }
+
+/* 自定義樣式 */
+.fixed-width {
+  width: 95px;
+}
+
+.d-flex .dropdown {
+  margin-bottom: 2 !important;
+}
+
+.d-flex .dropdown .btn {
+  text-align: center;
+}
+
+.custom-card {
+  border: 2px solid #000 !important;
+}
+
+/* 小螢幕樣式 (max-width: 768px) */
+@media (max-width: 768px) {
+  .table-striped th, .table-striped td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .table-striped th {
+    background-color: #f8f9fa;
+    padding: 8px;
+    display: none;
+  }
+
+  .table-striped td {
+    padding: 8px;
+    border: none;
+    text-align: left;
+    width: 100% !important; /* 覆蓋所有寬度限制 */
+  }
+
+  .table-striped tbody tr {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .table-striped tbody tr td {
+    border-top: none;
+  }
+
+  /* 覆蓋 Bootstrap 的 col-* 類別寬度 */
+  .table-striped .col-6,
+  .table-striped .col-2,
+  .table-striped .col-4,
+  .table-striped .col-12 {
+    width: 100% !important; /* 小螢幕寬度為 100% */
+    padding: 0;
+  }
+  
+  .navbar-nav .nav-item {
+    margin-bottom: 10px; /* 增加間距 */
+  }
+
+  .fc-toolbar-title {
+    font-size: 16px !important; /* 小螢幕上調整標題的字體大小 */
+  }
+
+  .fc-toolbar button {
+    font-size: 14px !important; /* 小螢幕上調整導航按鈕的字體大小 */
+    padding: 5px 5px !important; /* 小螢幕上縮小按鈕的內邊距 */
+  }
+
+  .badge {
+    padding: 0.25em 0.5em;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  .fs-5 {
+    font-size: 1rem;
+  }
+  .card-body {
+    padding: 1rem;
+  }
+
+  .email-overflow {
+    white-space: nowrap !important; /* 禁止換行 */
+    overflow: hidden !important; /* 隱藏溢出部分 */
+    text-overflow: ellipsis !important; /* 使用省略號表示溢出的文字 */
+    display: inline-block !important; /* 使元素按內容寬度顯示 */
+    max-width: 310px !important; /* 限制最大寬度 */
+  }
+}
+
+/* 大螢幕樣式 (min-width: 768px) */
+@media (min-width: 768px) {
+  .table-striped th {
+    display: table-cell; /* 大尺寸顯示 th */
+  }
+
+  .d-md-none {
+    display: none !important; /* 大尺寸隱藏 */
+  }
+
+  .d-md-block {
+    display: inline !important; /* 大尺寸顯示 */
+  }
+  .navbar-nav .nav-item {
+    margin-left: 5px;
+  }
+}
+
+.user_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user_card {
+  max-width: 400px;
+  width: 100%;
+}
+
