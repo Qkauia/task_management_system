@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveDeviseColumnsFromUsers < ActiveRecord::Migration[7.1]
   def up
     remove_column :users, :encrypted_password
@@ -7,7 +9,7 @@ class RemoveDeviseColumnsFromUsers < ActiveRecord::Migration[7.1]
   end
 
   def down
-    add_column :users, :encrypted_password, :string, default: "", null: false
+    add_column :users, :encrypted_password, :string, default: '', null: false
     add_column :users, :reset_password_token, :string
     add_column :users, :reset_password_sent_at, :datetime
     add_column :users, :remember_created_at, :datetime

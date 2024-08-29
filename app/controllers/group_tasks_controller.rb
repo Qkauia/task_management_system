@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# The main application controller that other controllers inherit from.
 class GroupTasksController < ApplicationController
   before_action :authenticate_user!
 

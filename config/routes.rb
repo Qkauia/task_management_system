@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  scope "(:locale)", locale: /en|zh-TW/ do
-    resources :users, only: [:new, :create, :edit, :update]
+  scope '(:locale)', locale: /en|zh-TW/ do
+    resources :users, only: %i[new create edit update]
     namespace :admin do
-      resources :users, only: [:index, :edit, :update, :destroy]
+      resources :users, only: %i[index edit update destroy]
     end
     resources :tasks, except: [:index] do
       collection do
@@ -31,7 +33,7 @@ Rails.application.routes.draw do
       end
     end
 
-    root "tasks#personal"
+    root 'tasks#personal'
 
     get 'signup', to: 'users#new'
     post 'signup', to: 'users#create'
@@ -41,5 +43,5 @@ Rails.application.routes.draw do
     get '/profile/edit', to: 'users#edit_profile', as: :edit_profile
     patch '/profile', to: 'users#update_profile', as: :update_profile
   end
-  get '', to: redirect("/%{locale}"), defaults: { locale: I18n.default_locale }
+  get '', to: redirect('/%<locale>s'), defaults: { locale: I18n.default_locale }
 end

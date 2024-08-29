@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faker'
 
 # Create Tags
@@ -30,8 +32,8 @@ end
     task = user.tasks.create!(
       title: Faker::Lorem.sentence(word_count: 3),
       content: Faker::Lorem.paragraph,
-      start_time: start_time,
-      end_time: end_time,
+      start_time:,
+      end_time:,
       priority: Task.priorities.keys.sample,
       status: Task.statuses.keys.sample
     )
@@ -39,7 +41,9 @@ end
     # 隨機分配標籤
     assigned_tags = tags.sample(rand(1..3))
     task.tags << assigned_tags
-    Rails.logger.debug { "Created Task: #{task.title} for Admin User: #{user.email} with Tags: #{assigned_tags.map(&:name).join(', ')}" }
+    Rails.logger.debug do
+      "Created Task: #{task.title} for Admin User: #{user.email} with Tags: #{assigned_tags.map(&:name).join(', ')}"
+    end
   end
 end
 
@@ -59,8 +63,8 @@ end
     task = user.tasks.create!(
       title: Faker::Lorem.sentence(word_count: 3),
       content: Faker::Lorem.paragraph,
-      start_time: start_time,
-      end_time: end_time,
+      start_time:,
+      end_time:,
       priority: Task.priorities.keys.sample,
       status: Task.statuses.keys.sample
     )
@@ -68,8 +72,10 @@ end
     # 隨機分配標籤
     assigned_tags = tags.sample(rand(1..3))
     task.tags << assigned_tags
-    Rails.logger.debug { "Created Task: #{task.title} for Regular User: #{user.email} with Tags: #{assigned_tags.map(&:name).join(', ')}" }
+    Rails.logger.debug do
+      "Created Task: #{task.title} for Regular User: #{user.email} with Tags: #{assigned_tags.map(&:name).join(', ')}"
+    end
   end
 end
 
-Rails.logger.debug "Seed data created successfully!"
+Rails.logger.debug 'Seed data created successfully!'

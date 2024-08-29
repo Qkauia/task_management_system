@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPriorityAndStatusToTasks < ActiveRecord::Migration[7.1]
   def up
     if column_exists?(:tasks, :priority)

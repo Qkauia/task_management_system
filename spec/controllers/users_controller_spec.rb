@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
@@ -36,9 +38,9 @@ RSpec.describe UsersController, type: :controller do
       let(:valid_attributes) { attributes_for(:user) }
 
       it 'creates a new user' do
-        expect {
+        expect do
           post :create, params: { user: valid_attributes }
-        }.to change(User, :count).by(1)
+        end.to change(User, :count).by(1)
       end
 
       it 'redirects to the root path' do
@@ -56,9 +58,9 @@ RSpec.describe UsersController, type: :controller do
       let(:invalid_attributes) { attributes_for(:user, email: '') }
 
       it 'does not create a new user' do
-        expect {
+        expect do
           post :create, params: { user: invalid_attributes }
-        }.not_to change(User, :count)
+        end.not_to change(User, :count)
       end
 
       it 're-renders the new template' do
@@ -74,11 +76,11 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'with valid current password and new passwords' do
+      subject { patch :update, params: { id: user.id }.merge(valid_params) }
+
       let(:valid_params) do
         { user: { current_password: 'oldpassword', password: 'newpassword', password_confirmation: 'newpassword' } }
       end
-
-      subject { patch :update, params: { id: user.id }.merge(valid_params) }
 
       it 'updates the user password' do
         subject
@@ -93,11 +95,11 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'with incorrect current password' do
+      subject { patch :update, params: { id: user.id }.merge(invalid_params) }
+
       let(:invalid_params) do
         { user: { current_password: 'wrongpassword', password: 'newpassword', password_confirmation: 'newpassword' } }
       end
-
-      subject { patch :update, params: { id: user.id }.merge(invalid_params) }
 
       it 'does not update the user password' do
         subject
@@ -112,11 +114,11 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'with blank password fields' do
+      subject { patch :update, params: { id: user.id }.merge(blank_password_params) }
+
       let(:blank_password_params) do
         { user: { current_password: 'oldpassword', password: '', password_confirmation: '' } }
       end
-
-      subject { patch :update, params: { id: user.id }.merge(blank_password_params) }
 
       it 'does not update the user password' do
         subject

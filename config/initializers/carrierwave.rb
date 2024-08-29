@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 CarrierWave.configure do |config|
   config.storage = :file
-  config.cache_dir = Rails.root.join("tmp/uploads").to_s
+  config.cache_dir = Rails.root.join('tmp/uploads').to_s
 
   # 如果你使用不同的雲端儲存服務（例如 AWS S3），可以在這裡設定
   # config.fog_credentials = {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
@@ -23,7 +25,7 @@ class User < ApplicationRecord
   scope :excluding_current_user, ->(current_user) { where.not(id: current_user.id) }
   scope :filtered_by_query, lambda { |query|
     cleaned_query = query.to_s.strip
-    where("email ILIKE ?", "%#{cleaned_query}%").distinct if cleaned_query.present?
+    where('email ILIKE ?', "%#{cleaned_query}%").distinct if cleaned_query.present?
   }
 
   def authenticate(password)
