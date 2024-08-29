@@ -150,6 +150,18 @@ main {
     display: inline-block !important; /* 使元素按內容寬度顯示 */
     max-width: 310px !important; /* 限制最大寬度 */
   }
+
+  .email-overflow-group{
+    white-space: nowrap !important; /* 禁止換行 */
+    overflow: hidden !important; /* 隱藏溢出部分 */
+    text-overflow: ellipsis !important; /* 使用省略號表示溢出的文字 */
+    display: inline-block !important; /* 使元素按內容寬度顯示 */
+    max-width: 250px !important; /* 限制最大寬度 */
+  }
+
+  .min-group-card {
+    margin-top: 20px !important;
+  }
 }
 
 /* 大螢幕樣式 (min-width: 768px) */

@@ -16,7 +16,7 @@
       </ul>
     </div>
   </div>
-  <div class="col-md-8">
+  <div class="min-group-card col-md-8">
     <% if @selected_group %>
       <div class="card shadow-sm">
         <div class="card-body">
@@ -27,7 +27,7 @@
             <ul class="list-unstyled">
               <li class="mb-1 d-flex align-items-center">
                 <i class="bi bi-person-circle me-2"></i> 
-                <span class="btn btn-outline-info"><%= @selected_group.user.email %></span>
+                <span class="email-overflow-group btn btn-outline-info"><%= @selected_group.user.email %></span>
               </li>
             </ul>
           </div>
