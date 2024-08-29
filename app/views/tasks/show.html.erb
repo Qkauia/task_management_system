@@ -1,81 +1,82 @@
-<h1 class="mb-4"><%= t('tasks.headers.task_details') %></h1>
+<h1 class="mb-4" style="font-size: 2rem;"><%= t('tasks.headers.task_details') %></h1>
+
 <div class="card shadow-sm mb-4">
   <div class="card-body">
-    <div class="row mb-3">
+    <div class="row mb-4">
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.title') %>:</strong>
-        <span class="ms-2 text-muted"><%= @task.title %></span>
+        <strong class="fs-5"><%= t('tasks.headers.title') %>:</strong>
+        <span class="ms-3 text-muted fs-5"><%= @task.title %></span>
       </div>
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.priority') %>:</strong>
-        <span class="ms-2 badge bg-<%= @task.priority == 'high' ? 'danger' : @task.priority == 'medium' ? 'warning' : 'secondary' %>">
+        <strong class="fs-5"><%= t('tasks.headers.priority') %>:</strong>
+        <span class="ms-3 badge bg-<%= @task.priority == 'high' ? 'danger' : @task.priority == 'medium' ? 'warning' : 'secondary' %> fs-5">
           <%= t("enums.task.priority.#{@task.priority}") %>
         </span>
       </div>
     </div>
 
-    <div class="row mb-3">
+    <div class="row mb-4">
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.start_time') %>:</strong>
-        <span class="ms-2 text-muted"><%= format_datetime(@task.start_time) %></span>
+        <strong class="fs-5"><%= t('tasks.headers.start_time') %>:</strong>
+        <span class="ms-3 text-muted fs-5"><%= format_datetime(@task.start_time) %></span>
       </div>
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.end_time') %>:</strong>
-        <span class="ms-2 text-muted"><%= format_datetime(@task.end_time) %></span>
+        <strong class="fs-5"><%= t('tasks.headers.end_time') %>:</strong>
+        <span class="ms-3 text-muted fs-5"><%= format_datetime(@task.end_time) %></span>
       </div>
     </div>
 
-    <div class="row mb-3">
+    <div class="row mb-4">
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.founder') %>:</strong>
-        <span class="badge bg-success ms-2"><%= @task.author.email %></span>
+        <strong class="fs-5"><%= t('tasks.headers.founder') %>:</strong>
+        <span class="badge bg-success ms-3 fs-5"><%= @task.author.email %></span>
       </div>
       <div class="col-md-6">
-        <strong><%= t('tasks.headers.status') %>:</strong>
-        <span class="ms-2 badge bg-<%= @task.status == 'completed' ? 'success' : @task.status == 'in_progress' ? 'primary' : 'secondary' %>">
+        <strong class="fs-5"><%= t('tasks.headers.status') %>:</strong>
+        <span class="ms-3 badge bg-<%= @task.status == 'completed' ? 'success' : @task.status == 'in_progress' ? 'primary' : 'secondary' %> fs-5">
           <%= t("enums.task.status.#{@task.status}") %>
         </span>
       </div>
     </div>
 
-    <div class="mb-3">
-      <strong>Related Groups:</strong>
+    <div class="mb-4">
+      <strong class="fs-5"><%= t('tasks.show.related.groups') %></strong>
       <% if @task.groups.any? %>
-        <div class="mt-2">
+        <div class="mt-3">
           <% @task.groups.each do |group| %>
-            <span class="badge bg-info me-2"><%= group.name %>(群組)</span>
+            <span class="badge bg-info me-3 fs-5 mb-2"><%= group.name %>(群組)</span>
             <% group.users.where.not(id: current_user.id).each do |user| %>
-              <span class="badge bg-primary ms-1"><%= user.email %></span>
+              <span class="badge email-overflow bg-primary ms-2 fs-5 mb-2"><%= user.email %></span>
             <% end %>
           <% end %>
         </div>
       <% else %>
-        <span class="ms-2 text-muted">No related groups</span>
+        <span class="ms-3 text-muted fs-5"><%= t('tasks.show.no_related_groups') %></span>
       <% end %>
     </div>
     
-    <div class="mb-3">
-      <strong>Related Users:</strong>
+    <div class="mb-4">
+      <strong class="fs-5"><%= t('tasks.show.related.users') %></strong>
       <% associated_users = @task.shared_users.where.not(id: current_user.id) %>
       <% if associated_users.any? %>
-        <div class="mt-2">
+        <div class="mt-3">
           <% associated_users.each do |user| %>
-            <span class="badge bg-primary me-2"><%= user.email %></span>
+            <span class="badge email-overflow bg-primary me-3 fs-5 mb-2"><%= user.email %></span>
           <% end %>
         </div>
       <% else %>
-        <span class="ms-2 text-muted">No related users</span>
+        <span class="ms-3 text-muted fs-5"><%= t('tasks.show.no_sharer') %></span>
       <% end %>
     </div>
 
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.tags') %>:</strong>
-      <span class="badge bg-warning ms-2"><%= @task.tags.map(&:name).join(", ") %></span>
+    <div class="mb-4">
+      <strong class="fs-5"><%= t('tasks.headers.tags') %>:</strong>
+      <span class="badge bg-warning ms-3 fs-5 mb-2">＃<%= @task.tags.map(&:name).join("  ＃ ") %></span>
     </div>
 
-    <div class="mb-3">
-      <strong><%= t('tasks.headers.content') %>:</strong>
-      <div class="mt-2 p-2 bg-light rounded border"><%= @task.content %></div>
+    <div class="mb-4">
+      <strong class="fs-5"><%= t('tasks.headers.content') %>:</strong>
+      <div class="mt-3 p-3 bg-light rounded border fs-5"><%= @task.content %></div>
     </div>
   </div>
 </div>

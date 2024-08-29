@@ -6,7 +6,6 @@
                           class: "form-control #{'is-invalid' if @task.errors[:title].any?}",
                           placeholder: t('tasks.form.placeholder.title'),
                           required: true %>
-                          
       <% if @task.errors[:title].any? %>
         <div class="invalid-feedback">
           <%= @task.errors[:title].first %>
@@ -58,15 +57,13 @@
 
   <div class="mb-3">
     <%= form.label :content, t('tasks.form.content'), class: "form-label" %>
-    <%= form.text_area :content, placeholder: t('tasks.form.placeholder.content'),
-                                 class: "form-control picker" %>
+    <%= form.text_area :content, placeholder: t('tasks.form.placeholder.content'), class: "form-control picker" %>
   </div>
 
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= form.label :new_tag, t('tasks.form.new_tag'), class: "form-label" %>
-      <%= form.text_field :new_tag, placeholder: t('tasks.form.placeholder.tag'),
-                                    class: "form-control" %>
+      <%= form.text_field :new_tag, placeholder: t('tasks.form.placeholder.tag'), class: "form-control" %>
     </div>
 
     <div class="col-md-6 mb-3">
@@ -88,68 +85,87 @@
     <% end %>
   </div>
 
-  <%#= group %>
-  <div class="align-items-center mb-3" data-controller="group-buttons">
+  <!-- Group -->
+  <% if @groups_by_letter.present? %>
+    <div class="align-items-center mb-3" data-controller="group-buttons">
+      <div class="mb-3">
+        <p><%= t('tasks.form.choose_share_with_groups') %></p>
+      </div>
+      <div class="d-flex align-items-center flex-wrap mb-3">
+        <span class="btn btn-success btn-sm me-2">
+          <%= t('tasks.form.selected') %> <span data-group-buttons-target="totalCount" class="fw-bold">(0)</span> <%= t('tasks.form.groups') %>
+        </span>
+        <button class="btn btn-danger btn-sm ms-1" data-action="click->group-buttons#clearAll"><%= t('tasks.form.clear_all_selections') %></button>
+      </div>
+      <div class="d-flex flex-wrap">
+        <% @groups_by_letter.each do |letter, groups| %>
+          <div class="dropdown mb-2 me-2">
+            <button class="btn btn-secondary dropdown-toggle align-items-center fixed-width" type="button" id="dropdown<%= letter %>" data-bs-toggle="dropdown" aria-expanded="false" data-group-buttons-target="letter" data-letter="<%= letter %>">
+              <%= letter %>
+              <span data-group-buttons-target="count" data-letter="<%= letter %>" class="badge rounded-circle bg-success bg-opacity-25 ms-2"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown<%= letter %>">
+              <% groups.each do |group| %>
+                <li>
+                  <label class="dropdown-item group-button d-flex align-items-center" data-action="click->group-buttons#toggle" data-group-buttons-target="button" data-letter="<%= letter %>">
+                    <input type="checkbox" name="task[group_ids][]" value="<%= group.id %>" autocomplete="off" <%= 'checked' if @task.group_ids.include?(group.id) %> hidden>
+                    <%= group.name %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
     <div class="mb-3">
       <p><%= t('tasks.form.choose_share_with_groups') %></p>
     </div>
-    <span class="btn btn-success btn-sm">
-      <%= t('tasks.form.selected') %> <span data-group-buttons-target="totalCount" class="fw-bold">(0)</span> <%= t('tasks.form.groups') %>
-    </span>
-    <button class="btn btn-danger btn-sm ms-1" data-action="click->group-buttons#clearAll"><%= t('tasks.form.clear_all_selections') %></button>
-    <div class="mt-3">
-      <% @groups_by_letter.each do |letter, groups| %>
-        <button class="btn btn-secondary dropdown-toggle mb-2 align-items-center" type="button" id="dropdown<%= letter %>" data-bs-toggle="dropdown" aria-expanded="false" data-group-buttons-target="letter" data-letter="<%= letter %>" style="width: 95px;">
-          <%= letter %>
-          <span data-group-buttons-target="count" data-letter="<%= letter %>" class="badge rounded-circle bg-success bg-opacity-25 ms-2"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdown<%= letter %>">
-          <% groups.each do |group| %>
-            <li>
-              <label class="dropdown-item group-button" data-action="click->group-buttons#toggle" data-group-buttons-target="button" data-letter="<%= letter %>">
-                <input type="checkbox" name="task[group_ids][]" value="<%= group.id %>" autocomplete="off" <%= 'checked' if @task.group_ids.include?(group.id) %> hidden>
-                <%= group.name %>
-              </label>
-            </li>
-          <% end %>
-        </ul>
+    <div class="mb-3">
+      <p><%= t('tasks.form.no_group_create') %></p>
+      <%= link_to t('groups.links.create_group'), new_group_path, class: "btn btn-success text-decoration-none" %>
+    </div>
+  <% end %>
+
+
+  <!-- Shared users -->
+  <div class="align-items-center mb-3" data-controller="user-buttons">
+    <div class="mb-3">
+      <p><%= t('users.form.choose_share_with_other_users') %></p>
+    </div>
+    <div class="d-flex align-items-center flex-wrap mb-3">
+      <span class="btn btn-success btn-sm me-2">
+        <%= t('users.form.selected') %> <span data-user-buttons-target="totalCount" class="fw-bold">(0)</span> <%= t('users.form.peoples') %>
+      </span>
+      <button class="btn btn-danger btn-sm ms-1" data-action="click->user-buttons#clearAll"><%= t('users.form.clear_all_selections') %></button>
+    </div>
+    <div class="d-flex flex-wrap">
+      <% if @users_by_letter.present? %>
+        <% @users_by_letter.each do |letter, users| %>
+          <div class="dropdown mb-2 me-2">
+            <button class="btn btn-secondary dropdown-toggle align-items-center fixed-width" type="button" id="dropdown<%= letter %>" data-bs-toggle="dropdown" aria-expanded="false" data-user-buttons-target="letter" data-letter="<%= letter %>">
+              <%= letter %>
+              <span data-user-buttons-target="count" data-letter="<%= letter %>" class="badge rounded-circle bg-success bg-opacity-25 ms-2"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown<%= letter %>">
+              <% users.each do |user| %>
+                <li>
+                  <label class="dropdown-item user-button" data-action="click->user-buttons#toggle" data-user-buttons-target="button" data-letter="<%= letter %>">
+                    <input type="checkbox" name="task[shared_user_ids][]" value="<%= user.id %>" autocomplete="off" <%= 'checked' if @task.shared_user_ids.include?(user.id) %> hidden>
+                    <%= user.email %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
 
-  <%#= shared %>
-  <div class="align-items-center mb-3" data-controller="user-buttons">
-  <div class="mb-3">
-    <p><%= t('users.form.choose_share_with_other_users') %></p>
-  </div>
-  <span class="btn btn-success btn-sm">
-    <%= t('users.form.selected') %> <span data-user-buttons-target="totalCount" class="fw-bold">(0)</span> <%= t('users.form.peoples') %>
-  </span>
-  <button class="btn btn-danger btn-sm ms-1" data-action="click->user-buttons#clearAll"><%= t('users.form.clear_all_selections') %></button>
-  <div class="mt-3">
-  <% if @users_by_letter.present? %>
-    <% @users_by_letter.each do |letter, users| %>
-      <button class="btn btn-secondary dropdown-toggle mb-2 align-items-center" type="button" id="dropdown<%= letter %>" data-bs-toggle="dropdown" aria-expanded="false" data-user-buttons-target="letter" data-letter="<%= letter %>" style="width: 95px;">
-        <%= letter %>
-        <span data-user-buttons-target="count" data-letter="<%= letter %>" class="badge rounded-circle bg-success bg-opacity-25 ms-2"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdown<%= letter %>">
-        <% users.each do |user| %>
-          <li>
-            <label class="dropdown-item user-button" data-action="click->user-buttons#toggle" data-user-buttons-target="button" data-letter="<%= letter %>">
-              <input type="checkbox" name="task[shared_user_ids][]" value="<%= user.id %>" autocomplete="off" <%= 'checked' if @task.shared_user_ids.include?(user.id) %> hidden>
-              <%= user.email %>
-            </label>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  <% end %>
-  </div>
-</div>
-
   <div class="text-center mb-10">
-    <%= link_to t('tasks.link.back'), personal_tasks_path ,class: "btn btn-secondary"%>
+    <%= link_to t('tasks.link.back'), personal_tasks_path, class: "btn btn-secondary" %>
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
