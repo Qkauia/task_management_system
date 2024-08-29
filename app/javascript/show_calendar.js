@@ -2,7 +2,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import Swal from 'sweetalert2';
 
-document.addEventListener('turbo:load', function () { // 改成 turbo:load
+document.addEventListener('turbo:load', function () {
   function showCalendar(event) {
     event.preventDefault();
 
@@ -12,20 +12,21 @@ document.addEventListener('turbo:load', function () { // 改成 turbo:load
         <div id="calendar" style="min-height: 400px; opacity: 0; transition: opacity 0.5s;"></div>
         <button id="closeButton" class="swal2-close-btn btn btn-secondary mt-3">Close</button>
       `,
-      width: '90%',
+      width: '100%',
       showConfirmButton: false,
       didOpen: () => {
         const calendarEl = document.getElementById('calendar');
         if (calendarEl) {
           setTimeout(() => {
+            const isSmallScreen = window.innerWidth < 768;
             const calendar = new Calendar(calendarEl, {
               plugins: [dayGridPlugin],
-              initialView: 'dayGridMonth',
+              initialView: isSmallScreen ? 'dayGridDay' : 'dayGridMonth', // 小螢幕顯示每日視圖
               events: '/tasks/personal.json',
               headerToolbar: {
-                left: 'prev,next today',
+                left: 'prev,next',
                 center: 'title',
-                right: 'dayGridMonth,dayGridWeek,dayGridDay',
+                right: isSmallScreen ? 'dayGridDay' : 'dayGridMonth,dayGridWeek,dayGridDay', // 小螢幕上只顯示日視圖
               },
               height: 'auto',
               eventContent: function (info) {
@@ -37,9 +38,11 @@ document.addEventListener('turbo:load', function () { // 改成 turbo:load
                   html: `<div class="task-event" style="margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">☉ ${truncatedTitle}</div>`,
                 };
               },
+              eventDidMount: function (info) {
+                info.el.style.fontSize = isSmallScreen ? '12px' : '14px';
+              },
               eventClick: function (info) {
                 info.jsEvent.preventDefault();
-
                 if (info.event.url) {
                   window.location.href = info.event.url;
                 }
