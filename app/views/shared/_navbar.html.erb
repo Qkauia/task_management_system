@@ -29,14 +29,15 @@
           <!-- Notification Dropdown -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <%= t('navbar.notification') %> 
+              <%= t('navbar.notification') %>
               <% if @unread_count.to_i > 0 %>
                 <span class="badge bg-danger"><%= @unread_count %></span>
               <% end %>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <% if @unread_count.to_i > 0 %>
-                <% @notifications.each do |notification| %>
+                <% notifications_to_display = @notifications.first(5) %>
+                <% notifications_to_display.each do |notification| %>
                   <li class="dropdown-item">
                     <%= notification.message %>
                     <div class="mt-2">
@@ -50,6 +51,8 @@
                   </li>
                   <li><hr class="dropdown-divider"></li>
                 <% end %>
+
+                <!-- 顯示"更多通知"的連結，如果未讀通知超過5條 -->
                 <% if @unread_count > 5 %>
                   <li class="dropdown-item text-center">
                     <%= link_to t('navbar.notification_links.view_all_notifications'), notifications_path %>
