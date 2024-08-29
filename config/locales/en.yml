@@ -37,6 +37,12 @@ en:
       keyword: "Keyword Search"
       filter: "Filter"
       tag: "Tag Filter"
+    show:
+      no_related_groups: "No Related Groups"
+      no_sharer: "No Sharer"
+      related:
+        groups: "Related Groups："
+        users: "Related Users："
     link:
       new_task: "New Task"
       show: "Show"
@@ -49,6 +55,7 @@ en:
       group_tasks: "Group Tasks"
       download_file: "Download File"
       view_file: "View File"
+      update_tasks: "Update Tasks"
     errors:
       start_time_greater_than_end_time: "StartTime greater than EndTime"
     form:
@@ -58,6 +65,7 @@ en:
       clear_all_selections: "Clear all Selections"
       show_label_usage: "Show Label Usage"
       upload_file: "Upload File"
+      no_group_create: " ※ No Group, please Create one First"
       placeholder:
         title: "Please Input Title"
         content: "Please Input Something"
@@ -287,7 +295,7 @@ en:
       delete: "Delete Group"
       edit: "Edit Group"
     remind:
-      select_group: "Please select the Group on the right to Operate"
+      select_group: "Please select the Group on the left to Operate"
     remove_user:
       success: "%{email} Removed from Group"
       failure: "Unable to Remove User"
@@ -297,6 +305,8 @@ en:
       remove_user: "Are you sure you want to Remove this User?"
     placeholder:
       input_group_name: "Please Input Group Name"
+    alert:
+      no_groups_found: "Currently no Group, please create a Group first."
   alert:
       creation_failed: "Creation Failed"
       not_found: "Not Found, Task may have been Removed"

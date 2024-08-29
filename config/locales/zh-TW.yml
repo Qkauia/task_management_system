@@ -54,6 +54,7 @@ zh-TW:
       groups: " 個群組"
       clear_all_selections: "清除所有選取"
       upload_file: "上傳檔案"
+      no_group_create: " ※ 目前沒有群組，請先建立"
       placeholder:
         title: "請輸入標題"
         content: "請輸入些內容"
@@ -64,6 +65,12 @@ zh-TW:
       keyword: "關鍵字搜尋"
       filter: "篩選"
       tag: "標記篩選"
+    show:
+      no_related_groups: "沒有群組"
+      no_sharer: "沒有分享者"
+      related:
+        groups: "關連群組："
+        users: "關連使用者："
     link:
       new_task: "建立新任務"
       show: "檢視"
@@ -76,6 +83,7 @@ zh-TW:
       group_tasks: "群組任務"
       download_file: "下載檔案"
       view_file: "檢視檔案"
+      update_tasks: "更新任務"
     errors:
       start_time_greater_than_end_time: "開始時間大於結束時間"
       prohibited: "禁止"
@@ -303,7 +311,7 @@ zh-TW:
       delete: "刪除群組"
       edit: "編輯群組"
     remind:
-      select_group: "請選擇右側群組進行操作"
+      select_group: "請選擇左側群組進行操作"
     remove_user:
       success: "%{email} 已移出群組。"
       failure: "無法移除使用者。"
@@ -313,6 +321,8 @@ zh-TW:
       remove_user: "確定要移除這位使用者？"
     placeholder:
       input_group_name: "請輸入群組名稱"
+    alert:
+      no_groups_found: "目前沒有群組，請先建立群組。"
   alert:
       creation_failed: "新增失敗"
       not_found: "找不到頁面，任務可能已經被移除。"
