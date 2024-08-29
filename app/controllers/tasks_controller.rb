@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller manages the users within the admin namespace.
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_task, only: %i[show edit update destroy]
@@ -140,7 +143,11 @@ class TasksController < ApplicationController
   end
 
   def set_groups_by_letter
-    @groups_by_letter = current_user.groups.order(:name).group_by { |group| group.name[0].upcase }
+    @groups_by_letter = current_user.groups.order(:name).group_by do |group|
+      group.name.present? ? group.name[0].upcase : '#'
+    end
+
+    @groups_by_letter = nil if @groups_by_letter.empty?
   end
 
   def attach_file_to_task
