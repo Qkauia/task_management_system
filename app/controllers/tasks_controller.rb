@@ -101,13 +101,13 @@ class TasksController < ApplicationController
 
   def task_accessible?(update: false)
     return true if current_user.id == @task.user_id
-  
+
     if update
       @task.task_users.find_by(user: current_user)&.can_edit ||
-      current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
+        current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
     else
       @task.shared_users.include?(current_user) ||
-      @task.groups.any? { |group| group.users.include?(current_user) }
+        @task.groups.any? { |group| group.users.include?(current_user) }
     end
   end
 
