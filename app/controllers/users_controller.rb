@@ -2,13 +2,13 @@
 
 # This controller manages the users within the admin namespace.
 class UsersController < ApplicationController
+  before_action :set_user, only: %i[edit update edit_profile update_profile]
+
   def new
     @user = User.new
   end
 
-  def edit
-    @user = current_user
-  end
+  def edit; end
 
   def create
     @user = User.new(user_params)
@@ -21,8 +21,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = current_user
-
     if @user.authenticate(params[:user][:current_password])
       if passwords_present?
         if @user.update(user_params)
@@ -41,12 +39,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit_profile
-    @user = current_user
-  end
+  def edit_profile; end
 
   def update_profile
-    @user = current_user
     if @user.update(profile_params)
       redirect_to root_path, notice: t('users.avatar.updated_successfully')
     else
@@ -57,6 +52,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_user
+    @user = current_user
+  end
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :avatar)

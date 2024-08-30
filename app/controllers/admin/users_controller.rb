@@ -4,6 +4,7 @@ module Admin
   class UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
+    before_action :set_user, only: %i[edit update destroy]
 
     def index
       @users = User.excluding_current_user(current_user)
@@ -12,14 +13,15 @@ module Admin
                    .per(10)
     end
 
-    def edit
-      @user = User.find(params[:id])
-    end
+    def edit; end
 
     def update
       if prevent_self_action
         redirect_to admin_users_path, alert: t('.cannot_update_self')
-      elsif @user.update(user_params)
+        return
+      end
+
+      if @user.update(user_params)
         redirect_to admin_users_path, notice: t('.success')
       else
         render :edit
@@ -29,7 +31,10 @@ module Admin
     def destroy
       if prevent_self_action
         redirect_to admin_users_path, alert: t('.cannot_delete_self')
-      elsif last_admin?
+        return
+      end
+
+      if last_admin?
         redirect_to admin_users_path, alert: t('.last_admin')
       else
         @user.destroy
@@ -38,6 +43,10 @@ module Admin
     end
 
     private
+
+    def set_user
+      @user = User.find(params[:id])
+    end
 
     def user_params
       params.require(:user).permit(:email, :password, :password_confirmation, :role)
@@ -50,7 +59,6 @@ module Admin
     end
 
     def prevent_self_action
-      @user = User.find(params[:id])
       @user == current_user
     end
 
