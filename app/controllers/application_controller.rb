@@ -23,37 +23,24 @@ class ApplicationController < ActionController::Base
     redirect_to login_path unless current_user
   end
 
+  # 檢查用戶的任務通知
   def check_task_notifications(user)
-    owned_and_shared_tasks = Task.owned_and_shared_by(user)
-    group_tasks = Task.for_user_groups(user)
+    tasks = fetch_related_tasks_for(user)
 
-    related_tasks = (owned_and_shared_tasks + group_tasks).uniq
-
-    related_tasks.each do |task|
+    tasks.each do |task|
       next if task.end_time.blank?
 
-      if task.end_time <= Time.current && user.notifications.where(task:,
-                                                                   message: t(
-                                                                     'notification.task_end_time_has_passed', task_title: task.title
-                                                                   )).blank?
-        user.notifications.create(task:,
-                                  message: t('notification.task_end_time_has_passed',
-                                             task_title: task.title))
-      elsif (task.end_time - 2.days) <= Time.current && user.notifications.where(task:,
-                                                                                 message: t(
-                                                                                   'notification.task_is_due_soon', task_title: task.title
-                                                                                 )).blank?
-        user.notifications.create(task:, message: t('notification.task_is_due_soon', task_title: task.title))
+      if task.end_time <= Time.current
+        create_notification(user, task, 'notification.task_end_time_has_passed')
+      elsif (task.end_time - 2.days) <= Time.current
+        create_notification(user, task, 'notification.task_is_due_soon')
       end
     end
   end
 
   def sort_column
-    if params[:sort] == 'shared_count'
-      'shared_count'
-    else
-      %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : 'priority'
-    end
+    return 'shared_count' if params[:sort] == 'shared_count'
+    %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : 'priority'
   end
 
   def sort_direction
@@ -83,9 +70,7 @@ class ApplicationController < ActionController::Base
   private
 
   def not_found
-    render file: Rails.public_path.join('404.html'),
-           status: :not_found,
-           layout: false
+    render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
   end
 
   def set_notifications
@@ -93,5 +78,19 @@ class ApplicationController < ActionController::Base
 
     @notifications = current_user.notifications.unread.includes(:task)
     @unread_count = @notifications.size
+  end
+
+  def fetch_related_tasks_for(user)
+    owned_and_shared_tasks = Task.owned_and_shared_by(user)
+    group_tasks = Task.for_user_groups(user)
+
+    (owned_and_shared_tasks + group_tasks).uniq
+  end
+
+  def create_notification(user, task, message_key)
+    message = t(message_key, task_title: task.title)
+    return if user.notifications.exists?(task:, message:)
+
+    user.notifications.create(task:, message:)
   end
 end
