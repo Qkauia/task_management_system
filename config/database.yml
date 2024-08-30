@@ -9,17 +9,10 @@ development:
   <<: *default
   database: task_management_system_development
 
+test:
+  <<: *default
+  database: task_management_system_test
+
 production:
   url: <%= ENV['DATABASE_URL'] %>
   pool: 5
-  
-# production:
-#   <<: *default
-#   database: task_management_system_production
-#   username: <%= ENV['TASK_MANAGEMENT_SYSTEM_DATABASE_USERNAME'] %>
-#   password: <%= ENV['TASK_MANAGEMENT_SYSTEM_DATABASE_PASSWORD'] %>
-#   host: mydb
-#   port: 5432
-#   log_level: debug
-
-
