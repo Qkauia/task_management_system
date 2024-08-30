@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
 
   def sort_column
     return 'shared_count' if params[:sort] == 'shared_count'
+
     %w[title priority status start_time end_time].include?(params[:sort]) ? params[:sort] : 'priority'
   end
 
