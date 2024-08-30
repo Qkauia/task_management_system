@@ -5,22 +5,11 @@ class GroupTasksController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @tasks = Task.for_user_groups(current_user)
-                 .filtered_by_status(params[:status])
-                 .filtered_by_query(params[:query])
-                 .filter_by_tag(params[:tag_id])
-                 .order("#{sort_column} #{sort_direction}")
-                 .sorted
-                 .page(params[:page])
-                 .per(10)
+    base_scope = Task.for_user_groups(current_user)
 
-    @important_tasks = Task.for_user_groups(current_user)
-                           .important
-                           .with_shared_count
-                           .filtered_by_status(params[:status])
-                           .filtered_by_query(params[:query])
-                           .filter_by_tag(params[:tag_id])
-                           .order("#{sort_column} #{sort_direction}")
+    @tasks = load_tasks(base_scope, params).sorted.page(params[:page]).per(10)
+
+    @important_tasks = load_tasks(base_scope.important.with_shared_count, params)
 
     respond_to do |format|
       format.html

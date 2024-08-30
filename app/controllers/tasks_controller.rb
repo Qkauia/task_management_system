@@ -8,15 +8,11 @@ class TasksController < ApplicationController
   before_action :set_groups_by_letter, only: %i[new create edit update]
 
   def personal
-    @tasks = Task.owned_and_shared_by(current_user)
-                 .with_shared_count
-                 .filtered_by_status(params[:status])
-                 .filtered_by_query(params[:query])
-                 .filter_by_tag(params[:tag_id])
-                 .order("#{sort_column} #{sort_direction}")
-                 .sorted.page(params[:page]).per(5)
+    base_scope = Task.owned_and_shared_by(current_user).with_shared_count
 
-    @important_tasks = Task.owned_and_shared_by(current_user).important
+    @tasks = load_tasks(base_scope, params).sorted.page(params[:page]).per(5)
+
+    @important_tasks = load_tasks(base_scope.important, params)
 
     respond_to do |format|
       format.html
@@ -49,7 +45,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    if task_accessible_for_update?
+    if task_accessible?(update: true)
       if @task.update(task_params)
         handle_after_save_actions
         redirect_to personal_tasks_path, notice: t('.success')
@@ -74,21 +70,21 @@ class TasksController < ApplicationController
 
     head :ok
   rescue ActiveRecord::RecordNotFound
-    render json: { error: '任務未找到' }, status: :not_found
+    render json: { error: t('tasks.errors.not_found') }, status: :not_found
   end
 
   def update_importance
     task = Task.find_by(id: params[:id])
 
     if task.nil?
-      render json: { error: '未找到任務' }, status: :not_found
+      render json: { error: t('tasks.errors.not_found') }, status: :not_found
       return
     end
 
     if task.update(important: params[:important])
       head :ok
     else
-      render json: { error: '更新失敗' }, status: :unprocessable_entity
+      render json: { error: t('tasks.errors.update_failed') }, status: :unprocessable_entity
     end
   end
 
@@ -103,16 +99,16 @@ class TasksController < ApplicationController
     end
   end
 
-  def task_accessible?
-    current_user.id == @task.user_id ||
-      @task.shared_users.include?(current_user) ||
-      @task.groups.any? { |group| group.users.include?(current_user) }
-  end
-
-  def task_accessible_for_update?
-    @task.user == current_user ||
+  def task_accessible?(update: false)
+    return true if current_user.id == @task.user_id
+  
+    if update
       @task.task_users.find_by(user: current_user)&.can_edit ||
       current_user.groups.joins(:tasks).exists?(tasks: { id: @task.id })
+    else
+      @task.shared_users.include?(current_user) ||
+      @task.groups.any? { |group| group.users.include?(current_user) }
+    end
   end
 
   def task_params
@@ -137,17 +133,11 @@ class TasksController < ApplicationController
   end
 
   def users_by_letter
-    @users_by_letter = User.where.not(id: current_user.id)
-                           .order(:email)
-                           .group_by { |user| user.email[0].upcase }
+    @users_by_letter = User.grouped_by_letter(exclude_id: current_user.id)
   end
 
   def set_groups_by_letter
-    @groups_by_letter = current_user.groups.order(:name).group_by do |group|
-      group.name.present? ? group.name[0].upcase : '#'
-    end
-
-    @groups_by_letter = nil if @groups_by_letter.empty?
+    @groups_by_letter = current_user.groups.grouped_by_letter
   end
 
   def attach_file_to_task

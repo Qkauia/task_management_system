@@ -87,6 +87,8 @@ zh-TW:
     errors:
       start_time_greater_than_end_time: "開始時間大於結束時間"
       prohibited: "禁止"
+      not_found: "任務未找到"
+      update_failed: "更新失敗"
   time:
     formats:
       default: "%Y-%m-%d %H:%M:%S"
