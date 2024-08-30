@@ -93,4 +93,11 @@ class ApplicationController < ActionController::Base
 
     user.notifications.create(task:, message:)
   end
+
+  def load_tasks(scope, params)
+    scope.filtered_by_status(params[:status])
+         .filtered_by_query(params[:query])
+         .filter_by_tag(params[:tag_id])
+         .order("#{sort_column} #{sort_direction}")
+  end
 end

@@ -58,6 +58,8 @@ en:
       update_tasks: "Update Tasks"
     errors:
       start_time_greater_than_end_time: "StartTime greater than EndTime"
+      not_found: "Task not Found"
+      update_failed: "Update Failed"
     form:
       choose_share_with_groups: "Choose Share With Groups:"
       groups: "Groups"

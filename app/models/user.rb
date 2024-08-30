@@ -36,6 +36,11 @@ class User < ApplicationRecord
     owned_tasks.or(shared_tasks)
   end
 
+  def self.grouped_by_letter(exclude_id: nil)
+    scope = exclude_id ? where.not(id: exclude_id) : all
+    scope.order(:email).group_by { |user| user.email[0].upcase }
+  end
+
   private
 
   def encrypt_password
