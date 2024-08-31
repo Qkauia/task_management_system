@@ -1,12 +1,63 @@
-# Task Manager Application
+## QTakes
+[點擊進入網站 🌐](https://taskmanagementsystem.fly.dev/zh-TW/)
 
-## Project Overview
-This project is a task management system that allows users to create, manage, and categorize their tasks, with support for group functionality and a notification system.
+# Project Overview
 
-## Tech Stack
-- Ruby 3.2.0
-- Rails 7.1.3
-- PostgreSQL
+該專案是一個任務管理系統，允許使用者建立、管理和分類他們的任務，並支援群組功能和通知系統。
+
+### 主要功能
+
+- **使用者管理**：
+  - 註冊、登入和登出
+  - 上傳大頭照
+  - 更改密碼
+  - **管理員角色**：
+    - 搜尋使用者
+    - 更改使用者權限
+    - 刪除使用者
+
+- **上傳檔案**：
+  - 支援 Amazon S3
+
+- **任務管理**：
+  - 任務搜尋、篩選與排列
+  - 查看標記使用量（圖表）
+  - 任務分享功能：
+    - 分享給使用者
+    - 分享至群組
+  - 任務自動排程至日曆顯示
+  - 任務列表介面支援拖放操作
+  - 任務到期通知
+
+- **介面語言支援**：
+  - 中文/英文
+  - RWD 響應式設計
+
+### 使用技術
+
+#### 前端技術
+
+- **Bootstrap**
+- **Stimulus**
+
+#### 後端技術
+
+- **Ruby**
+- **Ruby on Rails**
+
+#### 部署和執行環境
+
+- **Fly.io**
+- **AWS**
+
+#### 版本控制和代碼存儲
+
+- **Git**
+- **GitHub**
+
+#### 資料庫
+
+- **PostgreSQL**
 
 ## Installation Guide
 1. Clone the project locally:
@@ -36,90 +87,90 @@ This project is a task management system that allows users to create, manage, an
 ## Database Structure
 
 ### Extensions
-This project uses the following PostgreSQL extension:
-- `plpgsql`: Procedural language support for PostgreSQL.
+此專案使用以下 PostgreSQL 擴充功能：
+- `plpgsql`：支援 PostgreSQL 的程序化語言。
 
 ### Tables
 
 #### `groups`
-| Column     | Type                | Description                  |
-|------------|--------------------|------------------------------|
-| `id`       | `bigint`            | Primary key.                 |
-| `name`     | `string`           | Group name.                  |
-| `user_id`  | `integer`          | Creator (Group Leader).      |
-| `deleted_at` | `datetime`       | Soft delete timestamp.       |
-| `created_at` | `datetime`       | Timestamp when the record was created. |
-| `updated_at` | `datetime`       | Timestamp when the record was last updated. |
+| 欄位名稱    | 資料類型  | 說明                                |
+|-------------|-----------|-------------------------------------|
+| `id`        | `bigint`  | 主鍵。                              |
+| `name`      | `string`  | 群組名稱。                          |
+| `user_id`   | `integer` | 建立者（群組領袖）。                |
+| `deleted_at`| `datetime`| 軟刪除時間戳記。                    |
+| `created_at`| `datetime`| 記錄建立的時間戳記。                |
+| `updated_at`| `datetime`| 記錄最後更新的時間戳記。            |
 
 #### `group_users`
-| Column     | Type                | Description                  |
-|------------|--------------------|------------------------------|
-| `group_id` | `bigint` (foreign key) | References the `groups` table. |
-| `user_id`  | `bigint` (foreign key) | References the `users` table. |
-| `created_at` | `datetime`       | Timestamp when the record was created. |
-| `updated_at` | `datetime`       | Timestamp when the record was last updated. |
+| 欄位名稱    | 資料類型                  | 說明                                |
+|-------------|---------------------------|-------------------------------------|
+| `group_id`  | `bigint` (外鍵)           | 參考 `groups` 表。                  |
+| `user_id`   | `bigint` (外鍵)           | 參考 `users` 表。                   |
+| `created_at`| `datetime`                | 記錄建立的時間戳記。                |
+| `updated_at`| `datetime`                | 記錄最後更新的時間戳記。            |
 
-**Indexes:**
+**索引:**
 - `index_group_users_on_group_id`
 - `index_group_users_on_user_id`
 
-**Associations:**
+**關聯:**
 - `belongs_to :group`
 - `belongs_to :user`
 
 #### `group_tasks`
-| Column     | Type                | Description                  |
-|------------|--------------------|------------------------------|
-| `group_id` | `bigint` (foreign key) | References the `groups` table. |
-| `task_id`  | `bigint` (foreign key) | References the `tasks` table. |
-| `created_at` | `datetime`       | Timestamp when the record was created. |
-| `updated_at` | `datetime`       | Timestamp when the record was last updated. |
+| 欄位名稱    | 資料類型                  | 說明                                |
+|-------------|---------------------------|-------------------------------------|
+| `group_id`  | `bigint` (外鍵)           | 參考 `groups` 表。                  |
+| `task_id`   | `bigint` (外鍵)           | 參考 `tasks` 表。                   |
+| `created_at`| `datetime`                | 記錄建立的時間戳記。                |
+| `updated_at`| `datetime`                | 記錄最後更新的時間戳記。            |
 
-**Indexes:**
+**索引:**
 - `index_group_tasks_on_group_id`
 - `index_group_tasks_on_task_id`
 
-**Associations:**
+**關聯:**
 - `belongs_to :group`
 - `belongs_to :task`
 
 #### `tasks`
-| Column       | Type                     | Description                                                      |
-|--------------|--------------------------|------------------------------------------------------------------|
-| `title`      | `string`                 | Task title.                                                      |
-| `content`    | `text`                   | Task content.                                                    |
-| `start_time` | `datetime`               | Start time for the task.                                         |
-| `end_time`   | `datetime`               | End time for the task.                                           |
-| `priority`   | `integer` (default: 1, not null) | Task priority (1: low, 2: medium, 3: high).                     |
-| `status`     | `integer` (default: 1, not null) | Task status (1: pending, 2: in progress, 3: completed).         |
-| `position`   | `integer`                | Task's position for sorting or ordering purposes.                 |
-| `important`  | `boolean`                | Indicates if the task is marked as important (true: important, false: not important). |
-| `user_id`    | `bigint` (foreign key)   | References the `users` table.                                     |
-| `deleted_at` | `datetime`               | Soft delete timestamp.                                            |
-| `created_at` | `datetime`               | Timestamp when the record was created.                            |
-| `updated_at` | `datetime`               | Timestamp when the record was last updated.                       |
+| 欄位名稱    | 資料類型                  | 說明                                |
+|-------------|---------------------------|-------------------------------------|
+| `title`     | `string`                  | 任務標題。                          |
+| `content`   | `text`                    | 任務內容。                          |
+| `start_time`| `datetime`                | 任務開始時間。                      |
+| `end_time`  | `datetime`                | 任務結束時間。                      |
+| `priority`  | `integer` (預設值: 1, 不可為空) | 任務優先級 (1: 低, 2: 中, 3: 高)。 |
+| `status`    | `integer` (預設值: 1, 不可為空) | 任務狀態 (1: 待處理, 2: 進行中, 3: 已完成)。 |
+| `position`  | `integer`                 | 任務排序位置。                      |
+| `important` | `boolean`                 | 是否標記為重要任務 (true: 重要, false: 不重要)。|
+| `user_id`   | `bigint` (外鍵)           | 參考 `users` 表。                   |
+| `deleted_at`| `datetime`                | 軟刪除時間戳記。                    |
+| `created_at`| `datetime`                | 記錄建立的時間戳記。                |
+| `updated_at`| `datetime`                | 記錄最後更新的時間戳記。            |
 
-**Indexes:**
+**索引:**
 - `index_tasks_on_deleted_at`
 - `index_tasks_on_user_id`
 
 #### `users`
-| Column     | Type                | Description                  |
-|------------|--------------------|------------------------------|
-| `email`    | `string` (default: "", not null) | User email address (must be unique). |
-| `password_hash` | `string` (not null) | Hashed password.            |
-| `password_salt` | `string` (not null) | Password salt.              |
-| `role`     | `string`           | User role (e.g., admin, regular user). |
-| `avatar`   | `string`           | Path to user avatar.         |
-| `deleted_at` | `datetime`       | Soft delete timestamp.       |
-| `created_at` | `datetime`       | Timestamp when the record was created. |
-| `updated_at` | `datetime`       | Timestamp when the record was last updated. |
+| 欄位名稱    | 資料類型                  | 說明                                |
+|-------------|---------------------------|-------------------------------------|
+| `email`     | `string` (預設值: "", 不可為空) | 使用者電子郵件地址 (必須唯一)。    |
+| `password_hash` | `string` (不可為空)    | 密碼的哈希值。                      |
+| `password_salt` | `string` (不可為空)    | 密碼鹽值。                          |
+| `role`      | `string`                  | 使用者角色 (例如：管理員、普通用戶)。|
+| `avatar`    | `string`                  | 使用者頭像的路徑。                  |
+| `deleted_at`| `datetime`                | 軟刪除時間戳記。                    |
+| `created_at`| `datetime`                | 記錄建立的時間戳記。                |
+| `updated_at`| `datetime`                | 記錄最後更新的時間戳記。            |
 
-**Indexes:**
+**索引:**
 - `index_users_on_deleted_at`
-- `index_users_on_email` (unique)
+- `index_users_on_email` (唯一)
 
-### Foreign Keys
+### 外鍵
 - `group_tasks`: `group_id`, `task_id`
 - `group_users`: `group_id`, `user_id`
 - `tasks`: `user_id`
