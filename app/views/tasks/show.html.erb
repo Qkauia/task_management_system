@@ -44,10 +44,14 @@
       <% if @task.groups.any? %>
         <div class="mt-3">
           <% @task.groups.each do |group| %>
-            <span class="badge bg-info me-3 fs-5 mb-2"><%= group.name %>(群組)</span>
-            <% group.users.where.not(id: current_user.id).each do |user| %>
-              <span class="badge email-overflow bg-primary ms-2 fs-5 mb-2"><%= user.email %></span>
-            <% end %>
+            <div class="mb-2">
+              <span class="badge bg-info fs-5"><%= group.name %> (群組)：</span>
+              <div class="ms-3 mt-2">
+                <% group.users.where.not(id: current_user.id).each do |user| %>
+                  <div class="badge email-overflow bg-primary fs-5 mb-2"><%= user.email %></div>
+                <% end %>
+              </div>
+            </div>
           <% end %>
         </div>
       <% else %>
@@ -71,7 +75,11 @@
 
     <div class="mb-4">
       <strong class="fs-5"><%= t('tasks.headers.tags') %>:</strong>
-      <span class="badge bg-warning ms-3 fs-5 mb-2">＃<%= @task.tags.map(&:name).join("  ＃ ") %></span>
+      <div class="d-flex flex-wrap mt-2">
+        <% @task.tags.each do |tag| %>
+          <span class="badge bg-warning me-2 fs-5 mb-2">#<%= tag.name %></span>
+        <% end %>
+      </div>
     </div>
 
     <div class="mb-4">
