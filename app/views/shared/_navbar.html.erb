@@ -39,6 +39,7 @@
                 <% notifications_to_display = @notifications.first(5) %>
                 <% notifications_to_display.each do |notification| %>
                   <li class="dropdown-item">
+                    <h4 class="fw-bold task-titile-overflow-group"><%= notification.task.title %></h4>
                     <%= notification.message %>
                     <div class="mt-2">
                       <%= link_to t('navbar.notification_links.mark_as_read'), mark_as_read_notification_path(notification), data: { turbo_method: :patch }, class: "btn btn-sm btn-outline-primary" %>
