@@ -4,6 +4,7 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_task, only: %i[show edit update destroy]
+  before_action :find_notification, only: %i[show]
   before_action :users_by_letter, only: %i[new edit]
   before_action :set_groups_by_letter, only: %i[new create edit update]
 
@@ -23,9 +24,11 @@ class TasksController < ApplicationController
   end
 
   def show
-    return if task_accessible?
-
-    redirect_to personal_tasks_path, alert: t('alert.not_found')
+    if task_accessible?
+      @notification.update(read_at: Time.current) if @notification.present?
+    else
+      redirect_to personal_tasks_path, alert: t('alert.not_found')
+    end
   end
 
   def new
@@ -142,5 +145,9 @@ class TasksController < ApplicationController
 
   def attach_file_to_task
     @task.file.attach(params[:task][:file]) if params[:task][:file].present?
+  end
+
+  def find_notification
+    @notification = current_user.notifications.find_by(task_id: @task.id)
   end
 end
