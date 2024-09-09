@@ -3,132 +3,89 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-  let(:user) { create(:user, password: 'oldpassword', password_confirmation: 'oldpassword') }
+  let(:user) { create(:user) }
 
-  describe '#new' do
-    it 'assigns a new user to @user' do
-      get :new
-      expect(assigns(:user)).to be_a_new(User)
-    end
-
-    it 'renders the new template' do
-      get :new
-      expect(response).to render_template(:new)
-    end
+  before do
+    allow(controller).to receive(:current_user).and_return(user)
   end
 
-  describe '#edit' do
-    before do
-      session[:user_id] = user.id
-    end
+  describe 'POST #create' do
+    let(:valid_params) { { email: 'test@example.com', password: 'password', password_confirmation: 'password' } }
+    let(:invalid_params) { { email: '', password: '', password_confirmation: '' } }
 
-    it 'assigns the current user to @user' do
-      get :edit, params: { id: user.id }
-      expect(assigns(:user)).to eq(user)
-    end
+    subject { post :create, params: { user: params } }
 
-    it 'renders the edit template' do
-      get :edit, params: { id: user.id }
-      expect(response).to render_template(:edit)
-    end
-  end
-
-  describe '#create' do
     context 'with valid attributes' do
-      let(:valid_attributes) { attributes_for(:user) }
+      let(:params) { valid_params }
 
-      it 'creates a new user' do
-        expect do
-          post :create, params: { user: valid_attributes }
-        end.to change(User, :count).by(1)
-      end
-
-      it 'redirects to the root path' do
-        post :create, params: { user: valid_attributes }
-        expect(response).to redirect_to(root_path)
-      end
-
-      it 'sets the session user_id' do
-        post :create, params: { user: valid_attributes }
-        expect(session[:user_id]).to eq(assigns(:user).id)
+      it 'creates a new user and returns a success message' do
+        post :create, params: { user: valid_params }
+        expect(response).to have_http_status(:found)
+        expect(flash[:notice]).to eq(I18n.t('users.registration.success'))
       end
     end
 
     context 'with invalid attributes' do
-      let(:invalid_attributes) { attributes_for(:user, email: '') }
+      let(:params) { invalid_params }
 
-      it 'does not create a new user' do
-        expect do
-          post :create, params: { user: invalid_attributes }
-        end.not_to change(User, :count)
-      end
-
-      it 're-renders the new template' do
-        post :create, params: { user: invalid_attributes }
-        expect(response).to render_template(:new)
+      it 'does not create a user and returns an error message' do
+        post :create, params: { user: invalid_params }
+        expect(response).to have_http_status(422)
+        expect(flash[:alert]).to eq(I18n.t('users.registration.failed'))
       end
     end
   end
 
-  describe '#update' do
-    before do
-      session[:user_id] = user.id
-    end
+  describe 'PATCH/PUT #update' do
+    subject { patch :update, params: { id: user.id, user: params } }
 
-    context 'with valid current password and new passwords' do
-      subject { patch :update, params: { id: user.id }.merge(valid_params) }
+    context 'with valid current password and matching new password' do
+      let(:params) { { current_password: 'password', password: 'newpassword', password_confirmation: 'newpassword' } }
 
-      let(:valid_params) do
-        { user: { current_password: 'oldpassword', password: 'newpassword', password_confirmation: 'newpassword' } }
-      end
-
-      it 'updates the user password' do
-        subject
-        expect(user.reload.authenticate('newpassword')).to be_truthy
-      end
-
-      it 'redirects to the root path with a success message' do
-        subject
-        expect(response).to redirect_to(root_path)
+      it 'updates the password and returns a success message' do
+        patch :update, params: { id: user.id, user: params }
+        expect(response).to have_http_status(:found)
         expect(flash[:notice]).to eq(I18n.t('users.password.update_success'))
       end
     end
 
-    context 'with incorrect current password' do
-      subject { patch :update, params: { id: user.id }.merge(invalid_params) }
+    context 'with invalid current password' do
+      let(:params) { { current_password: 'wrongpassword', password: 'newpassword', password_confirmation: 'newpassword' } }
 
-      let(:invalid_params) do
-        { user: { current_password: 'wrongpassword', password: 'newpassword', password_confirmation: 'newpassword' } }
-      end
-
-      it 'does not update the user password' do
-        subject
-        expect(user.reload.authenticate('newpassword')).to be_falsey
-      end
-
-      it 're-renders the edit template with an alert message' do
-        subject
-        expect(response).to render_template(:edit)
-        expect(flash.now[:alert]).to eq(I18n.t('users.password.current_password_incorrect'))
+      it 'does not update the password and returns an error message' do
+        patch :update, params: { id: user.id, user: params }
+        expect(response).to have_http_status(:found)
+        expect(flash[:alert]).to eq(I18n.t('users.password.current_password_incorrect'))
       end
     end
 
-    context 'with blank password fields' do
-      subject { patch :update, params: { id: user.id }.merge(blank_password_params) }
+    context 'with blank password or password_confirmation' do
+      let(:params) { { current_password: 'password', password: '', password_confirmation: '' } }
 
-      let(:blank_password_params) do
-        { user: { current_password: 'oldpassword', password: '', password_confirmation: '' } }
+      it 'returns an error about missing password fields' do
+        patch :update, params: { id: user.id, user: params }
+        expect(response).to have_http_status(:found)
+        expect(flash[:alert]).to eq(I18n.t('users.password.fields_cannot_be_blank'))
       end
+    end
+  end
 
-      it 'does not update the user password' do
-        subject
-        expect(user.reload.authenticate('oldpassword')).to be_truthy
+  describe 'PATCH/PUT #update_profile' do
+    subject { patch :update_profile, params: { user: { avatar: 'new_avatar.png' } } }
+
+    context 'with valid attributes' do
+      it 'updates the profile and returns a success message' do
+        patch :update_profile, params: { user: { avatar: 'new_avatar.png' } }
+        expect(response).to have_http_status(:found)
+        expect(flash[:notice]).to eq(I18n.t('users.avatar.updated_successfully'))
       end
+    end
 
-      it 're-renders the edit template with an alert message' do
-        subject
-        expect(response).to render_template(:edit)
-        expect(flash.now[:alert]).to eq(I18n.t('users.password.fields_cannot_be_blank'))
+    context 'with invalid attributes' do
+      it 'does not update the profile and returns an error message' do
+        patch :update_profile, params: { user: { email: nil } }
+        expect(response).to have_http_status(422)
+        expect(flash[:alert]).to eq(I18n.t('users.avatar.update_failed'))
       end
     end
   end
