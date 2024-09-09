@@ -16,7 +16,8 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect_to root_path, notice: t('users.registration.success')
     else
-      render :new
+      flash[:alert] = t('users.registration.failed')
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -26,28 +27,27 @@ class UsersController < ApplicationController
         if @user.update(user_params)
           redirect_to root_path, notice: t('users.password.update_success')
         else
-          flash.now[:alert] = t('users.password.update_failed')
-          render :edit
+          flash[:alert] = t('users.password.update_failed')
+          redirect_to edit_user_path(@user)
         end
       else
-        flash.now[:alert] = t('users.password.fields_cannot_be_blank')
-        render :edit
+        flash[:alert] = t('users.password.fields_cannot_be_blank')
+        redirect_to edit_user_path(@user)
       end
     else
-      flash.now[:alert] = t('users.password.current_password_incorrect')
-      render :edit
+      flash[:alert] = t('users.password.current_password_incorrect')
+      redirect_to edit_user_path(@user)
     end
   end
 
   def edit_profile; end
 
   def update_profile
-    if @user.update(profile_params)
+    if @user.update(user_params)
       redirect_to root_path, notice: t('users.avatar.updated_successfully')
     else
       flash.now[:alert] = t('users.avatar.update_failed')
-      Rails.logger.debug @user.errors.full_messages
-      render :edit_profile
+      render :edit_profile, status: :unprocessable_entity
     end
   end
 
@@ -59,10 +59,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :avatar)
-  end
-
-  def profile_params
-    params.require(:user).permit(:avatar)
   end
 
   def passwords_present?
