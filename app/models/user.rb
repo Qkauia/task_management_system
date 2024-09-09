@@ -28,28 +28,24 @@ class User < ApplicationRecord
     where('email ILIKE ?', "%#{cleaned_query}%").distinct if cleaned_query.present?
   }
 
-  def authenticate(password)
-    password_hash == encrypt(password)
-  end
-
-  def accessible_tasks
-    owned_tasks.or(shared_tasks)
-  end
-
   def self.grouped_by_letter(exclude_id: nil)
     scope = exclude_id ? where.not(id: exclude_id) : all
     scope.order(:email).group_by { |user| user.email[0].upcase }
   end
 
+  def authenticate(password)
+    password_hash == encrypt(password)
+  end
+
   private
+
+  def encrypt(password)
+    Digest::SHA2.hexdigest(password + password_salt)
+  end
 
   def encrypt_password
     self.password_salt = SecureRandom.hex(16)
     self.password_hash = encrypt(password)
-  end
-
-  def encrypt(password)
-    Digest::SHA2.hexdigest(password + password_salt)
   end
 
   def set_default_role
