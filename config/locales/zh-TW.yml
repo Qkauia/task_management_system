@@ -186,6 +186,7 @@ zh-TW:
   users:
     registration:
       success: "註冊成功，您已登入"
+      failed: "信箱重複或是密碼格式輸入錯誤"
     password:
       update_success: "密碼已成功更新"
       current_password_incorrect: "當前密碼不正確"

@@ -170,6 +170,7 @@ en:
   users:
     registration:
       success: "Registration successful, you are now logged in"
+      failed: "Duplicate e-mail or wrong password format"
     password:
       update_success: "Password successfully updated"
       current_password_incorrect: "Current password is incorrect"
