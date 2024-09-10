@@ -64,11 +64,9 @@ class Task < ApplicationRecord
   end
 
   def shared_count
-    if groups.exists?
-      # 如果任務有群組，計算所有相關群組中的成員數（扣除創建者）
+    if groups.any?
       groups.joins(:users).where.not(users: { id: user_id }).distinct.count('users.id')
     else
-      # 如果任務沒有群組，計算直接共享的用戶數
       shared_users.where.not(id: user_id).count
     end
   end
