@@ -43,7 +43,8 @@ class TasksController < ApplicationController
       handle_after_save_actions
       redirect_to personal_tasks_path, notice: t('.success')
     else
-      render :new, alert: t('alert.creation_failed')
+      flash.now[:alert] = t('alert.creation_failed')
+      render :new
     end
   end
 
