@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Notification, type: :model do
   let(:user) { create(:user) }
   let(:task) { create(:task) }
-  let(:notification) { create(:notification, user: user, task: task) }
+  let(:notification) { create(:notification, user:, task:) }
 
   describe 'associations' do
     it { is_expected.to belong_to(:user) }
