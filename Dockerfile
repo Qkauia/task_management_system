@@ -74,7 +74,7 @@ USER rails:rails
 
 # wait-for-it.sh
 COPY wait-for-it.sh /rails/wait-for-it.sh
-COPY --chmod=+x wait-for-it.sh /rails/wait-for-it.sh
+COPY --chmod=0755 wait-for-it.sh /rails/wait-for-it.sh
 
 EXPOSE 3000
 
