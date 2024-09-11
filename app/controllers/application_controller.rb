@@ -2,8 +2,8 @@
 
 # The main application controller that other controllers inherit from.
 class ApplicationController < ActionController::Base
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from StandardError, with: :internal_server_error
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   helper_method :current_user
   before_action :set_locale
@@ -76,8 +76,7 @@ class ApplicationController < ActionController::Base
     render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
   end
 
-  def internal_server_error(exception = nil)
-    log_error(exception) if exception
+  def internal_server_error
     render file: Rails.public_path.join('500.html'), status: :internal_server_error, layout: false
   end
 
