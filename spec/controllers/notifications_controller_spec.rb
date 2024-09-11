@@ -4,15 +4,15 @@ require 'rails_helper'
 
 RSpec.describe NotificationsController, type: :controller do
   let(:user) { create(:user) }
-  let(:notification) { create(:notification, user: user) }
+  let(:notification) { create(:notification, user:) }
 
   before do
     session[:user_id] = user.id
   end
 
   describe 'GET #index' do
-    let!(:unread_notification) { create(:notification, user: user, read_at: nil) }
-    let!(:read_notification) { create(:notification, user: user, read_at: Time.current) }
+    let!(:unread_notification) { create(:notification, user:, read_at: nil) }
+    let!(:read_notification) { create(:notification, user:, read_at: Time.current) }
     subject { get :index }
     it 'assigns unread notifications to @notifications' do
       subject
@@ -40,11 +40,11 @@ RSpec.describe NotificationsController, type: :controller do
     context 'when the notification does not belong to the current user' do
       let(:other_user) { create(:user) }
       let(:other_notification) { create(:notification, user: other_user) }
-    
+
       it 'redirects to the not found page when notification is not found' do
         post :mark_as_read, params: { id: other_notification.id }
         expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('404')  # 假設你顯示 404 頁面
+        expect(response.body).to include('404') # 假設你顯示 404 頁面
       end
     end
   end
